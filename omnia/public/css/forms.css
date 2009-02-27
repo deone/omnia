@@ -1,0 +1,25 @@
+fieldset    {
+    margin: 0;
+    border-style: none;
+}
+
+fieldset ol {
+    list-style: none;
+}
+
+fieldset ol li  {
+    margin-left: 0px;
+    padding-bottom: 0.5em;
+}
+
+.info-form fieldset.submit {
+    padding-left: 11em;
+    padding-bottom: 1em;
+}
+
+.info-form label    {
+    float: left;
+    width: 10em;
+    text-align: right;
+    margin-right: 1em;
+}

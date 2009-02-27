@@ -1,0 +1,84 @@
+#feedback   {
+    margin: 0 0 10px 10px;
+    width: 680px;
+}
+
+#resume h3  {
+    margin: 5px 10px 10px 10px;
+
+}
+
+#resume ul  {
+    margin: 0px;
+    list-style: none;
+}
+
+#resume p   {
+    margin: 0px;
+    font-weight: bold;
+}
+
+.rsm-item   {
+    margin: 0 10px 10px 10px;
+}
+
+.rsm-item .tag {
+    width: 200px;
+    float: left;
+}
+
+.content    {
+    float: left;
+    background-color: #fff;
+    width: 460px;
+    padding: 10px;
+}
+
+.resume-form label  {
+    padding: 0.3em 0px 0.5em 0px;
+}
+
+.content .toggle  {
+    text-decoration: none;
+    float: left;
+    color: #999;
+}
+
+.content #container {
+    float: left;
+    margin-left: 0.3em;
+}
+
+.content ul li {
+    margin: 0;
+}
+
+#resume table   {
+    width: 100%;
+}
+
+#resume table.list-item {
+    width: 440px;
+}
+
+#resume table.short td  {
+    width: 25%;
+    border-right: solid 1px #999;
+    background-color: #eee;
+    border-bottom: none;
+}
+
+#resume th  {
+    background: #eee;
+    text-align: right;
+    border-bottom: solid 2px #999;
+    width: 120px;
+}
+
+#resume td  {
+    border-bottom: solid 1px #999;
+}
+
+#resume th, td  {
+    padding: 5px;
+}

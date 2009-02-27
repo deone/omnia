@@ -1,0 +1,45 @@
+<%inherit file="base.html"/>
+
+<%def name="title()">Home</%def>
+
+<%def name="custom_js()">
+    <script src="/js/index.js"></script>
+</%def>
+
+<%def name="page_content()">
+
+    <div class="grid_12 alpha">&nbsp;</div>
+
+    <div id="sign-in" class="grid_4 omega auth">
+        <div class="widget">
+
+            <h4>Sign In</h4>
+            <div class="feedback">&nbsp;</div>
+            <form name="login" id="login" class="auth-form">
+                <fieldset>
+                    <ol>
+                        <li>
+                            <label for="username">User name</label>
+                            <input type="text" id="username" name="username"/><br/>
+                        </li>
+                        <li>
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password"/><br/>
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset>
+                    <input class="submit" type="submit" value="OK"/>
+                    <input type="reset" value="Cancel"/>
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
+
+    <div id="footer" class="grid_16 alpha omega">
+        <p>&copy;2009. OmniaWorks. All rights reserved.</p>
+    </div>
+
+</%def>

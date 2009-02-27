@@ -1,0 +1,83 @@
+@import url("960/reset.css");
+@import url("960/text.css");
+@import url("960/960.css");
+
+@import url("forms.css");
+
+@import url("auth.css");
+@import url("resume.css");
+
+@import url("resumeold.css");
+
+body    {
+    color: #333;    
+}
+
+h1 {
+    border-bottom: solid 3px #c2c2c2;
+    margin-bottom: 30px;
+    padding-top: 10px;
+}
+
+h1 .horiz-nav    {
+    float: right;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+h3  {
+    margin: 0;
+}
+
+h4  {
+    border-bottom: solid 1px #c2c2c2;
+    margin: 0 5px 15px 5px;
+}
+
+.feedback   {
+    height: 20px;
+    display: block;
+    margin: 5px 0;
+}
+
+#logo   {
+    width: 150px;
+    float: left;
+}
+
+#menu p {
+    margin: 10px;
+    background-color: #fff;
+}
+
+.err  {
+    color: #f00;
+}
+
+.ok {
+    font-weight: bold;
+    color: green;
+}
+
+.clear-float {
+    float: none;
+    clear: both;
+}
+
+#footer {
+    border-top: solid 1px #c2c2c2;
+    margin-top: 30px;
+}
+
+#footer p   {
+    color: #999;
+    font-size: 12px;
+    margin: 5px 10px;
+}
+
+label.error {
+    font-size: 85%;
+    color: green;
+    width: 12em;
+}

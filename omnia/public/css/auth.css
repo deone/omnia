@@ -1,0 +1,18 @@
+.auth .widget h4    {
+    border-bottom-width: 1px;
+}
+
+#register {
+    display: none;
+}
+
+/*.ajaxload   {
+    background: url("/img/loading.gif") center no-repeat #333;
+    position: absolute;
+    opacity: 0.8;
+    display: none;
+}
+
+#sign-in .ajaxload  {
+    padding: 122px 108px;
+}*/

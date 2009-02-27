@@ -1,0 +1,32 @@
+<%def name="title()"></%def>
+
+<%def name="custom_js()"></%def>
+
+<%def name="page_content()"></%def>
+
+<%def name="main()">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Omnia Asset Management | ${self.title()}</title>
+
+        <link rel="stylesheet" type="text/css" media="all" href="/css/main.css"/>
+        <script type="text/javascript" src="/js/jquery.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+
+        ${self.custom_js()}
+    </head>
+    <body>
+        <div class="container_16">
+            <h1 class="alpha omega grid_16">
+                <div id="logo">
+                    <h2>Omnia</h2>
+                </div>
+            </h1>
+            ${self.page_content()}
+        </div>
+    </body>
+    </html>
+</%def>
+
+${self.main()}
