@@ -29,6 +29,7 @@ class User(Base):
         self.lastname = lastname
         self.roles = roles
 
+    @staticmethod
     def get(id=None, username=None):
         try:
             if id:
@@ -39,6 +40,14 @@ class User(Base):
                 return [u for u in meta.session.query(User)]
         except Exception, e:
             print_exc()
+
+    def todict(self):
+        return {
+                'id': self.id,
+                'firstname': self.firstname,
+                'lastname': self.lastname,
+                'roles': self.roles
+                }
 
 class Requisition(Base):
     __tablename__ = 'requisition'

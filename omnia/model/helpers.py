@@ -4,6 +4,7 @@ from traceback import print_exc
 import simplejson
 import sys
 import datetime
+import md5
 
 def commit():
     meta.session.commit()
