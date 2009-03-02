@@ -1,0 +1,37 @@
+.main .feedback {
+    margin: 0;
+}
+
+.main .widget .activity-board   {
+    padding: 5px 0;
+}
+
+.main form  {
+    background-color: #e8e8e8;
+    padding: 5px 10px;
+    width: 400px;
+}
+
+.main form label  {
+    width: 6em;
+}
+
+.main form fieldset.submit  {
+    padding-left: 92px;
+    padding-bottom: 1em;
+}
+
+.main .widget   {
+    border-style: none none solid none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.main .widget .first    {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+#requisition-form, #add-item-form    {
+    display: none;
+}

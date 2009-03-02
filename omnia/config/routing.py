@@ -18,6 +18,9 @@ def make_map():
 
     # CUSTOM ROUTES HERE
     map.connect('root', '/', controller='auth', action='index')
+    map.connect('requisition', '/requisition', controller='requisition', action='index')
+    map.connect('requisition_action', '/requisition/:action', controller='requisition')
+    map.connect('requisition_others', '/requisition/:id/:action', controller='requisition')
 
     map.connect(':controller/:action/:id')
     map.connect('*url', controller='template', action='view')

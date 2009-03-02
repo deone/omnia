@@ -1,0 +1,31 @@
+<%inherit file="base.html"/>
+
+<%def name="title()">Dashboard</%def>
+
+<%def name="custom_js()"></%def>
+
+<%def name="page_content()">
+    
+    <div class="grid_4 alpha">
+        <div class="widget">
+            <ul>
+                <li><a href="/requisition">Manage Requisitions</a></li>
+                <li><a href="#">Approve Requisitions</a></li>
+                <li><a href="#">Generate Order</a></li>
+                <li><a href="#">Receive Goods</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    <div class="grid_12 omega">
+        <div class="widget">
+            <h4>Dashboard</h4>
+            <p>
+                Welcome <b>Oladayo Osikoya</b><br/><br/>
+                You have 2 pending requistions
+            </p>
+        </div>
+    </div>
+
+</%def>
