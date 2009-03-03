@@ -34,7 +34,7 @@ class AuthController(BaseController):
 
             return ("user", user.todict())
 
-    def logout(self, id):
+    def logout(self):
         session['user'] = None
         session.save()
 

@@ -13,13 +13,16 @@ class RequisitionController(BaseController):
     def index(self):
         return render("/requisition.html")
 
-    @h.json_response
-    def get(self, id, **kwargs):
-        return ("requisition", Requisition.get_as_dict(id))
+    def add_item(self, id):
+        c.req_id = id
+        return render("/add_item.html")
 
-    @h.json_response
-    def get_all(self, **kwargs):
-        return ("requisitions", Requisition.get_as_dict(id=None))
+    def details(self, id):
+        c.req_id = id
+        return render("/requisition_detail.html")
+
+    def all(self):
+        return render("/all_requisitions.html")
 
     @h.json_response
     @h.commit_or_rollback
@@ -28,13 +31,13 @@ class RequisitionController(BaseController):
         req = Requisition.create(description)
         return ("new", req)
 
-    def add_item(self, id):
-        c.req_id = id
-        return render("/add_item.html")
+    @h.json_response
+    def get(self, id, **kwargs):
+        return ("requisition", Requisition.get_as_dict(id))
 
-    def edit(self, id):
-        c.req_id = id
-        return render("/requisition_edit.html")
+    @h.json_response
+    def get_all(self, **kwargs):
+        return ("requisitions", Requisition.get_as_dict(id=None))
 
     @h.json_response
     @h.commit_or_rollback
@@ -47,3 +50,13 @@ class RequisitionController(BaseController):
         req = Requisition.get(id=id)
 
         return req.add_item(quantity, name, description, unitprice)
+
+    def items(self, id):
+        c.requisition = Requisition.get_as_dict(id)
+
+        return render("/items.html")
+
+    @h.json_response
+    def get_items(self, id=None, **kwargs):
+        items = Requisition.get_items(id)
+        return ("list", items)

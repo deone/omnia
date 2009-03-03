@@ -110,6 +110,11 @@ class Requisition(Base):
     def add_item(self, quantity, name, description, unitprice):
         self.items.append(Item(quantity, name, description, unitprice))
 
+    @staticmethod
+    def get_items(id):
+        items = [i.todict() for i in meta.session.query(Item).filter_by(requisitionid=id)]
+        return items
+
 class Order(Base):
     __tablename__ = 'order'
     __table_args__ = {'mysql_engine': 'innodb'}

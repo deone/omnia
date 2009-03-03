@@ -13,4 +13,3 @@ class ItemController(BaseController):
     @h.commit_or_rollback
     def new(self, id, **kwargs):
         return ("Hello World")
-        
