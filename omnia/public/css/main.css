@@ -18,12 +18,26 @@ h1 {
 }
 
 table    {
-    margin: 0;
+    width: 100%;
 }
 
-table th {
+tbody   {
+padding: 0;
+}
+
+table th, table td  {
+    margin: 0;
+    padding: 5px;
+    border-top: solid 1px #fff;
+}
+
+th  {
     text-align: left;
-    font-weight: normal;
+}
+
+td  {
+    background-color: #e8e8e8;
+    border-right-style: none;
 }
 
 a   {

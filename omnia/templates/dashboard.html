@@ -4,21 +4,22 @@
 
 <%def name="custom_js()"></%def>
 
-<%def name="page_content()">
-    
+<%def name="menu()">
     <div class="grid_4 alpha">
         <div class="widget">
             <ul>
                 <li><a href="/requisition">Create Requisition</a></li>
-                <li><a href="#">Manage Requisitions</a></li>
+                <li><a href="/requisition/all">View Requisitions</a></li>
                 <li><a href="#">Approve Requisitions</a></li>
                 <li><a href="#">Generate Order</a></li>
                 <li><a href="#">Receive Goods</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
-    </div> 
+    </div>
+</%def>
 
+<%def name="activity()">
     <div class="grid_12 omega">
         <div class="widget">
             <h4>Dashboard</h4>
@@ -28,5 +29,9 @@
             </p>
         </div>
     </div>
+</%def>
 
+<%def name="page_content()">
+    ${self.menu()}
+    ${self.activity()}
 </%def>

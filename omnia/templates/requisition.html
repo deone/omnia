@@ -1,4 +1,4 @@
-<%inherit file="base.html"/>
+<%inherit file="dashboard.html"/>
 
 <%def name="title()">Create Requisition</%def>
 
@@ -6,8 +6,7 @@
     <script src="/js/req.js"></script>
 </%def>
 
-<%def name="page_content()">
-
+<%def name="menu()">
     <div class="grid_4 alpha">
         <div id="menu" class="widget">
             <ul>
@@ -16,18 +15,18 @@
             </ul>
         </div>
     </div>
+</%def>
 
+<%def name="activity()">
     <div class="grid_12 omega main">
         <div class="widget">
             <h4>Create Requisition</h4>
             <div class="activity-board">
                 <div id="req-links" class="info">
-                    <h6><a id="create-req" href="#" onclick="showCreatereqForm()">Create Requisition</a></h6>
+                    <span class="head"><a id="create-req" href="#" onclick="showCreateReqForm()">Create Requisition</a></span>
                 </div>
 
                 <form name="requisition-form" id="requisition-form" class="info-form"><!--{{{-->
-
-                    <h6>Create Requisition</h6>
                     <div class="feedback">&nbsp;</div>
                     <fieldset>
                         <ol>
@@ -43,38 +42,12 @@
                     </fieldset>
                 </form><!--}}}-->
 
-                <form name="add-item-form" id="add-item-form" class="info-form"><!--{{{-->
-
-                    <h6>Add Item To Requisition</h6>
-                    <div class="feedback">&nbsp;</div>
-                    <fieldset>
-                        <ol>
-                            <li>
-                                <label for="quantity">Quantity</label>
-                                <input id="quantity" name="quantity"/>
-                            </li>
-                            <li>
-                                <label for="item-name">Name</label>
-                                <input id="item-name" name="item-name"/>
-                            </li>
-                            <li>
-                                <label for="item-description">Description</label>
-                                <textarea id="item-description" name="item-description" cols=40></textarea>
-                            </li>
-                            <li>
-                                <label for="unitprice">Unit Price</label>
-                                <input id="unitprice" name="unitprice"/>
-                            </li>
-                        </ol>
-                    </fieldset>
-
-                    <fieldset class="submit">
-                        <input type="button" class="submit" value="Add" onClick="addItem();"/>
-                    </fieldset>
-                </form><!--}}}-->
-
             </div>
         </div>
     </div>
+</%def>
 
+<%def name="page_content()">
+    ${self.menu()} 
+    ${self.activity()}
 </%def>

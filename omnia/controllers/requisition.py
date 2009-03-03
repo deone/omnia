@@ -28,13 +28,17 @@ class RequisitionController(BaseController):
         req = Requisition.create(description)
         return ("new", req)
 
-    def edit(self, id, **kwargs):
+    def add_item(self, id):
         c.req_id = id
-        return render("requisition_edit.html")
+        return render("/add_item.html")
+
+    def edit(self, id):
+        c.req_id = id
+        return render("/requisition_edit.html")
 
     @h.json_response
     @h.commit_or_rollback
-    def add_item(self, id, **kwargs):
+    def new_item(self, id, **kwargs):
         quantity = request.params['qty']
         name = request.params['name']
         description = request.params['desc']

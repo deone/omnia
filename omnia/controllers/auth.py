@@ -33,3 +33,9 @@ class AuthController(BaseController):
             session.save()
 
             return ("user", user.todict())
+
+    def logout(self, id):
+        session['user'] = None
+        session.save()
+
+        redirect_to("/auth")

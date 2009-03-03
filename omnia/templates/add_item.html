@@ -1,0 +1,93 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Add Item To Requisition</%def>
+
+<%def name="custom_js()">
+    <script>
+
+        function addItem()  {
+
+            var qty = $("#quantity").val();
+            var name = $("#item-name").val();
+            var desc = $("#item-description").val();
+            var unitprice = $("#unitprice").val();
+
+            var data =  "qty=" + qty +
+                        "&name=" + name +
+                        "&desc=" + desc +
+                        "&unitprice=" + unitprice;
+
+            var url = "/requisition/${c.req_id}/new_item";
+
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: "json",
+
+                success: function(response) {
+                    if (response.code != 0) {
+                        $("#add-item-form .feedback")
+                            .addClass("err")
+                            .html("Error Adding Item");
+                    } else  {
+                        document.location = "/requisition/${c.req_id}/edit";
+                    }
+                }
+
+            });
+
+        }
+    </script>
+</%def>
+
+<%def name="menu()">
+    <div class="grid_4 alpha">
+        <div id="menu" class="widget">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>Add Item To Requisition</h4>
+            <div class="activity-board">
+
+                <form name="add-item-form" id="add-item-form" class="info-form"><!--{{{-->
+                    <div class="feedback">&nbsp;</div>
+                    <fieldset>
+                        <ol>
+                            <li>
+                                <label for="quantity">Quantity</label>
+                                <input id="quantity" name="quantity"/>
+                            </li>
+                            <li>
+                                <label for="item-name">Name</label>
+                                <input id="item-name" name="item-name"/>
+                            </li>
+                            <li>
+                                <label for="item-description">Description</label>
+                                <textarea id="item-description" name="item-description" cols=40></textarea>
+                            </li>
+                            <li>
+                                <label for="unitprice">Unit Price</label>
+                                <input id="unitprice" name="unitprice"/>
+                            </li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="submit">
+                        <input type="button" class="submit" value="Add" onClick="addItem();"/>
+                    </fieldset>
+                </form><!--}}}-->
+
+            </div>
+        </div>
+    </div>
+</%def>

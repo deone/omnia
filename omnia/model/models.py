@@ -11,7 +11,7 @@ from omnia.model import meta
 Base = declarative_base()
 meta.metadata = Base.metadata
 
-class User(Base):
+class User(Base):#{{{
     __tablename__ = 'user'
     __table_args__ = {'mysql_engine': 'innodb'}
 
@@ -47,7 +47,7 @@ class User(Base):
                 'firstname': self.firstname,
                 'lastname': self.lastname,
                 'roles': self.roles
-                }
+                }#}}}
 
 class Requisition(Base):
     __tablename__ = 'requisition'
@@ -103,7 +103,8 @@ class Requisition(Base):
                     "description": self.description,
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed),
-                    "status": Requisition.STATUS_MAP[int(self.status)]
+                    "status": Requisition.STATUS_MAP[int(self.status)],
+                    "items": [item.todict() for item in self.items]
                 }
 
     def add_item(self, quantity, name, description, unitprice):
@@ -141,6 +142,15 @@ class Item(Base):
         self.name = name
         self.description = description
         self.unitprice = unitprice
+
+    def todict(self):
+        return  {
+            "id": self.id,
+            "quantity": self.quantity,
+            "name": self.name,
+            "description": self.description,
+            "unitprice": self.unitprice
+        }
 
 class Vendor(Base):
     __tablename__ = 'vendor'

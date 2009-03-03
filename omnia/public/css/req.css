@@ -14,7 +14,6 @@
 
 .activity-board form  {
     background-color: #f5f5f5;
-    width: 400px;
 }
 
 .activity-board form label  {
@@ -26,7 +25,7 @@
     padding-bottom: 1em;
 }
 
-#requisition-form, #add-item-form, #req-info    {
+#requisition-form    {
     display: none;
 }
 
@@ -35,6 +34,16 @@
     padding: 10px;
 }
 
-.activity-board .info h6  {
+.head   {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+#req-detail {
+    margin-bottom: 5px;
+}
+
+#item-list h6   {
     border-bottom-style: none;
+    margin-bottom: 5px;
 }

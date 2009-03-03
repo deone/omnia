@@ -1,0 +1,101 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Requisition #${c.req_id}</%def>
+
+<%def name="custom_js()">
+    <script><!--{{{-->
+
+        var reqId = "${c.req_id}";
+
+        var url = "/requisition/" + reqId + "/get";
+
+        getReq(url);
+
+        function getReq(url)  {
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                dataType: "json",
+
+                success: function(response)  {
+
+                    var req = response.data.body;
+
+                    var reqDetail = "<div id='req-detail' class='info'>" + 
+                                        "<p style='margin-bottom: 0; margin-top: 0;'>" + 
+                                            "<span class='head'>Requisition #" + req['id'] + "</span><br/>" + 
+                                            req['description'] + "&nbsp;&nbsp;" + 
+                                            "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
+                                        "</p>"
+                                    "</div>";
+
+                    if (req['items'] != "") {
+
+                        var items = req['items'];
+
+                        var itemList = "<div id='item-list' class='info'>" + 
+                                            "<h6>Items</h6>" + 
+                                            "<table>" + 
+                                                "<tr>" + 
+                                                    "<th>Item ID.</th>" + 
+                                                    "<th>Name</th>" + 
+                                                    "<th>Description</th>" + 
+                                                    "<th>Quantity</th>" + 
+                                                    "<th>Unit Price</th>" + 
+                                                    "<th>&nbsp;</th>" + 
+                                                    "<th>&nbsp;</th>" + 
+                                                "</tr>";
+
+                        for (i=0; i<items.length; i++)  {
+                            itemList += "<tr>" + 
+                                            "<td>" + items[i]['id'] + "</td>" + 
+                                            "<td>" + items[i]['name'] + "</td>" + 
+                                            "<td>" + items[i]['description'] + "</td>" + 
+                                            "<td>" + items[i]['quantity'] + "</td>" + 
+                                            "<td>" + items[i]['unitprice'] + "</td>" + 
+                                            "<td><a href='#'>Edit</a></td>" + 
+                                            "<td><a href='#'>Delete</a></td>" +
+                                        "</tr>";
+                        }
+
+                        itemList += "</table></div>";
+
+                    }
+
+                    $(".activity-board").html(reqDetail);
+                    $(".activity-board").append(itemList);
+                }
+
+            });
+        }
+
+    </script><!--}}}-->
+</%def>
+
+<%def name="menu()">
+    <div class="grid_4 alpha">
+        <div id="menu" class="widget">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>Requisition Detail</h4>
+            <div class="activity-board">
+                <div id="req-detail" class="info"></div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="page_content()">
+    ${self.menu()} 
+    ${self.activity()}
+</%def>
