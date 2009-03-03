@@ -3,53 +3,7 @@
 <%def name="title()">Create Requisition</%def>
 
 <%def name="custom_js()">
-    <script>
-        $(function()    {
-        });
-
-        function showCreatereqForm()    {
-            $("#req-links").remove();
-            $("#requisition-form").show();
-        }
-
-        function showAdditemForm()  {
-            $("#message").remove();
-            $("#add-item").remove();
-            $("#add-item-form").show();
-        }
-
-        function submitReq()    {
-            
-            var data = "description=" + $("#req-description").val();
-
-            var url = "/requisition/new";
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: data,
-                dataType: "json",
-
-                success: function(response) {
-                    if (response.code != 0) {
-                        $("#requisition .feedback")
-                            .addClass("err")
-                            .html("Error Creating Requisition");
-
-                    } else  {
-                        $("#requisition-form").remove();
-                        $(".main .widget .activity-board").append(
-                                                "<div id='message' class='feedback ok'>Requisition Created Successfully.</div>" + 
-                                                "<a id='add-item' href='#' onclick=\"showAdditemForm()\">Add items</a>"
-                                            );
-                    }
-                }
-
-            });
-
-        }
-    </script>
+    <script src="/js/req.js"></script>
 </%def>
 
 <%def name="page_content()">
@@ -65,12 +19,13 @@
 
     <div class="grid_12 omega main">
         <div class="widget">
-            <h4>Requisitions</h4>
+            <h4>Create Requisition</h4>
             <div class="activity-board">
-                <p id="req-links">
-                    <a id="create-req" href="#" onclick="showCreatereqForm()">Create Requisition</a>
-                </p>
-                <form name="requisition-form" id="requisition-form" class="info-form">
+                <div id="req-links" class="info">
+                    <h6><a id="create-req" href="#" onclick="showCreatereqForm()">Create Requisition</a></h6>
+                </div>
+
+                <form name="requisition-form" id="requisition-form" class="info-form"><!--{{{-->
 
                     <h6>Create Requisition</h6>
                     <div class="feedback">&nbsp;</div>
@@ -84,11 +39,11 @@
                     </fieldset>
 
                     <fieldset class="submit">
-                        <input type="button" class="submit" value="Create" onClick="submitReq()"/>
+                        <input type="button" class="submit" value="Create" onClick="submitReq();"/>
                     </fieldset>
-                </form>
+                </form><!--}}}-->
 
-                <form name="add-item-form" id="add-item-form" class="info-form">
+                <form name="add-item-form" id="add-item-form" class="info-form"><!--{{{-->
 
                     <h6>Add Item To Requisition</h6>
                     <div class="feedback">&nbsp;</div>
@@ -114,9 +69,10 @@
                     </fieldset>
 
                     <fieldset class="submit">
-                        <input type="button" class="submit" value="Add" onClick=""/>
+                        <input type="button" class="submit" value="Add" onClick="addItem();"/>
                     </fieldset>
-                </form>
+                </form><!--}}}-->
+
             </div>
         </div>
     </div>

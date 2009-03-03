@@ -68,10 +68,20 @@ class Requisition(Base):
         req = Requisition(desc)
         meta.session.add(req)
         meta.session.flush()
-        return req
+        return req.todict()
 
     @staticmethod
     def get(id=None):
+        try:
+            if id:
+                return meta.session.query(Requisition).filter_by(id=id).one()
+            else:
+                return [r for r in meta.session.query(Requisition)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_as_dict(id=None):
         try:
             if id:
                 return meta.session.query(Requisition).filter_by(id=id).one().todict()
@@ -96,8 +106,8 @@ class Requisition(Base):
                     "status": Requisition.STATUS_MAP[int(self.status)]
                 }
 
-        def add_item(self):
-            self.items.append(Item(quantity, name, description, unitprice))
+    def add_item(self, quantity, name, description, unitprice):
+        self.items.append(Item(quantity, name, description, unitprice))
 
 class Order(Base):
     __tablename__ = 'order'
@@ -120,8 +130,8 @@ class Item(Base):
     name = Column(String(200), nullable=False)
     description = Column(Text)
     unitprice = Column(Integer, nullable=False, default='0')
-    requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
-    orderid = Column(Integer, ForeignKey('order.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    orderid = Column(Integer, ForeignKey('order.id', ondelete='RESTRICT', onupdate='CASCADE'))
 
     requisition = relation(Requisition, backref=backref('items', order_by=id))
     order = relation(Order, backref=backref('items', order_by=id))
