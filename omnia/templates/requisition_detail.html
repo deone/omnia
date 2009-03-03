@@ -5,11 +5,14 @@
 <%def name="custom_js()">
     <script><!--{{{-->
 
-        var reqId = "${c.req_id}";
+        $(function()    {
 
-        var url = "/requisition/" + reqId + "/get";
+            var reqId = "${c.req_id}";
+            var url = "/requisition/" + reqId + "/get";
 
-        getReq(url);
+            getReq(url);
+
+        });
 
         function getReq(url)  {
             $.ajax({
@@ -22,30 +25,18 @@
 
                     var req = response.data.body;
 
-                    var reqDetail = "<div id='req-detail' class='info'>" + 
-                                        "<p style='margin-bottom: 0; margin-top: 0;'>" + 
-                                            "<span class='head'>Requisition #" + req['id'] + "</span><br/>" + 
-                                            req['description'] + "&nbsp;&nbsp;" + 
-                                            "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
-                                        "</p>"
-                                    "</div>";
+                    var reqDetail = "<p style='margin-bottom: 0; margin-top: 0;'>" + 
+                                        "<span class='head'>Requisition #" + req['id'] + "</span><br/>" + 
+                                        req['description'] + "&nbsp;&nbsp;" + 
+                                        "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
+                                    "</p>";
+
+                    $("#req-detail").html(reqDetail);
 
                     if (req['items'] != "") {
 
                         var items = req['items'];
-
-                        var itemList = "<div id='item-list' class='info'>" + 
-                                            "<h6>Items</h6>" + 
-                                            "<table>" + 
-                                                "<tr>" + 
-                                                    "<th>Item ID.</th>" + 
-                                                    "<th>Name</th>" + 
-                                                    "<th>Description</th>" + 
-                                                    "<th>Quantity</th>" + 
-                                                    "<th>Unit Price</th>" + 
-                                                    "<th>&nbsp;</th>" + 
-                                                    "<th>&nbsp;</th>" + 
-                                                "</tr>";
+                        var itemList = "";
 
                         for (i=0; i<items.length; i++)  {
                             itemList += "<tr>" + 
@@ -59,12 +50,10 @@
                                         "</tr>";
                         }
 
-                        itemList += "</table></div>";
+                        $("#req-items").html(itemList);
 
                     }
 
-                    $(".activity-board").html(reqDetail);
-                    $(".activity-board").append(itemList);
                 }
 
             });
@@ -73,7 +62,7 @@
     </script><!--}}}-->
 </%def>
 
-<%def name="menu()">
+<%def name="menu()"><!--{{{-->
     <div class="grid_4 alpha">
         <div id="menu" class="widget">
             <ul>
@@ -82,18 +71,34 @@
             </ul>
         </div>
     </div>
-</%def>
+</%def><!--}}}-->
 
-<%def name="activity()">
+<%def name="activity()"><!--{{{-->
     <div class="grid_12 omega main">
         <div class="widget">
             <h4>Requisition Detail</h4>
             <div class="activity-board">
                 <div id="req-detail" class="info"></div>
+                <div id="item-list" class="info">
+                    <h6>Items</h6>
+                    <table>
+                        <thead>
+                            <th>Item ID.</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </thead>
+                        <tbody id="req-items">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</%def>
+</%def><!--}}}-->
 
 <%def name="page_content()">
     ${self.menu()} 
