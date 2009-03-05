@@ -33,19 +33,19 @@ class RequisitionController(BaseController):
     def new(self, **kwargs):
         description = request.params['description']
         req = Requisition.create(description)
-        return ("new", req.todict())
+        return ("object", req.todict())
 
     @h.json_response
     def get(self, id, **kwargs):
-        return ("requisition", Requisition.get_as_dict(id=id))
+        return ("object", Requisition.get_as_dict(id=id))
 
     @h.json_response
     def get_all(self, **kwargs):
-        return ("requisitions", Requisition.get_as_dict(id=None))
+        return ("list", Requisition.get_as_dict(id=None))
 
     @h.json_response
     def get_open(self, **kwargs):
-        return ("open_reqs", Requisition.get_open())
+        return ("list", Requisition.get_open())
 
     @h.json_response
     @h.commit_or_rollback

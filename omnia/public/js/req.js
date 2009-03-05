@@ -69,9 +69,6 @@ function addItem(reqId)  {//{{{
 
 }//}}}
 
-
-
-// To be refactored
 function getReq(url)  {//{{{
 
     $.ajax({
@@ -84,64 +81,63 @@ function getReq(url)  {//{{{
 
             var req = response.data.body;
 
-            var reqDetail = "<p>" + 
-                                "Requisition #" + req['id'] + "<br/>" + 
-                                req['description'] + "&nbsp;&nbsp;" + 
-                                "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
-                            "</p>";
+            if (response.data.type == "list")   {
+                displayReqs(req);
 
-            $("#req-detail").html(reqDetail);
-
-            if (req['items'] != "") {
-
-                var items = req['items'];
-                var itemList = "";
-
-                for (i=0; i<items.length; i++)  {
-                    itemList += "<tr>" + 
-                                    "<td>" + items[i]['id'] + "</td>" + 
-                                    "<td>" + items[i]['name'] + "</td>" + 
-                                    "<td>" + items[i]['description'] + "</td>" + 
-                                    "<td>" + items[i]['quantity'] + "</td>" + 
-                                    "<td>" + items[i]['unitprice'] + "</td>" + 
-                                    "<td><a href='#'>Edit</a></td>" + 
-                                    "<td><a href='#'>Delete</a></td>" +
-                                "</tr>";
-                }
-
-                $("#req-items").html(itemList);
+            } else if(response.data.type == "object") {
+                displayReqAndItems(req);
 
             }
 
         }
 
     });
+
 }//}}}
 
-function getAllReq(url) {
+function displayReqAndItems(req)   {//{{{
 
-    $.ajax({
-        url: url,
-        type: "GET",
-        dataType: "json",
+    var reqDetail = "<p>" + 
+                        "Requisition #" + req['id'] + "<br/>" + 
+                        req['description'] + "&nbsp;&nbsp;" + 
+                        "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
+                    "</p>";
 
-        success: function(response) {
-            displayReqs(response.data.body);                              
+    $("#req-detail").html(reqDetail);
+
+    if (req['items'] != "") {
+
+        var items = req['items'];
+        var itemList = "";
+
+        for (i=0; i<items.length; i++)  {
+            itemList += "<tr>" + 
+                            "<td>" + items[i]['id'] + "</td>" + 
+                            "<td>" + items[i]['name'] + "</td>" + 
+                            "<td>" + items[i]['description'] + "</td>" + 
+                            "<td>" + items[i]['quantity'] + "</td>" + 
+                            "<td>" + items[i]['unitprice'] + "</td>" + 
+                            "<td><a href='#'>Edit</a></td>" + 
+                            "<td><a href='#'>Delete</a></td>" +
+                        "</tr>";
         }
-    });
 
-}
+        $("#req-items").html(itemList);
 
-function displayReqs(data)  {//{{{
+    }
+        
+}//}}}
+
+function displayReqs(req)  {//{{{
     var rows = "";
 
-    for (i=0; i<data.length; i++)   {
+    for (i=0; i<req.length; i++)   {
 
         rows += "<tr>" + 
-                    "<td>" + data[i]['id'] + "</td>" + 
-                    "<td>" + data[i]['description'] + "</td>" + 
-                    "<td>" + data[i]['status'] + "</td>" + 
-                    "<td><a href='/requisition/" + data[i]['id'] + "/items'>View Items</a></td>" + 
+                    "<td>" + req[i]['id'] + "</td>" + 
+                    "<td>" + req[i]['description'] + "</td>" + 
+                    "<td>" + req[i]['status'] + "</td>" + 
+                    "<td><a href='/requisition/" + req[i]['id'] + "/items'>View Items</a></td>" + 
                 "</tr>";
 
     }
@@ -149,9 +145,6 @@ function displayReqs(data)  {//{{{
     $("#reqs-container").html(rows);
 
 }//}}}
-
-
-
 
 // Items//{{{
 function createItemRows(list)   {
