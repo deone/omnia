@@ -5,39 +5,22 @@
 .main .widget   {
     border-style: none none solid none;
     padding: 0;
-    margin-bottom: 20px;
 }
 
-.activity-board   {
+.inner  {
     padding: 5px 0;
 }
 
-.activity-board form  {
-    background-color: #f5f5f5;
-}
-
-.activity-board form label  {
-    width: 6em;
-}
-
-.activity-board form fieldset.submit  {
-    padding-left: 92px;
-    padding-bottom: 1em;
+.inner a   {
+    font-weight: bold;
 }
 
 #requisition-form    {
     display: none;
 }
 
-.activity-board .info, .activity-board form   {
-    background-color: #f5f5f5;
-    padding: 10px;
-}
 
-.head   {
-    font-size: 120%;
-    font-weight: bold;
-}
+
 
 #req-detail {
     margin-bottom: 5px;

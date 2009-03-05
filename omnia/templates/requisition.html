@@ -19,11 +19,12 @@
 
 <%def name="activity()">
     <div class="grid_12 omega main">
+
         <div class="widget">
             <h4>Create Requisition</h4>
-            <div class="activity-board">
-                <div id="req-links" class="info">
-                    <span class="head"><a id="create-req" href="#" onclick="showCreateReqForm()">Create Requisition</a></span>
+            <div class="inner">
+                <div id="req-links">
+                    <a id="create-req" href="#" onclick="showCreateReqForm()">Create Requisition</a>
                 </div>
 
                 <form name="requisition-form" id="requisition-form" class="info-form"><!--{{{-->
@@ -38,7 +39,7 @@
                     </fieldset>
 
                     <fieldset class="submit">
-                        <input type="button" class="submit" value="Create" onClick="submitReq();"/>
+                        <input type="button" class="submit" value="Create" onClick="createReq();"/>
                     </fieldset>
                 </form><!--}}}-->
 

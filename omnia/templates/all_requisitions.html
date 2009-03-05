@@ -3,6 +3,7 @@
 <%def name="title()">All Requisitions</%def>
 
 <%def name="custom_js()">
+    <script src="/js/req.js"></script>
     <script>
         $(function()    {
 
@@ -11,38 +12,6 @@
 
         });
 
-
-        function getAllReq(url) {
-
-            $.ajax({
-                url: url,
-                type: "GET",
-                dataType: "json",
-
-                success: function(response) {
-                    displayReqs(response.data.body);                              
-                }
-            });
-
-        }
-
-        function displayReqs(data)  {
-            var rows = "";
-
-            for (i=0; i<data.length; i++)   {
-
-                rows += "<tr>" + 
-                            "<td>" + data[i]['id'] + "</td>" + 
-                            "<td>" + data[i]['description'] + "</td>" + 
-                            "<td>" + data[i]['status'] + "</td>" + 
-                            "<td><a href='/requisition/" + data[i]['id'] + "/items'>View Items</a></td>" + 
-                        "</tr>";
-
-            }
-
-            $("#reqs-container").html(rows);
-
-        }
     </script>
 </%def>
 
@@ -59,16 +28,17 @@
 
 <%def name="activity()">
     <div class="grid_12 omega main">
+
         <div class="widget">
             <h4>All Requisitions</h4>
-            <div class="activity-board">
-                <div id='item-list' class='info'>
+            <div class="inner">
+                <div id="item-list">
                     <table>
                         <thead>
                             <th>Requisition ID.</th>
                             <th>Description</th>
                             <th>Status</th>
-                            <th>&nbsp;</th>
+                            <th>Items</th>
                         </thead>
                         <tbody id="reqs-container">
                         </tbody>

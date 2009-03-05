@@ -1,0 +1,30 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Approve Requisitions</%def>
+
+<%def name="custom_js()"></%def>
+
+<%def name="menu()">
+    <div class="grid_4 alpha">
+        <div id="menu" class="widget">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>Approve Requisitions</h4>
+            <div class="activity-board"></div>
+        </div>
+    </div>
+</%def>
+
+<%def name="page_content()">
+    ${self.menu()} 
+    ${self.activity()}
+</%def>

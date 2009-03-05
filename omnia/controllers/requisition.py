@@ -18,26 +18,34 @@ class RequisitionController(BaseController):
         return render("/add_item.html")
 
     def details(self, id):
+        """Displays requisition and items just after creation and item addition"""
         c.req_id = id
         return render("/requisition_detail.html")
 
     def all(self):
         return render("/all_requisitions.html")
 
+    def approve(self):
+        return render("/open_requisitions.html")
+
     @h.json_response
     @h.commit_or_rollback
     def new(self, **kwargs):
         description = request.params['description']
         req = Requisition.create(description)
-        return ("new", req)
+        return ("new", req.todict())
 
     @h.json_response
     def get(self, id, **kwargs):
-        return ("requisition", Requisition.get_as_dict(id))
+        return ("requisition", Requisition.get_as_dict(id=id))
 
     @h.json_response
     def get_all(self, **kwargs):
         return ("requisitions", Requisition.get_as_dict(id=None))
+
+    @h.json_response
+    def get_open(self, **kwargs):
+        return ("open_reqs", Requisition.get_open())
 
     @h.json_response
     @h.commit_or_rollback

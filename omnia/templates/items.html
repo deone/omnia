@@ -3,7 +3,9 @@
 <%def name="title()">Items</%def>
 
 <%def name="custom_js()">
+    <script src="/js/req.js"></script>
     <script>
+
         $(function()    {
 
             var url = "/requisition/${c.requisition['id']}/get_items";
@@ -11,45 +13,6 @@
 
         });
 
-
-        function createItemRows(list)   {
-            var rows = "";
-
-            for (i=0; i<list.length; i++)   {
-                rows += "<tr>" + 
-                            "<td>" + list[i]['id'] + "</td>" + 
-                            "<td>" + list[i]['name'] + "</td>" + 
-                            "<td>" + list[i]['description'] + "</td>" + 
-                            "<td>" + list[i]['quantity'] + "</td>" + 
-                            "<td>" + list[i]['unitprice'] + "</td>" + 
-                        "</tr>";
-            }
-            $("#item-container").html(rows);
-        }
-
-        function showItems(url)    {
-            
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                dataType: "json",
-
-                success: function(itemList)  {
-                    if (itemList.code != 0)  {
-                        alert(itemList.code + ": " + itemList.data.body);
-                    } else  {
-                        if (itemList.data.type != "list")    {
-                            alert("Unrecognized data format: " + itemList.data.type);
-                        } else  {
-                            createItemRows(itemList.data.body);
-                        }
-                    }
-                }
-
-            });
-
-        }
     </script>
 </%def>
 

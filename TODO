@@ -1,0 +1,3 @@
+Refactor getReq and getAllReq, they should rely on the data type to perform their actions.
+Work on approve and generate orders.
+Complete refactor among other UIs.

@@ -68,7 +68,7 @@ class Requisition(Base):
         req = Requisition(desc)
         meta.session.add(req)
         meta.session.flush()
-        return req.todict()
+        return req
 
     @staticmethod
     def get(id=None):
@@ -114,6 +114,11 @@ class Requisition(Base):
     def get_items(id):
         items = [i.todict() for i in meta.session.query(Item).filter_by(requisitionid=id)]
         return items
+
+    @staticmethod
+    def get_open():
+        reqs = [r.todict() for r in meta.session.query(Requisition).filter_by(status=0)]
+        return reqs
 
 class Order(Base):
     __tablename__ = 'order'

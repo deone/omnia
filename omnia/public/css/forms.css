@@ -13,13 +13,13 @@ fieldset ol li  {
 }
 
 .info-form fieldset.submit {
-    padding-left: 11em;
+    padding-left: 9em;
     padding-bottom: 1em;
 }
 
 .info-form label    {
     float: left;
-    width: 10em;
+    width: 8em;
     text-align: right;
     margin-right: 1em;
 }
