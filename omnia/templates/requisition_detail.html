@@ -33,25 +33,25 @@
     <div class="grid_12 omega main">
 
         <div class="widget">
-            <h4>Requisition Detail</h4>
+            <h4>Requisition Details</h4>
             <div class="inner">
                 <div id="req-detail"></div>
-                <div id="item-list">
-                    <h6>Items</h6>
-                    <table>
-                        <thead>
-                            <th>Item ID.</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </thead>
-                        <tbody id="req-items">
-                        </tbody>
-                    </table>
-                </div>
+                <h6>Items</h6>
+                <table>
+                    <thead>
+                        <th>Item ID.</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                    </thead>
+                    <tbody id="req-items">
+                    </tbody>
+                </table>
+            </div>
+            <div id="other" class="inner">
+                <input type="button" class="button" value="Approve" onclick="approveReq('${c.req_id}');"/>
+                <div class="clear-float"></div>
             </div>
         </div>
 

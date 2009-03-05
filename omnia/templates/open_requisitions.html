@@ -2,7 +2,17 @@
 
 <%def name="title()">Approve Requisitions</%def>
 
-<%def name="custom_js()"></%def>
+<%def name="custom_js()">
+    <script src="/js/req.js"></script>
+    <script>
+        $(function()    {
+
+            var url = "/requisition/get_open";
+            getReq(url);
+
+        });
+    </script>
+</%def>
 
 <%def name="menu()">
     <div class="grid_4 alpha">
@@ -19,7 +29,17 @@
     <div class="grid_12 omega main">
         <div class="widget">
             <h4>Approve Requisitions</h4>
-            <div class="inner"></div>
+            <div class="inner">
+                <table>
+                    <thead>
+                        <th>Requisition ID.</th>
+                        <th>Description</th>
+                        <th>&nbsp;</th>
+                    </thead>
+                    <tbody id="open-reqs-container">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </%def>

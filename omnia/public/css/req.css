@@ -15,18 +15,14 @@
     font-weight: bold;
 }
 
-#requisition-form    {
+.inner .link-back   {
+    float: left;
+}
+
+.inner .button    {
+    float: right;
+}
+
+#requisition-form, #other, .inner .button    {
     display: none;
-}
-
-
-
-
-#req-detail {
-    margin-bottom: 5px;
-}
-
-#item-list h6   {
-    border-bottom-style: none;
-    margin-bottom: 5px;
 }

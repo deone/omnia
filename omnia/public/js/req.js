@@ -81,12 +81,14 @@ function getReq(url)  {//{{{
 
             var req = response.data.body;
 
-            if (response.data.type == "list")   {
-                displayReqs(req);
-
-            } else if(response.data.type == "object") {
+            if (response.data.type == "object")   {
                 displayReqAndItems(req);
 
+            } else if (response.data.type == "all_reqs_list") {
+                displayReqs("#reqs-container", req);
+
+            } else if (response.data.type == "open_reqs_list")  {
+                displayOpenReqs("#open-reqs-container", req);
             }
 
         }
@@ -95,40 +97,47 @@ function getReq(url)  {//{{{
 
 }//}}}
 
-function displayReqAndItems(req)   {//{{{
+function showReqDetails(req)   {//{{{
 
-    var reqDetail = "<p>" + 
-                        "Requisition #" + req['id'] + "<br/>" + 
-                        req['description'] + "&nbsp;&nbsp;" + 
-                        "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
-                    "</p>";
+    rf = document.referrer.split("/");
+
+    if (rf[rf.length - 1] == "add_item")  {
+        var reqDetail = "<p>" + 
+                            "Requisition #" + req['id'] + "<br/>" + 
+                            req['description'] + "&nbsp;&nbsp;" + 
+                            "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
+                        "</p>";
+    } else  {
+        var reqDetail = "<p>" + 
+                            "Requisition #" + req['id'] + "<br/>" + 
+                            req['description'] + 
+                        "</p>";
+    }
 
     $("#req-detail").html(reqDetail);
+
+}//}}}
+
+function displayReqAndItems(req)   {//{{{
+
+    showReqDetails(req); 
 
     if (req['items'] != "") {
 
         var items = req['items'];
-        var itemList = "";
-
-        for (i=0; i<items.length; i++)  {
-            itemList += "<tr>" + 
-                            "<td>" + items[i]['id'] + "</td>" + 
-                            "<td>" + items[i]['name'] + "</td>" + 
-                            "<td>" + items[i]['description'] + "</td>" + 
-                            "<td>" + items[i]['quantity'] + "</td>" + 
-                            "<td>" + items[i]['unitprice'] + "</td>" + 
-                            "<td><a href='#'>Edit</a></td>" + 
-                            "<td><a href='#'>Delete</a></td>" +
-                        "</tr>";
-        }
-
-        $("#req-items").html(itemList);
+        createItemRows("#req-items", items);
+        showExtraActions();
 
     }
         
 }//}}}
 
-function displayReqs(req)  {//{{{
+function approveReq(id) {//{{{
+    alert("Requisition " + id + " approved");
+}//}}}
+
+// Req. status is the only difference btw displayReqs() and displayOpenReqs(), refactor!
+function displayReqs(container, req)  {//{{{
     var rows = "";
 
     for (i=0; i<req.length; i++)   {
@@ -137,17 +146,35 @@ function displayReqs(req)  {//{{{
                     "<td>" + req[i]['id'] + "</td>" + 
                     "<td>" + req[i]['description'] + "</td>" + 
                     "<td>" + req[i]['status'] + "</td>" + 
-                    "<td><a href='/requisition/" + req[i]['id'] + "/items'>View Items</a></td>" + 
+                    "<td><a href='/requisition/" + req[i]['id'] + "/req_and_items'>Details</a></td>" + 
                 "</tr>";
 
     }
 
-    $("#reqs-container").html(rows);
+    $(container).html(rows);
 
 }//}}}
 
-// Items//{{{
-function createItemRows(list)   {
+function displayOpenReqs(container, req)  {//{{{
+    var rows = "";
+
+    for (i=0; i<req.length; i++)   {
+
+        rows += "<tr>" + 
+                    "<td>" + req[i]['id'] + "</td>" + 
+                    "<td>" + req[i]['description'] + "</td>" + 
+                    "<td><a href='/requisition/" + req[i]['id'] + "/req_and_items'>Details</a></td>" + 
+                "</tr>";
+
+    }
+
+    $(container).html(rows);
+
+}//}}}
+
+
+// Items
+function createItemRows(container, list)   {//{{{
 
     var rows = "";
 
@@ -162,12 +189,30 @@ function createItemRows(list)   {
                 "</tr>";
     }
 
-    $("#item-container").html(rows);
-    $("#item-container").append("<a href='/requisition/all'>Back</a>");
-}
+    $(container).html(rows);
 
-function showItems(url)    {
-    
+}//}}}
+
+function showExtraActions() {//{{{
+
+    var referrer = document.referrer;
+
+    // Add 'back' links to page (to ease viewing) except during requisition creation
+    var rf = referrer.split("/");
+    if (rf[rf.length - 1] != "add_item") {
+        $("#other").show();
+        $("#other input").before("<a class='link-back' href='" + referrer + "'>Back</a>");
+    }
+
+    // If page was redirected from http://foobar/requistion/approve, add 'Approve' button
+    if (rf[rf.length - 1] == "approve") {
+        $(".inner input").show();
+    }
+
+}//}}}
+
+function showItems(url)    {//{{{
+
     $.ajax({
 
         url: url,
@@ -181,7 +226,7 @@ function showItems(url)    {
                 if (itemList.data.type != "list")    {
                     alert("Unrecognized data format: " + itemList.data.type);
                 } else  {
-                    createItemRows(itemList.data.body);
+                    createItemRows("#item-container", itemList.data.body);
                 }
             }
         }
