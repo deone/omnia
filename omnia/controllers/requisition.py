@@ -17,8 +17,7 @@ class RequisitionController(BaseController):
         c.req_id = id
         return render("/add_item.html")
 
-    def details(self, id):
-        """Displays requisition and items just after creation and item addition"""
+    def req_and_items(self, id):
         c.req_id = id
         return render("/requisition_detail.html")
 

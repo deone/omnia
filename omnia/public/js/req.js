@@ -61,7 +61,7 @@ function addItem(reqId)  {//{{{
                     .addClass("err")
                     .html("Error Adding Item");
             } else  {
-                document.location = "/requisition/" + reqId + "/details";
+                document.location = "/requisition/" + reqId + "/req_and_items";
             }
         }
 
