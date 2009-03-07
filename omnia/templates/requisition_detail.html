@@ -50,7 +50,7 @@
                 </table>
             </div>
             <div id="other" class="inner">
-                <input type="button" class="button" value="Approve" onclick="approveReq('${c.req_id}');"/>
+                <input type="button" class="button" value="Approve" onclick="approveReq('${c.req_id}', '${session['user'].id}');"/>
                 <div class="clear-float"></div>
             </div>
         </div>

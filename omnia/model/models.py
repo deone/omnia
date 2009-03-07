@@ -30,6 +30,12 @@ class User(Base):#{{{
         self.roles = roles
 
     @staticmethod
+    def create(username, password, firstname, lastname, roles):
+        user = User(username, password, firstname, lastname, roles)
+        meta.session.add(user)
+        return user
+
+    @staticmethod
     def get(id=None, username=None):
         try:
             if id:
@@ -119,6 +125,56 @@ class Requisition(Base):
     def get_open():
         reqs = [r.todict() for r in meta.session.query(Requisition).filter_by(status=0)]
         return reqs
+
+    def approve(self, id, user_id):
+        self.status = 1
+        self.approvedrequisition = ApprovedRequisition(id, user_id)
+
+    @staticmethod
+    def get_approved():
+        approved = []
+        for r in meta.session.query(Requisition).filter_by(status=1):
+            approved.append(r.todict())
+
+        return approved
+
+def user_dict(id):
+    return meta.session.query(User).filter_by(id=id).one().todict()
+
+def req_dict(id):
+    return meta.session.query(Requisition).filter_by(id=id).one().todict()
+
+class ApprovedRequisition(Base):
+    __tablename__ = 'approvedrequisition'
+    __table_args__ = {'mysql_engine': 'innodb'}
+
+    id = Column(Integer, primary_key=True)
+    requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    userid = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+
+    requisition = relation(Requisition, backref=backref('approvedrequisition', uselist=False))
+    user = relation(User, backref=backref('approvedrequisitions', order_by=id))
+
+    def __init__(self, req_id, user_id):
+        self.requisitionid = req_id
+        self.userid = user_id
+
+    def todict(self):
+        return  {
+                    "id": self.id,
+                    "requisition": req_dict(self.requisitionid),
+                    "user": user_dict(self.userid)
+                }
+
+    @staticmethod
+    def get_as_dict(id=None):
+        try:
+            if id:
+                return meta.session.query(ApprovedRequisition).filter_by(id=id).one().todict()
+            else:
+                return [ar.todict() for ar in meta.session.query(ApprovedRequisition)]
+        except Exception, e:
+            print_exc()
 
 class Order(Base):
     __tablename__ = 'order'

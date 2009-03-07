@@ -7,8 +7,11 @@
     <script>
         $(function()    {
 
-            var url = "/requisition/get_open";
-            getReq(url);
+            var openUrl = "/requisition/get_open";
+            getReq(openUrl);
+
+            var approvedUrl = "/requisition/get_approved";
+            getReq(approvedUrl);
 
         });
     </script>
@@ -37,6 +40,19 @@
                         <th>&nbsp;</th>
                     </thead>
                     <tbody id="open-reqs-container">
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Approved Requisitions</h4>
+            <div class="inner">
+                <table>
+                    <thead>
+                        <th>Requisition ID.</th>
+                        <th>Description</th>
+                        <th>Approved By</th>
+                    </thead>
+                    <tbody id="approved-reqs-container">
                     </tbody>
                 </table>
             </div>

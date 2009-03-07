@@ -89,6 +89,10 @@ function getReq(url)  {//{{{
 
             } else if (response.data.type == "open_reqs_list")  {
                 displayOpenReqs("#open-reqs-container", req);
+                
+            } else if (response.data.type == "approved_reqs_list")  {
+                displayApprovedReqs("#approved-reqs-container", req);
+
             }
 
         }
@@ -132,8 +136,25 @@ function displayReqAndItems(req)   {//{{{
         
 }//}}}
 
-function approveReq(id) {//{{{
-    alert("Requisition " + id + " approved");
+function approveReq(id, user_id) {//{{{
+
+    $.ajax({
+
+        url: "/requisition/" + id + "/approve_req",
+        type: "POST",
+        data: "user_id=" + user_id,
+        dataType: "json",
+
+        success: function(response) {
+            if (response.code != 0)  {
+                alert("Error Approving requisition");
+            } else  {
+                document.location = "/requisition/approve";
+            }
+        }
+
+    });
+
 }//}}}
 
 // Req. status is the only difference btw displayReqs() and displayOpenReqs(), refactor!
@@ -172,6 +193,23 @@ function displayOpenReqs(container, req)  {//{{{
 
 }//}}}
 
+function displayApprovedReqs(container, req)  {//{{{
+
+    var rows = "";
+
+    for (i=0; i<req.length; i++)   {
+
+        rows += "<tr>" + 
+                    "<td>" + req[i]['id'] + "</td>" + 
+                    "<td>" + req[i]['requisition']['description'] + "</td>" + 
+                    "<td>" + req[i]['user']['lastname'] + "</td>" + 
+                "</tr>";
+
+    }
+
+    $(container).html(rows);
+
+}//}}}
 
 // Items
 function createItemRows(container, list)   {//{{{

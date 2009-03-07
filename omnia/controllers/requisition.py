@@ -45,6 +45,10 @@ class RequisitionController(BaseController):
         return ("open_reqs_list", Requisition.get_open())
 
     @h.json_response
+    def get_approved(self, **kwargs):
+        return ("approved_reqs_list", ApprovedRequisition.get_as_dict(id=None))
+
+    @h.json_response
     def get_items(self, id=None, **kwargs):
         items = Requisition.get_items(id)
         return ("list", items)
@@ -67,4 +71,12 @@ class RequisitionController(BaseController):
 
         req = Requisition.get(id=id)
 
-        return req.add_item(quantity, name, description, unitprice)
+        req.add_item(quantity, name, description, unitprice)
+
+    @h.json_response
+    @h.commit_or_rollback
+    def approve_req(self, id, **kwargs):
+        req = Requisition.get(id=id)
+
+        user_id = request.params['user_id']
+        req.approve(id, user_id)
