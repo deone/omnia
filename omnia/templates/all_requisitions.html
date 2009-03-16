@@ -16,14 +16,7 @@
 </%def>
 
 <%def name="menu()">
-    <div class="grid_4 alpha">
-        <div id="menu" class="widget">
-            <ul>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </div>
-    </div>
+    <%include file="menu.html"/>
 </%def>
 
 <%def name="activity()">
@@ -36,6 +29,8 @@
                     <thead>
                         <th>Requisition ID.</th>
                         <th>Description</th>
+                        <th>Organization</th>
+                        <th>No. of Items</th>
                         <th>Status</th>
                         <th>&nbsp;</th>
                     </thead>

@@ -7,14 +7,7 @@
 </%def>
 
 <%def name="menu()">
-    <div class="grid_4 alpha">
-        <div id="menu" class="widget">
-            <ul>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </div>
-    </div>
+    <%include file="menu.html"/>
 </%def>
 
 <%def name="activity()">
@@ -31,15 +24,61 @@
                     <div class="feedback">&nbsp;</div>
                     <fieldset>
                         <ol>
+                            <h6>Requisition</h6>
+                            <li>
+                                <label for="date-required">Date Required</label>
+                                <select id="day">
+                                    <option value="">-Select-</option>
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                    <option value=3>3</option>
+                                    <option value=4>4</option>
+                                    <option value=5>5</option>
+                                </select>
+                                <select id="month">
+                                    <option value="">-Select-</option>
+                                    <option value=1>January</option>
+                                    <option value=2>February</option>
+                                    <option value=3>March</option>
+                                    <option value=4>April</option>
+                                    <option value=5>May</option>
+                                </select>
+                                <select id="year">
+                                    <option value="">-Select-</option>
+                                    <option value=2001>2001</option>
+                                    <option value=2002>2002</option>
+                                    <option value=2003>2003</option>
+                                    <option value=2004>2004</option>
+                                    <option value=2005>2005</option>
+                                </select>
+                            </li>
                             <li>
                                 <label for="req-description">Description</label>
                                 <textarea id="req-description" name="req-description" cols=40 rows=5></textarea>
+                            </li>
+                            <h6>Requestor&rsquo;s Details</h6>
+                            <li>
+                                <label for="organization">Organization</label>
+                                <input id="organization" name="organization"/>
+                            </li>
+                            <li>
+                                <label for="firstname">Firstname</label>
+                                <input id="firstname" name="firstname"/>
+                            </li>
+                            <li>
+                                <label for="surname">Surname</label>
+                                <input id="surname" name="surname"/>
+                            </li>
+                            <li>
+                                <label for="phone-number">Phone Number</label>
+                                <input id="phone-number" name="phone-number"/>
                             </li>
                         </ol>
                     </fieldset>
 
                     <fieldset class="submit">
                         <input type="button" class="submit" value="Create" onClick="createReq();"/>
+                        <input type="reset" value="Clear form"/>
                     </fieldset>
                 </form><!--}}}-->
 

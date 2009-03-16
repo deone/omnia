@@ -1,3 +1,10 @@
+function parseDate(day, month, year)   {//{{{
+
+    var _date = year + "-" + month + "-" + day;
+    return _date;
+
+}//}}}
+
 // Requisitions
 function showCreateReqForm()    {//{{{
 
@@ -7,8 +14,18 @@ function showCreateReqForm()    {//{{{
 }//}}}
 
 function createReq()    {//{{{
-            
-    var data = "description=" + $("#req-description").val();
+
+    var dateRequired = parseDate($("#day").val(), $("#month").val(), $("#year").val());
+    var reqDesc = $("#req-description").val();
+    var organization = $("#organization").val();
+    var fullName = $("#firstname").val() + " " + $("#surname").val();
+    var phoneNumber = $("#phone-number").val();
+
+    var data = "datereq=" + dateRequired +
+                "&reqdesc=" + reqDesc + 
+                "&organization=" + organization +
+                "&fullname=" + fullName + 
+                "&phone=" + phoneNumber;
 
     var url = "/requisition/new";
 
@@ -26,6 +43,7 @@ function createReq()    {//{{{
                     .html("Error Creating Requisition");
 
             } else  {
+                alert(response.code);
                 document.location = "/requisition/" + response.data.body['id'] + "/add_item";
             }
         }
@@ -88,7 +106,7 @@ function getReq(url)  {//{{{
                 displayReqs("#reqs-container", req);
 
             } else if (response.data.type == "open_reqs_list")  {
-                displayOpenReqs("#open-reqs-container", req);
+                displayReqs("#open-reqs-container", req);
                 
             } else if (response.data.type == "approved_reqs_list")  {
                 displayApprovedReqs("#approved-reqs-container", req);
@@ -105,18 +123,15 @@ function showReqDetails(req)   {//{{{
 
     rf = document.referrer.split("/");
 
-    if (rf[rf.length - 1] == "add_item")  {
-        var reqDetail = "<p>" + 
-                            "Requisition #" + req['id'] + "<br/>" + 
-                            req['description'] + "&nbsp;&nbsp;" + 
-                            "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
-                        "</p>";
-    } else  {
-        var reqDetail = "<p>" + 
-                            "Requisition #" + req['id'] + "<br/>" + 
-                            req['description'] + 
-                        "</p>";
-    }
+    var reqDetail = "<p>" + 
+                        "Requisition <b>#" + req['id'] + "</b><br/>" + 
+                        "Required <b>" + req['date_required'].split(" ")[0] + "</b><br/>" + 
+                        "Requestor <b>" + req['full_name'] + "</b><br/>" + 
+                        "Organization <b>" + req['organization'] + "</b><br/>" + 
+                        "Requestor&rsquo;s Phone Number <b>" + req['phone_number'] + "</b><br/>" + 
+                        "Description <b>" + req['description'] + "</b><br/>" + 
+                        "<a href='/requisition/" + req['id'] + "/add_item'>Add Item</a>" + 
+                    "</p>";
 
     $("#req-detail").html(reqDetail);
 
@@ -159,6 +174,7 @@ function approveReq(id, user_id) {//{{{
 
 // Req. status is the only difference btw displayReqs() and displayOpenReqs(), refactor!
 function displayReqs(container, req)  {//{{{
+
     var rows = "";
 
     for (i=0; i<req.length; i++)   {
@@ -166,24 +182,9 @@ function displayReqs(container, req)  {//{{{
         rows += "<tr>" + 
                     "<td>" + req[i]['id'] + "</td>" + 
                     "<td>" + req[i]['description'] + "</td>" + 
+                    "<td>" + req[i]['organization'] + "</td>" + 
+                    "<td>" + req[i]['items'].length + "</td>" + 
                     "<td>" + req[i]['status'] + "</td>" + 
-                    "<td><a href='/requisition/" + req[i]['id'] + "/req_and_items'>Details</a></td>" + 
-                "</tr>";
-
-    }
-
-    $(container).html(rows);
-
-}//}}}
-
-function displayOpenReqs(container, req)  {//{{{
-    var rows = "";
-
-    for (i=0; i<req.length; i++)   {
-
-        rows += "<tr>" + 
-                    "<td>" + req[i]['id'] + "</td>" + 
-                    "<td>" + req[i]['description'] + "</td>" + 
                     "<td><a href='/requisition/" + req[i]['id'] + "/req_and_items'>Details</a></td>" + 
                 "</tr>";
 
@@ -202,7 +203,7 @@ function displayApprovedReqs(container, req)  {//{{{
         rows += "<tr>" + 
                     "<td>" + req[i]['id'] + "</td>" + 
                     "<td>" + req[i]['requisition']['description'] + "</td>" + 
-                    "<td>" + req[i]['user']['lastname'] + "</td>" + 
+                    "<td>" + req[i]['user']['firstname'] + " " + req[i]['user']['lastname'] + "</td>" + 
                 "</tr>";
 
     }
@@ -215,8 +216,13 @@ function displayApprovedReqs(container, req)  {//{{{
 function createItemRows(container, list)   {//{{{
 
     var rows = "";
+    var totalQty = 0;
+    var totalAmount = 0;
 
     for (i=0; i<list.length; i++)   {
+
+        totalQty += parseInt(list[i]['quantity']);
+        totalAmount += parseInt(list[i]['unitprice']);
 
         rows += "<tr>" + 
                     "<td>" + list[i]['id'] + "</td>" + 
@@ -225,9 +231,17 @@ function createItemRows(container, list)   {//{{{
                     "<td>" + list[i]['quantity'] + "</td>" + 
                     "<td>" + list[i]['unitprice'] + "</td>" + 
                 "</tr>";
+
     }
 
-    $(container).html(rows);
+    $(container).html(rows + "<tr>" + 
+                                "<td>&nbsp;</td>" + 
+                                "<td>&nbsp;</td>" + 
+                                "<td><b>TOTAL</b></td>" + 
+                                "<td>" + totalQty + "</td>" + 
+                                "<td>" + totalAmount + "</td>" + 
+                            "</tr>"
+            );
 
 }//}}}
 
