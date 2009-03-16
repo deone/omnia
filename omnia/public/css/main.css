@@ -74,6 +74,10 @@ ul li   {
     margin: 0;
 }
 
+.widget form h6 {
+    margin-bottom: 10px;
+}
+
 .widget ul  {
     margin: 10px 0;
 }
