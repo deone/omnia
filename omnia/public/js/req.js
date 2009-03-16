@@ -43,7 +43,6 @@ function createReq()    {//{{{
                     .html("Error Creating Requisition");
 
             } else  {
-                alert(response.code);
                 document.location = "/requisition/" + response.data.body['id'] + "/add_item";
             }
         }

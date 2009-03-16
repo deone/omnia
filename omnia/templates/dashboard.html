@@ -5,18 +5,7 @@
 <%def name="custom_js()"></%def>
 
 <%def name="menu()">
-    <div class="grid_4 alpha">
-        <div class="widget">
-            <ul>
-                <li><a href="/requisition">Create Requisition</a></li>
-                <li><a href="/requisition/all">View Requisitions</a></li>
-                <li><a href="/requisition/approve">Approve Requisitions</a></li>
-                <li><a href="#">Generate Order</a></li>
-                <li><a href="#">Receive Goods</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </div>
-    </div>
+    <%include file="menu.html"/>
 </%def>
 
 <%def name="activity()">
