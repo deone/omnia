@@ -55,23 +55,32 @@ class User(Base):#{{{
                 'roles': self.roles
                 }#}}}
 
-class Requisition(Base):
+class Requisition(Base):#{{{
     __tablename__ = 'requisition'
     __table_args__ = {'mysql_engine': 'innodb'}
 
     id = Column(Integer, primary_key=True, nullable=False)
+    date_required = Column(DateTime, default=datetime.datetime.now())
     description = Column(Text, nullable=False)
+    organization = Column(String(100), nullable=False)
+    fullname = Column(String(100), nullable=False)
+    phone_number = Column(Integer, nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
     date_closed = Column(DateTime)
     status = Column(Integer, default='0', nullable=False)
 
-    def __init__(self, desc):
-        self.description = desc
+    def __init__(self, date_required, description, organization, fullname, phone_number):
+        self.date_required = date_required
+        self.description = description
+        self.organization = organization
+        self.fullname = fullname
+        self.phone_number = phone_number
         self.date_created = datetime.datetime.now()
 
+
     @staticmethod
-    def create(desc):
-        req = Requisition(desc)
+    def create(date_required, description, organization, fullname, phone_number):
+        req = Requisition(date_required, description, organization, fullname, phone_number)
         meta.session.add(req)
         meta.session.flush()
         return req
@@ -97,16 +106,20 @@ class Requisition(Base):
             print_exc()
 
     STATUS_MAP = {
-                    0: "open", 
-                    1: "approved",
-                    2: "disapproved",
-                    3: "closed"
+                    0: "Open", 
+                    1: "Approved",
+                    2: "Disapproved",
+                    3: "Closed"
                 }
 
     def todict(self):
         return  {
                     "id": self.id,
+                    "date_required": str(self.date_required),
                     "description": self.description,
+                    "organization": self.organization,
+                    "full_name": self.fullname,
+                    "phone_number": self.phone_number,
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed),
                     "status": Requisition.STATUS_MAP[int(self.status)],
@@ -136,7 +149,7 @@ class Requisition(Base):
         for r in meta.session.query(Requisition).filter_by(status=1):
             approved.append(r.todict())
 
-        return approved
+        return approved#}}}
 
 def user_dict(id):
     return meta.session.query(User).filter_by(id=id).one().todict()
@@ -144,7 +157,7 @@ def user_dict(id):
 def req_dict(id):
     return meta.session.query(Requisition).filter_by(id=id).one().todict()
 
-class ApprovedRequisition(Base):
+class ApprovedRequisition(Base):#{{{
     __tablename__ = 'approvedrequisition'
     __table_args__ = {'mysql_engine': 'innodb'}
 
@@ -174,9 +187,9 @@ class ApprovedRequisition(Base):
             else:
                 return [ar.todict() for ar in meta.session.query(ApprovedRequisition)]
         except Exception, e:
-            print_exc()
+            print_exc()#}}}
 
-class Order(Base):
+class Order(Base):#{{{
     __tablename__ = 'order'
     __table_args__ = {'mysql_engine': 'innodb'}
 
@@ -186,9 +199,9 @@ class Order(Base):
     date_created = Column(DateTime, default=datetime.datetime.now())
     date_closed = Column(DateTime, default=datetime.datetime.now())
     requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
-    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)#}}}
 
-class Item(Base):
+class Item(Base):#{{{
     __tablename__ = 'item'
     __table_args__ = {'mysql_engine': 'innodb'}
 
@@ -216,7 +229,7 @@ class Item(Base):
             "name": self.name,
             "description": self.description,
             "unitprice": self.unitprice
-        }
+        }#}}}
 
 class Vendor(Base):
     __tablename__ = 'vendor'

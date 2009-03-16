@@ -57,8 +57,13 @@ class RequisitionController(BaseController):
     @h.json_response
     @h.commit_or_rollback
     def new(self, **kwargs):
-        description = request.params['description']
-        req = Requisition.create(description)
+        date_required = request.params['datereq']
+        description = request.params['reqdesc']
+        organization = request.params['organization']
+        fullname = request.params['fullname']
+        phone_number = request.params['phone']
+
+        req = Requisition.create(date_required, description, organization, fullname, phone_number)
         return ("object", req.todict())
 
     @h.json_response
