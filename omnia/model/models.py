@@ -15,7 +15,7 @@ class User(Base):#{{{
     __tablename__ = 'user'
     __table_args__ = {'mysql_engine': 'innodb'}
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(200), nullable=False)
     firstname = Column(String(50), nullable=False)
@@ -64,7 +64,7 @@ class Requisition(Base):#{{{
     description = Column(Text, nullable=False)
     organization = Column(String(100), nullable=False)
     fullname = Column(String(100), nullable=False)
-    phone_number = Column(Integer, nullable=False)
+    phone_number = Column(String(20), nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
     date_closed = Column(DateTime)
     status = Column(Integer, default='0', nullable=False)
@@ -123,16 +123,16 @@ class Requisition(Base):#{{{
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed),
                     "status": Requisition.STATUS_MAP[int(self.status)],
-                    "items": [item.todict() for item in self.items]
+                    "items": [lineitem.todict() for lineitem in self.lineitems]
                 }
 
-    def add_item(self, quantity, name, description, unitprice):
-        self.items.append(Item(quantity, name, description, unitprice))
+    def add_item(self, name, itemtype, specification, quantity, unitprice, vendor):
+        self.lineitems.append(LineItem(name, itemtype, specification, quantity, unitprice, vendor))
 
     @staticmethod
-    def get_items(id):
-        items = [i.todict() for i in meta.session.query(Item).filter_by(requisitionid=id)]
-        return items
+    def get_line_items(id):
+        line_items = [li.todict() for li in meta.session.query(LineItem).filter_by(requisitionid=id)]
+        return line_items
 
     @staticmethod
     def get_open():
@@ -193,7 +193,7 @@ class Order(Base):#{{{
     __tablename__ = 'order'
     __table_args__ = {'mysql_engine': 'innodb'}
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True)
     amount = Column(Integer, nullable=False)
     status = Column(String(50))
     date_created = Column(DateTime, default=datetime.datetime.now())
@@ -201,41 +201,56 @@ class Order(Base):#{{{
     requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)#}}}
 
-class Item(Base):#{{{
-    __tablename__ = 'item'
+class LineItem(Base):
+    __tablename__ = 'lineitem'
     __table_args__ = {'mysql_engine': 'innodb'}
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    itemtype = Column(String(100), nullable=False)
+    specification = Column(Text)
     quantity = Column(Integer, nullable=False)
-    name = Column(String(200), nullable=False)
-    description = Column(Text)
-    unitprice = Column(Integer, nullable=False, default='0')
+    unitprice = Column(Integer, nullable=False)
+    vendor = Column(String(100), nullable=False)
     requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
-    orderid = Column(Integer, ForeignKey('order.id', ondelete='RESTRICT', onupdate='CASCADE'))
 
-    requisition = relation(Requisition, backref=backref('items', order_by=id))
-    order = relation(Order, backref=backref('items', order_by=id))
+    requisition = relation(Requisition, backref=backref('lineitems', order_by=id))
 
-    def __init__(self, quantity, name, description, unitprice):
-        self.quantity = quantity
+    def __init__(self, name, itemtype, specification, quantity, unitprice, vendor):
         self.name = name
-        self.description = description
+        self.itemtype = itemtype
+        self.specification = specification
+        self.quantity = quantity
         self.unitprice = unitprice
+        self.vendor = vendor
 
     def todict(self):
         return  {
             "id": self.id,
-            "quantity": self.quantity,
             "name": self.name,
-            "description": self.description,
-            "unitprice": self.unitprice
-        }#}}}
+            "itemtype": self.itemtype,
+            "specification": self.specification,
+            "quantity": self.quantity,
+            "unitprice": self.unitprice,
+            "vendor": self.vendor
+        }
 
 class Vendor(Base):
     __tablename__ = 'vendor'
     __table_args__ = {'mysql_engine': 'innodb'}
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(200), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(200), nullable=False, unique=True)
     address = Column(Text)
-    phone = Column(Integer)
+    phone = Column(String(20), nullable=False)
+
+class Item(Base):
+    __tablename__ = 'item'
+    __table_args__ = {'mysql_engine': 'innodb'}
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(200), nullable=False, unique=True)
+    type = Column(String(100), nullable=False)
+    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'))
+
+    vendor = relation(Vendor, backref=backref('items', order_by=id))
