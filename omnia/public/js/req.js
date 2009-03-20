@@ -6,13 +6,6 @@ function parseDate(day, month, year)   {//{{{
 }//}}}
 
 // Requisitions
-function showCreateReqForm()    {//{{{
-
-    $("#req-links").remove();
-    $("#requisition-form").show();
-
-}//}}}
-
 function createReq()    {//{{{
 
     var dateRequired = parseDate($("#day").val(), $("#month").val(), $("#year").val());
@@ -53,15 +46,19 @@ function createReq()    {//{{{
 
 function addItem(reqId)  {//{{{
 
-    var qty = $("#quantity").val();
     var name = $("#item-name").val();
-    var desc = $("#item-description").val();
+    var type = $("#item-type").val();
+    var specification = $("#specification").val();
+    var qty = $("#quantity").val();
     var unitprice = $("#unitprice").val();
+    var vendor = $("#vendor").val();
 
-    var data =  "qty=" + qty +
-                "&name=" + name +
-                "&desc=" + desc +
-                "&unitprice=" + unitprice;
+    var data =  "name=" + name +
+                "&type=" + type +
+                "&spec=" + specification +
+                "&qty=" + qty + 
+                "&unitprice=" + unitprice + 
+                "&vendor=" + vendor;
 
     var url = "/requisition/" + reqId + "/new_item";
 
@@ -226,14 +223,18 @@ function createItemRows(container, list)   {//{{{
         rows += "<tr>" + 
                     "<td>" + list[i]['id'] + "</td>" + 
                     "<td>" + list[i]['name'] + "</td>" + 
-                    "<td>" + list[i]['description'] + "</td>" + 
+                    "<td>" + list[i]['itemtype'] + "</td>" + 
+                    "<td>" + list[i]['specification'] + "</td>" + 
                     "<td>" + list[i]['quantity'] + "</td>" + 
                     "<td>" + list[i]['unitprice'] + "</td>" + 
+                    "<td>" + list[i]['vendor'] + "</td>"
                 "</tr>";
 
     }
 
     $(container).html(rows + "<tr>" + 
+                                "<td>&nbsp;</td>" + 
+                                "<td>&nbsp;</td>" + 
                                 "<td>&nbsp;</td>" + 
                                 "<td>&nbsp;</td>" + 
                                 "<td><b>TOTAL</b></td>" + 

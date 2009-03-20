@@ -23,6 +23,6 @@
     float: right;
 }
 
-#requisition-form, #other, .inner .button    {
+.inner .button    {
     display: none;
 }

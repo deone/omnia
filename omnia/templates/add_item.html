@@ -21,26 +21,41 @@
                     <fieldset>
                         <ol>
                             <li>
-                                <label for="quantity">Quantity</label>
-                                <input id="quantity" name="quantity"/>
-                            </li>
-                            <li>
                                 <label for="item-name">Name</label>
                                 <input id="item-name" name="item-name"/>
                             </li>
                             <li>
-                                <label for="item-description">Description</label>
-                                <textarea id="item-description" name="item-description" cols=40></textarea>
+                                <label for="item-type">Item Type</label>
+                                <select id="item-type">
+                                    <option value="">--Select--</option>
+                                    <option value="Hardware">Hardware</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label for="specification">Specification</label>
+                                <textarea id="specification" name="specification" cols=40></textarea>
+                            </li>
+                            <li>
+                                <label for="quantity">Quantity</label>
+                                <input id="quantity" name="quantity"/>
                             </li>
                             <li>
                                 <label for="unitprice">Unit Price</label>
                                 <input id="unitprice" name="unitprice"/>
+                            </li>
+                            <li>
+                                <label for="vendor">Vendor</label>
+                                <select id="vendor">
+                                    <option value="">--Select--</option>
+                                    <option value="HP">HP</option>
+                                </select>
                             </li>
                         </ol>
                     </fieldset>
 
                     <fieldset class="submit">
                         <input type="button" class="submit" value="Add" onClick="addItem('${c.req_id}');"/>
+                        <input type="reset" value="Clear form"/>
                     </fieldset>
                 </form><!--}}}-->
 
