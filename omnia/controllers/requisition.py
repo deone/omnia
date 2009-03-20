@@ -49,8 +49,8 @@ class RequisitionController(BaseController):
         return ("approved_reqs_list", ApprovedRequisition.get_as_dict(id=None))
 
     @h.json_response
-    def get_items(self, id=None, **kwargs):
-        items = Requisition.get_items(id)
+    def get_line_items(self, id=None, **kwargs):
+        items = Requisition.get_line_items(id)
         return ("list", items)
 
 
@@ -69,14 +69,16 @@ class RequisitionController(BaseController):
     @h.json_response
     @h.commit_or_rollback
     def new_item(self, id, **kwargs):
-        quantity = request.params['qty']
         name = request.params['name']
-        description = request.params['desc']
+        itemtype = request.params['type']
+        specification = request.params['spec']
+        quantity = request.params['qty']
         unitprice = request.params['unitprice']
+        vendor = request.params['vendor']
 
         req = Requisition.get(id=id)
 
-        req.add_item(quantity, name, description, unitprice)
+        req.add_item(name, itemtype, specification, quantity, unitprice, vendor)
 
     @h.json_response
     @h.commit_or_rollback
