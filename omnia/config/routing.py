@@ -19,10 +19,11 @@ def make_map():
     # CUSTOM ROUTES HERE
     map.connect('root', '/', controller='auth', action='index')
     map.connect('logout', '/logout', controller='auth', action='logout')
+    map.connect('misc_action_type', '/misc/:action/:type', controller='misc')
+    map.connect('misc', '/misc/:action', controller='misc')
     map.connect('requisition', '/requisition', controller='requisition', action='index')
     map.connect('requisition_action', '/requisition/:action', controller='requisition')
     map.connect('requisition_others', '/requisition/:id/:action', controller='requisition')
-    #map.connect('requisition_by_status', '/requisition/:status/:action', controller='requisition')
     map.connect('item_action', '/item/:action', controller='item')
     map.connect('item_others', '/item/:id/:action', controller='item')
 

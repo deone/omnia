@@ -25,7 +25,7 @@ class RequisitionController(BaseController):
         return render("/all_requisitions.html")
 
     def approve(self):
-        return render("/open_requisitions.html")
+        return render("/approve.html")
 
     def items(self, id):
         c.requisition = Requisition.get_as_dict(id)
@@ -34,19 +34,19 @@ class RequisitionController(BaseController):
     
     @h.json_response
     def get(self, id, **kwargs):
-        return ("object", Requisition.get_as_dict(id=id))
+        return ("reqobject_list", Requisition.get_as_dict(id=id))
 
     @h.json_response
     def get_all(self, **kwargs):
-        return ("all_reqs_list", Requisition.get_as_dict(id=None))
+        return ("req_list", Requisition.get_as_dict(id=None))
 
     @h.json_response
     def get_open(self, **kwargs):
-        return ("open_reqs_list", Requisition.get_open())
+        return ("openreqs_list", Requisition.get_open())
 
     @h.json_response
     def get_approved(self, **kwargs):
-        return ("approved_reqs_list", ApprovedRequisition.get_as_dict(id=None))
+        return ("approvedreqs_list", ApprovedRequisition.get_as_dict(id=None))
 
     @h.json_response
     def get_line_items(self, id=None, **kwargs):
