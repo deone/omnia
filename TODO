@@ -1,9 +1,14 @@
-Refactor getReq and getAllReq, they should rely on the data type to perform their actions.
-Work on approve and generate orders.
-Complete refactor among other UIs.
+Refactor javascript to use more advanced language features. e.g. inheritance, object and class augmentation 
+and object-oriented style.
 
 Steps from here
 ===============
 Generate Purchase Order
 Create Invoice
 Handle Delivery @ Warehouse
+
+Populate item name based on item type value
+Remove status column from list of reqs to be approved bearing in mind that reqs list uses the same function.
+In item addition, bear in mind that an item category can be supplied by more than one vendor,
+So if the item category has more than one vendor, the vendor field should be a select drop-down,
+else, it should be a text field.

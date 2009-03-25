@@ -8,10 +8,8 @@
 
         $(function()    {
 
-            var reqId = "${c.req_id}";
-            var url = "/requisition/" + reqId + "/get";
-
-            getReq(url);
+            var obj = new AjaxGet();
+            obj.get("/requisition/${c.req_id}/get");
 
         });
 
@@ -42,10 +40,10 @@
                         <th>ID.</th>
                         <th>Name</th>
                         <th>Item Type</th>
+                        <th>Vendor</th>
                         <th>Specification</th>
                         <th>Quantity</th>
                         <th>Unit Price</th>
-                        <th>Vendor</th>
                     </thead>
                     <tbody id="req-items">
                     </tbody>

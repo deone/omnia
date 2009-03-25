@@ -4,6 +4,17 @@
 
 <%def name="custom_js()">
     <script src="/js/req.js"></script>
+    <script>
+        $(function()    {
+            var obj = new AjaxGet();
+            obj.get("/misc/get_item_types");
+
+            $("#item-type")
+                .change(function() { 
+                    populateNameVendor($(this).val()); 
+                });
+        });
+    </script>
 </%def>
 
 <%def name="menu()">
@@ -21,15 +32,12 @@
                     <fieldset>
                         <ol>
                             <li>
-                                <label for="item-name">Name</label>
-                                <input id="item-name" name="item-name"/>
+                                <label for="item-type">Item Type</label>
+                                <select id="item-type"></select>
                             </li>
                             <li>
-                                <label for="item-type">Item Type</label>
-                                <select id="item-type">
-                                    <option value="">--Select--</option>
-                                    <option value="Hardware">Hardware</option>
-                                </select>
+                                <label for="item-name">Name</label>
+                                <select id="item-name" name="item-name"/>
                             </li>
                             <li>
                                 <label for="specification">Specification</label>
@@ -45,10 +53,7 @@
                             </li>
                             <li>
                                 <label for="vendor">Vendor</label>
-                                <select id="vendor">
-                                    <option value="">--Select--</option>
-                                    <option value="HP">HP</option>
-                                </select>
+                                <select id="vendor"></select>
                             </li>
                         </ol>
                     </fieldset>

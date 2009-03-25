@@ -4,6 +4,15 @@
 
 <%def name="custom_js()">
     <script src="/js/req.js"></script>
+    <script>
+        $(function()    {
+            var obj = new AjaxGet();
+
+            obj.get("/misc/get_days");
+            obj.get("/misc/get_months");
+            obj.get("/misc/get_years");
+        });
+    </script>
 </%def>
 
 <%def name="menu()">
@@ -24,30 +33,9 @@
                             <h6>Requisition</h6>
                             <li>
                                 <label for="date-required">Date Required</label>
-                                <select id="day">
-                                    <option value="">-Select-</option>
-                                    <option value=1>1</option>
-                                    <option value=2>2</option>
-                                    <option value=3>3</option>
-                                    <option value=4>4</option>
-                                    <option value=5>5</option>
-                                </select>
-                                <select id="month">
-                                    <option value="">-Select-</option>
-                                    <option value=1>January</option>
-                                    <option value=2>February</option>
-                                    <option value=3>March</option>
-                                    <option value=4>April</option>
-                                    <option value=5>May</option>
-                                </select>
-                                <select id="year">
-                                    <option value="">-Select-</option>
-                                    <option value=2001>2001</option>
-                                    <option value=2002>2002</option>
-                                    <option value=2003>2003</option>
-                                    <option value=2004>2004</option>
-                                    <option value=2005>2005</option>
-                                </select>
+                                <select id="day"></select>
+                                <select id="month"></select>
+                                <select id="year"></select>
                             </li>
                             <li>
                                 <label for="req-description">Description</label>

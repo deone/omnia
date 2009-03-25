@@ -83,38 +83,6 @@ function addItem(reqId)  {//{{{
 
 }//}}}
 
-function getReq(url)  {//{{{
-
-    $.ajax({
-
-        url: url,
-        type: "GET",
-        dataType: "json",
-
-        success: function(response)  {
-
-            var req = response.data.body;
-
-            if (response.data.type == "object")   {
-                displayReqAndItems(req);
-
-            } else if (response.data.type == "all_reqs_list") {
-                displayReqs("#reqs-container", req);
-
-            } else if (response.data.type == "open_reqs_list")  {
-                displayReqs("#open-reqs-container", req);
-                
-            } else if (response.data.type == "approved_reqs_list")  {
-                displayApprovedReqs("#approved-reqs-container", req);
-
-            }
-
-        }
-
-    });
-
-}//}}}
-
 function showReqDetails(req)   {//{{{
 
     rf = document.referrer.split("/");
@@ -169,19 +137,19 @@ function approveReq(id, user_id) {//{{{
 }//}}}
 
 // Req. status is the only difference btw displayReqs() and displayOpenReqs(), refactor!
-function displayReqs(container, req)  {//{{{
+function displayReqs(reqList, container)  {//{{{
 
     var rows = "";
 
-    for (i=0; i<req.length; i++)   {
+    for (i=0; i<reqList.length; i++)   {
 
         rows += "<tr>" + 
-                    "<td>" + req[i]['id'] + "</td>" + 
-                    "<td>" + req[i]['description'] + "</td>" + 
-                    "<td>" + req[i]['organization'] + "</td>" + 
-                    "<td>" + req[i]['items'].length + "</td>" + 
-                    "<td>" + req[i]['status'] + "</td>" + 
-                    "<td><a href='/requisition/" + req[i]['id'] + "/req_and_items'>Details</a></td>" + 
+                    "<td>" + reqList[i]['id'] + "</td>" + 
+                    "<td>" + reqList[i]['description'] + "</td>" + 
+                    "<td>" + reqList[i]['organization'] + "</td>" + 
+                    "<td>" + reqList[i]['items'].length + "</td>" + 
+                    "<td>" + reqList[i]['status'] + "</td>" + 
+                    "<td><a href='/requisition/" + reqList[i]['id'] + "/req_and_items'>Details</a></td>" + 
                 "</tr>";
 
     }
@@ -190,16 +158,16 @@ function displayReqs(container, req)  {//{{{
 
 }//}}}
 
-function displayApprovedReqs(container, req)  {//{{{
+function displayApprovedReqs(reqList, container)  {//{{{
 
     var rows = "";
 
-    for (i=0; i<req.length; i++)   {
+    for (i=0; i<reqList.length; i++)   {
 
         rows += "<tr>" + 
-                    "<td>" + req[i]['id'] + "</td>" + 
-                    "<td>" + req[i]['requisition']['description'] + "</td>" + 
-                    "<td>" + req[i]['user']['firstname'] + " " + req[i]['user']['lastname'] + "</td>" + 
+                    "<td>" + reqList[i]['requisition_id'] + "</td>" + 
+                    "<td>" + reqList[i]['requisition']['description'] + "</td>" + 
+                    "<td>" + reqList[i]['user']['firstname'] + " " + reqList[i]['user']['lastname'] + "</td>" + 
                 "</tr>";
 
     }
@@ -224,10 +192,10 @@ function createItemRows(container, list)   {//{{{
                     "<td>" + list[i]['id'] + "</td>" + 
                     "<td>" + list[i]['name'] + "</td>" + 
                     "<td>" + list[i]['itemtype'] + "</td>" + 
+                    "<td>" + list[i]['vendor'] + "</td>" + 
                     "<td>" + list[i]['specification'] + "</td>" + 
                     "<td>" + list[i]['quantity'] + "</td>" + 
                     "<td>" + list[i]['unitprice'] + "</td>" + 
-                    "<td>" + list[i]['vendor'] + "</td>"
                 "</tr>";
 
     }
@@ -285,4 +253,93 @@ function showItems(url)    {//{{{
 
     });
 
+}//}}}
+
+// Misc
+function populateNameVendor(type) {
+    var obj = new AjaxGet();
+    obj.get("/misc/get_item_by_type/" + type);
+    obj.get("/misc/get_vendors");
+}
+
+function displayOptions(data, element, match)   {//{{{
+
+    var options = "<option value=''>--Select--</option>";
+
+    for (i=0; i<data.length; i++)   {
+
+        if (data[i]["name"] == match)   {
+            options +=  "<option value='" + data[i]["id"] + 
+                        "' selected='selected'>" + 
+                        data[i]["name"] + "</option>";
+        } else  {
+            options +=  "<option value='" + data[i]["id"] + 
+                        "'>" + data[i]["name"] + "</option>";
+        }
+
+    }
+
+    $(element).html(options);
+
+}//}}}
+
+function AjaxGet(url)   {//{{{
+
+    this.get = function (url)  {
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            dataType: "json",
+
+            success: function(response) {
+                if (response.code != 0) {
+                    alert(response.code + ": " + response.data.body);
+
+                } else  {
+                    var data = response.data.body;
+                    var dataType = response.data.type;
+
+                    var typeObj = {
+                        day_optionlist: "#day",
+                        month_optionlist: "#month",
+                        year_optionlist: "#year",
+                    }
+
+                    if (dataType.split("_")[1] == "optionlist")   {
+                        displayOptions(data, typeObj[dataType], "");
+
+                    } else if (dataType == "itemtype_list") {
+                        displayOptions(data, "#item-type", "");
+
+                    } else if (dataType == "itemname_list") {
+                        displayOptions(data, "#item-name", "");
+
+                    } else if (dataType == "vendor_list")   {
+                        displayOptions(data, "#vendor", "");
+
+                    } else if (dataType == "req_list")    {
+                        displayReqs(data, "#reqs-container");
+
+                    } else if (dataType == "openreqs_list") {
+                        displayReqs(data, "#open-reqs-container");
+
+                    } else if (dataType == "approvedreqs_list") {
+                        displayApprovedReqs(data, "#approved-reqs-container");
+
+                    } else if (dataType == "reqobject_list")    {
+                        displayReqAndItems(data);
+
+                    } else  {
+                        alert("Unrecognized data format: " + dataType);
+                    }
+
+                }
+            }
+
+        });
+
+    }
+    
 }//}}}

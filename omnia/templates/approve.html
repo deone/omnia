@@ -1,15 +1,18 @@
 <%inherit file="dashboard.html"/>
 
-<%def name="title()">All Requisitions</%def>
+<%def name="title()">Approve Requisitions</%def>
 
 <%def name="custom_js()">
     <script src="/js/req.js"></script>
     <script>
         $(function()    {
-            var obj = new AjaxGet();
-            obj.get("/requisition/get_all");
-        });
 
+            var obj = new AjaxGet();
+
+            obj.get("/requisition/get_open");
+            obj.get("/requisition/get_approved");
+
+        });
     </script>
 </%def>
 
@@ -19,9 +22,8 @@
 
 <%def name="activity()">
     <div class="grid_12 omega main">
-
         <div class="widget">
-            <h4>All Requisitions</h4>
+            <h4>Requisitions Awaiting Approval</h4>
             <div class="inner">
                 <table>
                     <thead>
@@ -32,7 +34,20 @@
                         <th>Status</th>
                         <th>&nbsp;</th>
                     </thead>
-                    <tbody id="reqs-container">
+                    <tbody id="open-reqs-container">
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Approved Requisitions</h4>
+            <div class="inner">
+                <table>
+                    <thead>
+                        <th>Requisition ID.</th>
+                        <th>Description</th>
+                        <th>Approved By</th>
+                    </thead>
+                    <tbody id="approved-reqs-container">
                     </tbody>
                 </table>
             </div>
