@@ -7,8 +7,6 @@ Generate Purchase Order
 Create Invoice
 Handle Delivery @ Warehouse
 
-Populate item name based on item type value
-Remove status column from list of reqs to be approved bearing in mind that reqs list uses the same function.
-In item addition, bear in mind that an item category can be supplied by more than one vendor,
-So if the item category has more than one vendor, the vendor field should be a select drop-down,
-else, it should be a text field.
+
+Write AjaxPost object, refactor all other functions to use object model like AjaxGet()
+Remove "Add Item" link from approved requisition detail.
