@@ -9,7 +9,17 @@ log = logging.getLogger(__name__)
 
 class ItemController(BaseController):
 
+    def index(self):
+        return 'Hello World'
+
     @h.json_response
-    @h.commit_or_rollback
-    def new(self, id, **kwargs):
-        return ("Hello World")
+    def get(self, **kwargs):
+        return (Item.get(), "items")
+
+    @h.json_response
+    def get_types(self, **kwargs):
+        return ("itemtype_list", Item.types())
+
+    @h.json_response
+    def get_by_type(self, type, **kwargs):
+        return ("itemname_list", Item.item_by_type(type))

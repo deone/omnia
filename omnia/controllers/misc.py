@@ -1,6 +1,7 @@
 import logging
 
 from omnia.lib.base import *
+
 import omnia.model.helpers as h
 from omnia.model.models import *
 
@@ -9,6 +10,9 @@ log = logging.getLogger(__name__)
 class MiscController(BaseController):
 
     @h.json_response
+    # Reverse fetch_dict's args seq. to look like json_response's
+    # e.g self.fetch_dict("foobar_list", foobar())
+    # so it should be defined: def fetch_dict(self, objtype, object, **kwargs):
     def fetch_dict(self, dct, objtype, **kwargs):
         res_lst = []
 
@@ -29,15 +33,3 @@ class MiscController(BaseController):
 
     def get_days(self):
         return self.fetch_dict(Misc.days(), "day_optionlist")
-
-    def get_items(self):
-        return self.fetch_dict(Item.get(), "items")
-
-    def get_item_types(self):
-        return self.fetch_dict(Item.get_types(), "itemtype_list")
-
-    def get_item_by_type(self, type):
-        return self.fetch_dict(Item.get_by_type(type), "itemname_list")
-
-    def get_vendors(self):
-        return self.fetch_dict(Vendor.get(), "vendor_list")
