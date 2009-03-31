@@ -10,3 +10,8 @@ Handle Delivery @ Warehouse
 
 Write AjaxPost object, refactor all other functions to use object model like AjaxGet()
 Remove "Add Item" link from approved requisition detail.
+
+Purchase Order plan
+===================
+"Add another Item" button should add item and display the form.
+"Create" button should add and display PO preview with links to perform further actions.

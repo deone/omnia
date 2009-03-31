@@ -32,6 +32,7 @@ def make_map():
     map.connect('requisition_action', '/requisition/:action', controller='requisition')
     map.connect('requisition_others', '/requisition/:id/:action', controller='requisition')
 
+    map.connect('lineitem_action', '/lineitem/:action', controller='lineitem')
     map.connect('lineitem_others', '/lineitem/:id/:action', controller='lineitem')
 
     map.connect('purchase_order', '/purchase_order', controller='purchase_order', action='index')

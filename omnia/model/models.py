@@ -143,7 +143,6 @@ class Requisition(Base):#{{{
         self.phone_number = phone_number
         self.date_created = datetime.datetime.now()
 
-
     @staticmethod
     def create(date_required, description, organization, fullname, phone_number):
         req = Requisition(date_required, description, organization, fullname, phone_number)
@@ -189,7 +188,7 @@ class Requisition(Base):#{{{
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed),
                     "status": Requisition.STATUS_MAP[int(self.status)],
-                    "items": [lineitem.todict() for lineitem in self.lineitems]
+                    "lineitems": [lineitem.todict() for lineitem in self.lineitems]
                 }
 
     def add_line_item(self, name, itemtype, specification, quantity, unitprice, vendorid):
@@ -207,11 +206,7 @@ class Requisition(Base):#{{{
 
     @staticmethod
     def get_approved():
-        approved = []
-        for r in meta.session.query(Requisition).filter_by(status=1):
-            approved.append(r.todict())
-
-        return approved
+        return [r.todict() for r in meta.session.query(Requisition).filter_by(status=1)]
 
     def approve(self, id, user_id):
         self.status = 1
@@ -293,6 +288,13 @@ class Vendor(Base):#{{{
         except Exception, e:
             print_exc()
 
+    def approved_line_items(self):
+        return [
+            vl.todict() for vl in meta.session.query(Vendor).filter_by(id=self.id).one().lineitems if vl.requisitionid in [
+                ar.requisitionid for ar in meta.session.query(ApprovedRequisition)
+            ]
+        ]
+
     # How do I extract id and name from get_as_dict() dictionary such that I would not 
     # need to write these two functions, get_name_dict() and to_name_dict()?
     @staticmethod
@@ -310,7 +312,8 @@ class Vendor(Base):#{{{
             "id": self.id,
             "name": self.name,
             "address": self.address,
-            "phone": self.phone
+            "phone": self.phone,
+            "lineitems": self.approved_line_items()
         }#}}}
 
 class LineItem(Base):#{{{
@@ -345,8 +348,11 @@ class LineItem(Base):#{{{
             "specification": self.specification,
             "quantity": self.quantity,
             "unitprice": self.unitprice,
-            "vendor": Vendor.get_as_dict(self.vendorid)['id']
-        }#}}}
+            "vendorid": self.vendorid,
+            "requisitionid": self.requisitionid
+        }
+    
+    #}}}
 
 class Item(Base):#{{{
     __tablename__ = 'item'
