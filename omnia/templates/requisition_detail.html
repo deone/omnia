@@ -9,7 +9,7 @@
         $(function()    {
 
             var obj = new AjaxGet();
-            obj.get("/requisition/${c.req_id}/get");
+            obj.get("/requisition/${c.req_id}/get_by_id");
 
         });
 
@@ -57,8 +57,3 @@
 
     </div>
 </%def><!--}}}-->
-
-<%def name="page_content()">
-    ${self.menu()} 
-    ${self.activity()}
-</%def>

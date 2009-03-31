@@ -4,17 +4,17 @@
 
 <%def name="custom_js()">
     <script src="/js/req.js"></script>
-    <script>
+    <script><!--{{{-->
         $(function()    {
             var obj = new AjaxGet();
-            obj.get("/misc/get_item_types");
+            obj.get("/item/get_types");
 
             $("#item-type")
                 .change(function() { 
-                    populateNameVendor($(this).val()); 
+                    populateItemnameVendor($(this).val()); 
                 });
         });
-    </script>
+    </script><!--}}}-->
 </%def>
 
 <%def name="menu()">
@@ -59,7 +59,7 @@
                     </fieldset>
 
                     <fieldset class="submit">
-                        <input type="button" class="submit" value="Add" onClick="addItem('${c.req_id}');"/>
+                        <input type="button" class="submit" value="Add" onClick="addLineItem('${c.req_id}');"/>
                         <input type="reset" value="Clear form"/>
                     </fieldset>
                 </form><!--}}}-->
