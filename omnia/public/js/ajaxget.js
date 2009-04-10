@@ -35,7 +35,20 @@ function AjaxGet(url)   {
                         displayOptions(data, "#vendor", "");
 
                     } else if (dataType == "vendor_object") {
-                        displayVendorName(data, "#vendor-name");
+                        var url = document.URL.split("/");
+
+                        if (url[url.length - 1] == "create")    {
+                            displayVendorDetails(data);
+                        }
+
+                        if (url[url.length - 1] == "add_line_item")    {
+                            $("#vendor-name").html(data['name']);
+                            fillItemForm(data);
+                        }
+
+                    } else if (dataType == "po_object") {
+                        obj = new AjaxGet();
+                        obj.get("/vendor/" + data['vendorid'] + "/get_by_id");
 
                     } else if (dataType == "req_list")    {
                         displayReqs(data, "#reqs-container");

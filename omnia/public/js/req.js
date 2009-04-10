@@ -178,8 +178,7 @@ function createItemRows(container, list)   {//{{{
 
     for (i=0; i<list.length; i++)   {
 
-        totalQty += parseInt(list[i]['quantity']);
-        totalAmount += parseInt(list[i]['unitprice']);
+        totalAmount += parseInt(list[i]['unitprice'] * parseInt(list[i]['quantity']));
 
         rows += "<tr>" + 
                     "<td>" + list[i]['id'] + "</td>" + 
@@ -189,6 +188,7 @@ function createItemRows(container, list)   {//{{{
                     "<td>" + list[i]['specification'] + "</td>" + 
                     "<td>" + list[i]['quantity'] + "</td>" + 
                     "<td>" + list[i]['unitprice'] + "</td>" + 
+                    "<td>" + list[i]['totalprice'] + "</td>" + 
                 "</tr>";
 
     }
@@ -199,7 +199,8 @@ function createItemRows(container, list)   {//{{{
                                 "<td>&nbsp;</td>" + 
                                 "<td>&nbsp;</td>" + 
                                 "<td><b>TOTAL</b></td>" + 
-                                "<td>" + totalQty + "</td>" + 
+                                "<td>&nbsp;</td>" + 
+                                "<td>&nbsp;</td>" + 
                                 "<td>" + totalAmount + "</td>" + 
                             "</tr>"
             );
@@ -210,14 +211,14 @@ function showExtraActions() {//{{{
 
     var referrer = document.referrer;
 
-    // Add 'back' links to page (to ease viewing) except during requisition creation
+    // Add 'back' links to page (to ease viewing) except when adding line item
     var rf = referrer.split("/");
     if (rf[rf.length - 1] != "add_line_item") {
         $("#other").show();
         $("#other input").before("<a class='link-back' href='" + referrer + "'>Back</a>");
     }
 
-    // If page was redirected from http://foobar/requistion/approve, add 'Approve' button
+    // If page was redirected from http://foobar/requisition/approve, add 'Approve' button
     if (rf[rf.length - 1] == "approve") {
         $(".inner input").show();
     }
