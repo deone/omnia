@@ -22,3 +22,12 @@ class LineitemController(BaseController):
         req = Requisition.get(id=id)
 
         req.add_line_item(name, itemtype, specification, quantity, unitprice, vendor)
+
+    @h.json_response
+    @h.commit_or_rollback
+    def order(self, id, **kwargs):
+        unit_price = request.params['unitprice']
+        po_id = request.params['poid']
+
+        line_item = LineItem.get(id)
+        line_item.order(unit_price, po_id)

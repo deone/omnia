@@ -11,6 +11,9 @@ log = logging.getLogger(__name__)
 class RequisitionController(BaseController):
 
     def index(self):
+        return render("/all_requisitions.html")
+
+    def create(self):
         return render("/requisition.html")
 
     def add_line_item(self, id):
@@ -20,9 +23,6 @@ class RequisitionController(BaseController):
     def req_and_items(self, id):
         c.req_id = id
         return render("/requisition_detail.html")
-
-    def all(self):
-        return render("/all_requisitions.html")
 
     def approve(self):
         return render("/approve.html")
