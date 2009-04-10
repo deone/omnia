@@ -23,6 +23,6 @@
     float: right;
 }
 
-.inner .button, #purchase-order-form    {
+.inner .button  {
     display: none;
 }

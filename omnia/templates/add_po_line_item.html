@@ -1,0 +1,59 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Add Line Item</%def>
+
+<%def name="custom_js()">
+    <script src="/js/purchase_order.js"></script>
+    <script>
+        $(function()    {
+            obj = new AjaxGet();
+            obj.get("/purchase_order/${c.po_id}/get_by_id");
+
+            $("#item")
+                .change(function()  {
+                    showItemDetail();
+                });
+        });
+        
+    </script>
+</%def>
+
+<%def name="menu()">
+    <%include file="menu.html"/>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>Add Line Item To <span id="vendor-name"></span>&rsquo;s Purchase Order</h4>
+
+            <form name="add-PO-item-form" id="add-PO-item-form" class="info-form">
+                <div class="feedback"></div>
+                <fieldset>
+                    <ol>
+                        <li>
+                            <label for="item">Item</label>
+                            <select id="item" name="item"></select>
+                        </li>
+                        <li>
+                            <label for="specification">Specification</label>
+                            <textarea id="specification" name="specification" cols=30 rows=3 disabled></textarea>
+                        </li>
+                        <li>
+                            <label for="quantity">Quantity</label>
+                            <input id="quantity" name="quantity" disabled/><br/>
+                            <span id="msg"></span>
+                        <li>
+                            <label for="unit-price">Unit Price</label>
+                            <input id="unit-price" name="unit-price"/>
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="submit">
+                    <input type="button" class="submit" value="Add Item" onclick="orderItem('${c.po_id}')"/>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</%def>

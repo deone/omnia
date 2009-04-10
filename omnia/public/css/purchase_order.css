@@ -1,0 +1,7 @@
+#purchase-order {
+    display: none;
+}
+
+#purchase-order span    {
+    font-weight: bold;
+}
