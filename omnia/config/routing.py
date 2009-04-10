@@ -36,6 +36,8 @@ def make_map():
     map.connect('lineitem_others', '/lineitem/:id/:action', controller='lineitem')
 
     map.connect('purchase_order', '/purchase_order', controller='purchase_order', action='index')
+    map.connect('purchase_order_action', '/purchase_order/:action', controller='purchase_order')
+    map.connect('purchase_order_other', '/purchase_order/:id/:action', controller='purchase_order')
 
     map.connect(':controller/:action/:id')
     map.connect('*url', controller='template', action='view')

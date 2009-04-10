@@ -246,17 +246,68 @@ class ApprovedRequisition(Base):#{{{
             else:
                 return [ar.todict() for ar in meta.session.query(ApprovedRequisition)]
         except Exception, e:
-            print_exc()#}}}
+            print_exc()
+
+    #}}}
 
 class PurchaseOrder(Base):#{{{
     __tablename__ = 'purchaseorder'
     __table_args__ = {'mysql_engine': 'innodb'}
 
     id = Column(Integer, primary_key=True)
-    amount = Column(Integer, nullable=False)
-    status = Column(String(50))
+    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    total_amount = Column(Integer, default='0', nullable=False)
+    status = Column(Integer, default='0', nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
-    date_closed = Column(DateTime, default=datetime.datetime.now())#}}}
+    date_closed = Column(DateTime)
+
+    def __init__(self, vendor_id):
+        self.vendorid = vendor_id
+        self.date_created = datetime.datetime.now()
+
+    STATUS_MAP = {
+                    0: "Open", 
+                    1: "Closed"
+                }
+
+    @staticmethod
+    def create(vendor):
+        po = PurchaseOrder(vendor)
+        meta.session.add(po)
+        meta.session.flush()
+        return po.todict()
+
+    def todict(self):
+        return  {
+                    "id": self.id,
+                    "vendorid": self.vendorid,
+                    "total_amount": self.total_amount,
+                    "status": PurchaseOrder.STATUS_MAP[int(self.status)],
+                    "date_created": str(self.date_created),
+                    "date_closed": str(self.date_closed)
+                }
+
+    @staticmethod
+    def get(id=None):
+        try:
+            if id:
+                return meta.session.query(PurchaseOrder).filter_by(id=id).one()
+            else:
+                return [po for po in meta.session.query(PurchaseOrder)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_as_dict(id=None):
+        try:
+            if id:
+                return meta.session.query(PurchaseOrder).filter_by(id=id).one().todict()
+            else:
+                return [po.todict() for po in meta.session.query(PurchaseOrder)]
+        except Exception, e:
+            print_exc()
+
+    #}}}
 
 class Vendor(Base):#{{{
     __tablename__ = 'vendor'
@@ -290,10 +341,10 @@ class Vendor(Base):#{{{
 
     def approved_line_items(self):
         return [
-            vl.todict() for vl in meta.session.query(Vendor).filter_by(id=self.id).one().lineitems if vl.requisitionid in [
-                ar.requisitionid for ar in meta.session.query(ApprovedRequisition)
+            vl.todict() for vl in meta.session.query(Vendor).filter_by(id=self.id).one().lineitems if vl.requisitionid in 
+                [ar.requisitionid for ar in meta.session.query(ApprovedRequisition)]
+                and vl.status == 0
             ]
-        ]
 
     # How do I extract id and name from get_as_dict() dictionary such that I would not 
     # need to write these two functions, get_name_dict() and to_name_dict()?
@@ -324,13 +375,24 @@ class LineItem(Base):#{{{
     name = Column(String(100), nullable=False)
     itemtype = Column(String(100), nullable=False)
     specification = Column(Text)
-    quantity = Column(Integer, nullable=False)
+    quantity = Column(Integer, default='0', nullable=False)
     unitprice = Column(Integer, nullable=False)
+    totalprice = Column(Integer, nullable=False)
     vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'))
     requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    purchaseorderid = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    status = Column(Integer, default='0', nullable=False)
 
     requisition = relation(Requisition, backref=backref('lineitems', order_by=id))
     vendor = relation(Vendor, backref=backref('lineitems', order_by=id))
+    purchaseorder = relation(PurchaseOrder, backref=backref('lineitems', order_by=id))
+
+    STATUS_MAP = {
+                    0: "Requested", 
+                    1: "Ordered",
+                    2: "Delivered",
+                    3: "Deployed"
+                }
 
     def __init__(self, name, itemtype, specification, quantity, unitprice, vendorid):
         self.name = name
@@ -338,7 +400,18 @@ class LineItem(Base):#{{{
         self.specification = specification
         self.quantity = quantity
         self.unitprice = unitprice
+        self.totalprice = int(quantity) * int(unitprice)
         self.vendorid = vendorid
+
+    @staticmethod
+    def get(id=None):
+        try:
+            if id:
+                return meta.session.query(LineItem).filter_by(id=id).one()
+            else:
+                return [li for li in meta.session.query(LineItem)]
+        except Exception, e:
+            print_exc()
 
     def todict(self):
         return  {
@@ -348,9 +421,24 @@ class LineItem(Base):#{{{
             "specification": self.specification,
             "quantity": self.quantity,
             "unitprice": self.unitprice,
+            "totalprice": self.totalprice,
             "vendorid": self.vendorid,
-            "requisitionid": self.requisitionid
+            "requisitionid": self.requisitionid,
+            "purchaseorderid": self.purchaseorderid,
+            "status": LineItem.STATUS_MAP[int(self.status)]
         }
+
+    def remove_from_PO(self):
+        pass
+
+    def order(self, unitprice, purchaseorderid):
+        self.unitprice = unitprice
+        self.purchaseorderid = purchaseorderid
+        self.totalprice = int(unitprice) * int(self.quantity)
+        self.status = 1
+
+        po = PurchaseOrder.get(purchaseorderid)
+        po.total_amount = po.total_amount + self.totalprice
     
     #}}}
 
