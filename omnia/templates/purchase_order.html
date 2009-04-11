@@ -1,0 +1,64 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Purchase Order</%def>
+
+<%def name="custom_js()">
+    <script src="/js/purchase_order.js"></script>
+    <script>
+        $(function(){
+            $("#purchase-order").show();
+            var obj = new AjaxGet();
+            obj.get("/purchase_order/${c.po_id}/get_by_id");
+        });
+    </script>
+</%def>
+
+<%def name="menu()">
+    <%include file="menu.html"/>
+</%def>
+
+<%def name="actionlinks()">
+    <li><a href="/purchase_order/${c.po_id}/edit">Edit</a></li>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega">
+        <div class="widget">
+            <div id="purchase-order">
+                <h4>Purchase Order</h4>
+                <div id="po">
+                    <ul>
+                        <li>Purchase Order No. <span id="id"></span></li>
+                        <li>Date <span id="date"></span></li>
+                        ${self.actionlinks()}
+                    </ul>
+                </div>
+                <div id="line-items">
+                    <table>
+                        <thead>
+                            <th>Item No.</th>
+                            <th>Name</th>
+                            <th>Specification</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total Price</th>
+                            <th></th>
+                        </thead>
+                        <tbody id="po-items">
+                        </tbody>
+                    </table>
+                    <ul>
+                        <li>Total Price <span id="amount"></span></li>
+                    </ul>
+                </div>
+                <div id="vendor">
+                    <ul>
+                        <li>Name of Vendor <span id="name"></span></li>
+                        <li>Address <span id="address"></span></li>
+                        <li>Phone Number <span id="phone"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
