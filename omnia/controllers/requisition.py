@@ -14,7 +14,7 @@ class RequisitionController(BaseController):
         return render("/all_requisitions.html")
 
     def create(self):
-        return render("/requisition.html")
+        return render("/create_requisition.html")
 
     def add_line_item(self, id):
         c.req_id = id

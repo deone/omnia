@@ -18,3 +18,7 @@ class VendorController(BaseController):
     @h.json_response
     def get_names(self, **kwargs):
         return ("vendorname_list", Vendor.get_names())
+
+    @h.json_response
+    def get_vendors_with_line_items(self, **kwargs):
+        return ("vendorname_list", Vendor.get_vendors_with_line_items())
