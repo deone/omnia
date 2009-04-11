@@ -52,7 +52,7 @@ function orderItem(POId)    {//{{{
                     .html("Error Adding Item");
 
             } else  {
-                alert("Sucess: Item added");
+                document.location = "/purchase_order/" + POId + "/edit";
             }
         }
 
@@ -132,4 +132,26 @@ function showItemDetail() {//{{{
         .attr("value",
             vendor['lineitems'][$$("item").selectedIndex - 1]['unitprice']
         );
+}//}}}
+
+function showPOItems(list, container)  {//{{{
+
+    var rows = "";
+
+    for (i=0; i<list.length; i++)   {
+        
+        rows += "<tr>" + 
+                    "<td>" + list[i]['id'] + "</td>" + 
+                    "<td>" + list[i]['name'] + "</td>" + 
+                    "<td>" + list[i]['specification'] + "</td>" + 
+                    "<td>" + list[i]['quantity'] + "</td>" + 
+                    "<td>" + list[i]['unitprice'] + "</td>" + 
+                    "<td>" + list[i]['totalprice'] + "</td>" + 
+                    "<td><a href='/purchase_order/'>Delete</td>" + 
+                "</tr>";
+
+    }
+
+    $(container).html(rows);
+
 }//}}}

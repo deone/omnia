@@ -15,6 +15,7 @@ function AjaxGet(url)   {
                 } else  {
                     var data = response.data.body;
                     var dataType = response.data.type;
+                    var url = document.URL.split("/");
 
                     var typeObj = {
                         day_optionlist: "#day",
@@ -35,9 +36,8 @@ function AjaxGet(url)   {
                         displayOptions(data, "#vendor", "");
 
                     } else if (dataType == "vendor_object") {
-                        var url = document.URL.split("/");
 
-                        if (url[url.length - 1] == "create")    {
+                        if (url[url.length - 1] == "create" || url[url.length - 1] == "edit")    {
                             displayVendorDetails(data);
                         }
 
@@ -47,8 +47,16 @@ function AjaxGet(url)   {
                         }
 
                     } else if (dataType == "po_object") {
-                        obj = new AjaxGet();
-                        obj.get("/vendor/" + data['vendorid'] + "/get_by_id");
+
+                        if (url[url.length - 1] == "add_line_item")    {
+                            obj = new AjaxGet();
+                            obj.get("/vendor/" + data['vendorid'] + "/get_by_id");
+                        }
+
+                        if (url[url.length - 1] == "edit")    {
+                            populatePO(data);
+                            showPOItems(data.line_items, "#po-items");
+                        }
 
                     } else if (dataType == "req_list")    {
                         displayReqs(data, "#reqs-container");
