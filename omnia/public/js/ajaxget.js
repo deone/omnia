@@ -37,7 +37,7 @@ function AjaxGet(url)   {
 
                     } else if (dataType == "vendor_object") {
 
-                        if (url[url.length - 1] == "create" || url[url.length - 1] == "edit")    {
+                        if (url[url.length - 1] == "create" || url[url.length - 1] == "edit" || url[url.length - 1] == "view")    {
                             displayVendorDetails(data);
                         }
 
@@ -53,7 +53,7 @@ function AjaxGet(url)   {
                             obj.get("/vendor/" + data['vendorid'] + "/get_by_id");
                         }
 
-                        if (url[url.length - 1] == "edit")    {
+                        if (url[url.length - 1] == "edit" || url[url.length - 1] == "view")    {
                             populatePO(data);
                             showPOItems(data.line_items, "#po-items");
                         }

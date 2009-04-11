@@ -64,7 +64,6 @@ function orderItem(POId)    {//{{{
 function populatePO(data)   {//{{{
     $("#po #id").html(data['id']);
     $("#po #date").html(data['date_created']);
-    $("#po a").attr("href", "/purchase_order/" + data['id'] + "/add_line_item");
 
     $("#line-items #amount").html(data['total_amount']);
 
