@@ -7,7 +7,8 @@
     <script>
         $(function()    {
             var obj = new AjaxGet();
-            obj.get("/vendor/get_names");
+            // Display only vendor objects which contain line items
+            obj.get("/vendor/get_vendors_with_line_items");
         });
     </script>
 </%def>
