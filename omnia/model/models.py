@@ -283,6 +283,7 @@ class PurchaseOrder(Base):#{{{
                     "vendorid": self.vendorid,
                     "total_amount": self.total_amount,
                     "status": PurchaseOrder.STATUS_MAP[int(self.status)],
+                    "line_items": [li.todict() for li in self.lineitems],
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed)
                 }
@@ -352,6 +353,23 @@ class Vendor(Base):#{{{
     def get_names():
         return [v.to_name_dict() for v in meta.session.query(Vendor)]
 
+    @staticmethod
+    def get_vendors_with_line_items():
+        # Bug: To avoid creating POs without having line items to add,
+        # I decided to return only vendor objects that have line items to the create PO template.
+        # But if a vendor object used to have line items and one or more have been ordered,
+        # It should only be returned if it still has unordered line items.
+        # The opposite is happening here.
+
+        # Solution: Remove all line items which have status:1 (I don't know how they got here 'cos I'm returning only line items with status:0<see approved_line_items() above>) from vendor lineitems list before returning vendor object list
+        for v in meta.session.query(Vendor):
+            line_items = v.lineitems
+            #Bug: When remove() is done through a loop or list comprehension, it leaves one value in list even if all values meet requirement for removal. We might have to come back to this later.
+            [line_items.remove(l) for l in line_items if l.status == 1]
+            print line_items
+
+        return [v.to_name_dict() for v in meta.session.query(Vendor) if v.lineitems != []]
+
     def to_name_dict(self):
         return  {
             "id": self.id,
@@ -364,6 +382,7 @@ class Vendor(Base):#{{{
             "name": self.name,
             "address": self.address,
             "phone": self.phone,
+            # Vendor objects contain only approved line items
             "lineitems": self.approved_line_items()
         }#}}}
 
