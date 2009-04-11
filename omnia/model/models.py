@@ -366,7 +366,6 @@ class Vendor(Base):#{{{
             line_items = v.lineitems
             #Bug: When remove() is done through a loop or list comprehension, it leaves one value in list even if all values meet requirement for removal. We might have to come back to this later.
             [line_items.remove(l) for l in line_items if l.status == 1]
-            print line_items
 
         return [v.to_name_dict() for v in meta.session.query(Vendor) if v.lineitems != []]
 

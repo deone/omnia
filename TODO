@@ -2,11 +2,11 @@ Refactor javascript to use more advanced language features. e.g. inheritance, ob
 and object-oriented style.
 Write AjaxPost object, refactor all other functions to use object model like AjaxGet()
 Remove "Add Item" link from approved requisition detail.
-Ideally, purchase Order drop-down should only display vendors who have line items
 Folderize files in the template folder, if possible do same for controllers
 Add created_by column to PO table and cascade to controller and templates.
+Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered.
 
-
+* Ideally, purchase Order drop-down should only display vendors who have line items. Tried this out, encountered issues.
 
 Steps from here
 ===============
@@ -27,12 +27,7 @@ i.e. If 10 line items are ordered, we can order 5 in one purchase order and 5 in
 
 For now, lets order all of a particular line item in one purchase order so that we would have a one-to-many relationship between purchaseorder and lineitem tables. Then we would be able to track the details of all the line items in a given purchase order.
 
-Purchase order creation How-to
-==============================
-Another approach is:
-    * Create the PO without any lineitem. At this point, total_amount is 0
-    * Then add line item separately and increment total_amount as each line item is added.
 PO Delete
 =========
-    * There's no room for editing PO except to add line item, if anything else needs to be edited, then it has to be vendor name. Then the PO would be deleted and re-created.
-    * Same with PO line item, user can only delete, no editing.
+    * For now, you cannot delete PO, will look into that later.
+    * User can delete PO line item after it has been added (i.e. line item has been ordered). This action should revert all actions in LineItem.order() in the same sequence.
