@@ -1,0 +1,41 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">All Purchase Orders</%def>
+
+<%def name="custom_js()">
+    <script src="/js/purchase_order.js"></script>
+    <script>
+        $(function()    {
+            var obj = new AjaxGet();
+            obj.get("/purchase_order/get");
+        });
+    </script>
+</%def>
+
+<%def name="menu()">
+    <%include file="menu.html"/>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>All Purchase Orders</h4>
+            <div class="inner">
+                <table>
+                    <thead>
+                        <th>ID.</th>
+                        <th>Vendor</th>
+                        <th>No. of Items</th>
+                        <th>Amount</th>
+                        <th>Date Created</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>&nbsp;</th>
+                    </thead>
+                    <tbody id="pos-container">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</%def>

@@ -17,7 +17,11 @@
     <%include file="menu.html"/>
 </%def>
 
-<%def name="createPO()">
+<%def name="actionlinks()">
+    <li><a href="">Add Item</a>
+</%def>
+
+<%def name="task()">
     <div id="create-PO">
         <h4>Create Purchase Order</h4>
         <form name="createPO-form" id="createPO-form" class="info-form">
@@ -32,20 +36,20 @@
             </fieldset>
 
             <fieldset class="submit">
-                <input type="button" class="submit" value="Create" onclick="createPO()"/>
+                <input type="button" class="submit" value="Create" onclick="createPO('${session['user'].id}');"/>
             </fieldset>
         </form>
     </div>
 </%def>
 
-<%def name="editPO()">
+<%def name="view()">
     <div id="purchase-order">
         <h4>Purchase Order</h4>
         <div id="po">
             <ul>
                 <li>Purchase Order No. <span id="id"></span></li>
                 <li>Date <span id="date"></span></li>
-                <li><a href="">Add Item</a>
+                ${self.actionlinks()}
             </ul>
         </div>
         <div id="line-items">
@@ -63,11 +67,13 @@
     </div>
 </%def>
 
-<%def name="activity()">
+<%def name="container()">
     <div class="grid_12 omega main">
         <div class="widget">
-            ${self.createPO()}
-            ${self.editPO()}
+            ${self.task()}   
+            ${self.view()}
         </div>
     </div>
 </%def>
+
+<%inherit file="purchase_order.html"/>
