@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 class RequisitionController(BaseController):
 
     def index(self):
-        return render("/all_requisitions.html")
+        return render("/requisitions.html")
 
     def create(self):
         return render("/create_requisition.html")
@@ -22,17 +22,12 @@ class RequisitionController(BaseController):
 
     def req_and_items(self, id):
         c.req_id = id
-        return render("/requisition_detail.html")
+        return render("/requisition.html")
 
     def approve(self):
         return render("/approve.html")
 
-    # What's this used for?
-    def items(self, id):
-        c.requisition = Requisition.get_as_dict(id)
-        return render("/items.html")
 
-    
     @h.json_response
     def get_by_id(self, id, **kwargs):
         return ("req_object", Requisition.get_as_dict(id=id))
