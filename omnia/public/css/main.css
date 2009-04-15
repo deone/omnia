@@ -91,6 +91,10 @@ ul li   {
     line-height: 1.5em;
 }
 
+.widget ul li span  {
+    font-weight: bold;
+}
+
 .horiz-nav   {
     font-size: 13px;
     font-weight: normal;

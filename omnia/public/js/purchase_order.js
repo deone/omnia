@@ -1,10 +1,12 @@
 var vendor = "";
 
 // AjaxPost
-function createPO() {//{{{
+function createPO(id) {//{{{
 
     var vendorId = $("#vendor").val();
-    var data = "vendor=" + vendorId;
+    var userId = id;
+    var data = "vendor=" + vendorId + 
+                "&user=" + userId;
 
     var url = "/purchase_order/new";
 
@@ -22,6 +24,7 @@ function createPO() {//{{{
                     .html("Error Creating Purchase Order");
 
             } else  {
+                $("#po a").attr("href", "/purchase_order/" + response.data.body['id'] + "/add_line_item");
                 showPO(response.data.body);
             }
         }
@@ -67,14 +70,14 @@ function populatePO(data)   {//{{{
 
     $("#line-items #amount").html(data['total_amount']);
 
-    // Get vendor object and populate vendor-details div
-    obj = new AjaxGet();
-    obj.get("/vendor/" + data['vendorid'] + "/get_by_id");
+    // Populate vendor-details div
+    displayVendorDetails(data['vendor']);
+
 }//}}}
 
 function fillItemForm(data)    {//{{{
     vendor = data;
-    populateItemField(data.lineitems);
+    populateItemField(data['lineitems']);
 }//}}}
 
 function showPO(po)   {//{{{
@@ -147,6 +150,29 @@ function showPOItems(list, container)  {//{{{
                     "<td>" + list[i]['unitprice'] + "</td>" + 
                     "<td>" + list[i]['totalprice'] + "</td>" + 
                     "<td><a href='/purchase_order/'>Delete</td>" + 
+                "</tr>";
+
+    }
+
+    $(container).html(rows);
+
+}//}}}
+
+function displayPOs(POList, container)    {//{{{
+
+    var rows = "";
+
+    for (i=0; i<POList.length; i++) {
+        
+        rows += "<tr>" + 
+                    "<td>" + POList[i]['id'] + "</td>" + 
+                    "<td>" + POList[i]['vendor']['name'] + "</td>" + 
+                    "<td>" + POList[i]['line_items'].length + "</td>" + 
+                    "<td>" + POList[i]['total_amount'] + "</td>" + 
+                    "<td>" + POList[i]['date_created'] + "</td>" + 
+                    "<td>" + POList[i]['created_by']['firstname'] + " " + POList[i]['created_by']['lastname'] + "</td>" + 
+                    "<td>" + POList[i]['status'] + "</td>" + 
+                    "<td><a href='/purchase_order/" + POList[i]['id'] + "/view'>View</a></td>" + 
                 "</tr>";
 
     }

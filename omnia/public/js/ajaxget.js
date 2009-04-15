@@ -35,28 +35,20 @@ function AjaxGet(url)   {
                     } else if (dataType == "vendorname_list")   {
                         displayOptions(data, "#vendor", "");
 
-                    } else if (dataType == "vendor_object") {
-
-                        if (url[url.length - 1] == "create" || url[url.length - 1] == "edit" || url[url.length - 1] == "view")    {
-                            displayVendorDetails(data);
-                        }
-
-                        if (url[url.length - 1] == "add_line_item")    {
-                            $("#vendor-name").html(data['name']);
-                            fillItemForm(data);
-                        }
-
                     } else if (dataType == "po_object") {
 
                         if (url[url.length - 1] == "add_line_item")    {
-                            obj = new AjaxGet();
-                            obj.get("/vendor/" + data['vendorid'] + "/get_by_id");
+                            $("#vendor-name").html(data['vendor']['name']);
+                            fillItemForm(data['vendor']);
                         }
 
                         if (url[url.length - 1] == "edit" || url[url.length - 1] == "view")    {
                             populatePO(data);
-                            showPOItems(data.line_items, "#po-items");
+                            showPOItems(data['line_items'], "#po-items");
                         }
+
+                    } else if (dataType == "po_list")   {
+                        displayPOs(data, "#pos-container");
 
                     } else if (dataType == "req_list")    {
                         displayReqs(data, "#reqs-container");
