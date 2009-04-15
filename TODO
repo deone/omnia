@@ -3,7 +3,9 @@ and object-oriented style.
 Write AjaxPost object, refactor all other functions to use object model like AjaxGet()
 Remove "Add Item" link from approved requisition detail.
 Folderize files in the template folder, if possible do same for controllers
+Add created_by column to requisition table and cascade to controller and templates.
 Add created_by column to PO table and cascade to controller and templates.
+Maybe we might need to add user.purchase_orders and user.requisitions relations just like we have user.approvedrequisitions, for system reports based on users, to track user actions and to guard against fraud.
 Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered.
 
 * Ideally, purchase Order drop-down should only display vendors who have line items. Tried this out, encountered issues.

@@ -255,14 +255,16 @@ class PurchaseOrder(Base):#{{{
     __table_args__ = {'mysql_engine': 'innodb'}
 
     id = Column(Integer, primary_key=True)
-    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    vendor_id = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     total_amount = Column(Integer, default='0', nullable=False)
     status = Column(Integer, default='0', nullable=False)
+    created_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
     date_closed = Column(DateTime)
 
-    def __init__(self, vendor_id):
-        self.vendorid = vendor_id
+    def __init__(self, vendor_id, user_id):
+        self.vendor_id = vendor_id
+        self.created_by = user_id
         self.date_created = datetime.datetime.now()
 
     STATUS_MAP = {
@@ -271,8 +273,8 @@ class PurchaseOrder(Base):#{{{
                 }
 
     @staticmethod
-    def create(vendor):
-        po = PurchaseOrder(vendor)
+    def create(vendor, user):
+        po = PurchaseOrder(vendor, user)
         meta.session.add(po)
         meta.session.flush()
         return po.todict()
@@ -280,9 +282,10 @@ class PurchaseOrder(Base):#{{{
     def todict(self):
         return  {
                     "id": self.id,
-                    "vendorid": self.vendorid,
+                    "vendor": vendor_dict(self.vendor_id),
                     "total_amount": self.total_amount,
                     "status": PurchaseOrder.STATUS_MAP[int(self.status)],
+                    "created_by": user_dict(self.created_by),
                     "line_items": [li.todict() for li in self.lineitems],
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed)
@@ -502,6 +505,9 @@ def user_dict(id):
 
 def req_dict(id):
     return meta.session.query(Requisition).filter_by(id=id).one().todict()
+
+def vendor_dict(id):
+    return meta.session.query(Vendor).filter_by(id=id).one().todict()
 
 def lst_to_dictlst(lst):
     new_lst = []
