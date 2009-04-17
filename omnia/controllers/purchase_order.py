@@ -1,4 +1,5 @@
 import logging
+import simplejson
 
 from omnia.lib.base import *
 
@@ -42,3 +43,11 @@ class PurchaseOrderController(BaseController):
     @h.json_response
     def get(self, **kwargs):
         return ("po_list", PurchaseOrder.get_as_dict())
+
+    @h.json_response
+    def is_invoice_received(self, id, **kwargs):
+        retval = id in simplejson.dumps([i.purchase_order_id for i in Invoice.get()])
+        if not retval:
+            return ("error", "Invoice not received")
+        else:
+            return ("ok", "Invoice received")

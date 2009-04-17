@@ -234,8 +234,8 @@ class ApprovedRequisition(Base):#{{{
         return  {
                     "id": self.id,
                     "requisition_id": self.requisitionid,
-                    "requisition": req_dict(self.requisitionid),
-                    "user": user_dict(self.userid)
+                    "requisition": Requisition.get(self.requisitionid).description,
+                    "user": User.get(self.userid).firstname + " " + User.get(self.userid).lastname
                 }
 
     @staticmethod
@@ -282,10 +282,10 @@ class PurchaseOrder(Base):#{{{
     def todict(self):
         return  {
                     "id": self.id,
-                    "vendor": vendor_dict(self.vendor_id),
+                    "vendor": Vendor.get(self.vendor_id).todict(),
                     "total_amount": self.total_amount,
                     "status": PurchaseOrder.STATUS_MAP[int(self.status)],
-                    "created_by": user_dict(self.created_by),
+                    "created_by": User.get(self.created_by).firstname + " " + User.get(self.created_by).lastname,
                     "line_items": [li.todict() for li in self.lineitems],
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed)
@@ -313,6 +313,63 @@ class PurchaseOrder(Base):#{{{
 
     #}}}
 
+class Invoice(Base):#{{{
+    __tablename__ = 'invoice'
+    __table_args__ = {'mysql_engine': 'innodb'}
+
+    id = Column(Integer, primary_key=True)
+    invoice_number = Column(Integer, unique=True, nullable=False)
+    purchase_order_id = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    vendor_id = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    total_amount = Column(Integer, default='0', nullable=False)
+    created_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
+    date_created = Column(DateTime, default=datetime.datetime.now())
+
+    def __init__(self, invoice_number, purchase_order_id, vendor_id, created_by):
+        self.invoice_number = invoice_number
+        self.purchase_order_id = purchase_order_id
+        self.vendor_id = vendor_id
+        self.created_by = created_by
+        self.date_created = datetime.datetime.now()
+
+    @staticmethod
+    def create(invoice_number, purchase_order_id, vendor_id, created_by):
+        invoice = Invoice(invoice_number, purchase_order_id, vendor_id, created_by)
+        meta.session.add(invoice)
+        meta.session.flush()
+        return invoice.todict()
+
+    @staticmethod
+    def get(id=None):
+        try:
+            if id:
+                return meta.session.query(Invoice).filter_by(id=id).one()
+            else:
+                return [i for i in meta.session.query(Invoice)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_as_dict(id=None):
+        try:
+            if id:
+                return meta.session.query(Requisition).filter_by(id=id).one().todict()
+            else:
+                return [r.todict() for r in meta.session.query(Requisition)]
+        except Exception, e:
+            print_exc()
+
+    def todict(self):
+        return  {
+                    "id": self.id,
+                    "invoice_no": self.invoice_number,
+                    "po_id": self.purchase_order_id,
+                    "vendor_id": self.vendor_id,
+                    "total_amount": self.total_amount,
+                    "created_by": self.created_by
+                }
+#}}}
+
 class Vendor(Base):#{{{
     __tablename__ = 'vendor'
     __table_args__ = {'mysql_engine': 'innodb'}
@@ -332,6 +389,16 @@ class Vendor(Base):#{{{
         vendor = Vendor(name, address, phone)
         meta.session.add(vendor)
         meta.session.flush()
+
+    @staticmethod
+    def get(id=None):
+        try:
+            if id:
+                return meta.session.query(Vendor).filter_by(id=id).one()
+            else:
+                return [v for v in meta.session.query(Vendor)]
+        except Exception, e:
+            print_exc()
     
     @staticmethod
     def get_as_dict(id=None):
@@ -399,14 +466,16 @@ class LineItem(Base):#{{{
     quantity = Column(Integer, default='0', nullable=False)
     unitprice = Column(Integer, nullable=False)
     totalprice = Column(Integer, nullable=False)
-    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'))
-    requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
-    purchaseorderid = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'))
     status = Column(Integer, default='0', nullable=False)
+    requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    purchaseorderid = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    invoiceid = Column(Integer, ForeignKey('invoice.id', ondelete='RESTRICT', onupdate='CASCADE'))
 
     requisition = relation(Requisition, backref=backref('lineitems', order_by=id))
     vendor = relation(Vendor, backref=backref('lineitems', order_by=id))
     purchaseorder = relation(PurchaseOrder, backref=backref('lineitems', order_by=id))
+    invoice = relation(Invoice, backref=backref('lineitems', order_by=id))
 
     STATUS_MAP = {
                     0: "Requested", 
@@ -443,7 +512,7 @@ class LineItem(Base):#{{{
             "quantity": self.quantity,
             "unitprice": self.unitprice,
             "totalprice": self.totalprice,
-            "vendorid": self.vendorid,
+            "vendor": Vendor.get(self.vendorid).name,
             "requisitionid": self.requisitionid,
             "purchaseorderid": self.purchaseorderid,
             "status": LineItem.STATUS_MAP[int(self.status)]
@@ -499,12 +568,7 @@ class Item(Base):#{{{
     #}}}
 
 # Refactor these helpers and add them to Misc#{{{
-
-def user_dict(id):
-    return meta.session.query(User).filter_by(id=id).one().todict()
-
-def req_dict(id):
-    return meta.session.query(Requisition).filter_by(id=id).one().todict()
+# Helpers should not return the whole object to avoid recursion limit error
 
 def vendor_dict(id):
     return meta.session.query(Vendor).filter_by(id=id).one().todict()

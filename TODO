@@ -4,23 +4,17 @@ Write AjaxPost object, refactor all other functions to use object model like Aja
 Remove "Add Item" link from approved requisition detail.
 Folderize files in the template folder, if possible do same for controllers
 Add created_by column to requisition table and cascade to controller and templates.
-Add created_by column to PO table and cascade to controller and templates.
-Maybe we might need to add user.purchase_orders and user.requisitions relations just like we have user.approvedrequisitions, for system reports based on users, to track user actions and to guard against fraud.
+Maybe we might need to add user.purchase_orders and user.requisitions relations just like we have user.approvedrequisitions, for system reports based on users, to track user actions.
 Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered.
+We might need to create a relation po->invoice in future.
+Fix URL hack for invoice creation from purchase order view template
 
 * Ideally, purchase Order drop-down should only display vendors who have line items. Tried this out, encountered issues.
 
 Steps from here
 ===============
-Generate Purchase Order
 Create Invoice
 Handle Delivery @ Warehouse
-
-Purchase Order plan
-===================
-Create a quantity_ordered column in line item table
-For each line item added to PO, add value from quantity field to value of LineItem.quantity_ordered
-Create a many to many ER mapping on LineItem->PurchaseOrder
 
 Many-to-Many relationship
 =========================
