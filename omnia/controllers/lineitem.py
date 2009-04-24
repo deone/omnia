@@ -10,6 +10,22 @@ log = logging.getLogger(__name__)
 class LineitemController(BaseController):
 
     @h.json_response
+    def get_by_vendor_id(self, id, **kwargs):
+        """This id is vendor_id, there should be a better way to do this.
+           This does not read fine: /lineitem/vendor_id/get_by_vendor_id,
+           Should be something like: /lineitem/get_by_vendor_id/vendor_id
+
+           Same with get_by_invoice_no
+        """
+        items = LineItem.get_by_vendor_id(id)
+        return ("itemname_list", items)
+
+    @h.json_response
+    def get_by_invoice_no(self, id, **kwargs):
+        items = LineItem.get_by_invoice_no(id)
+        return ("item_list", items)
+
+    @h.json_response
     @h.commit_or_rollback
     def new(self, id, **kwargs):
         name = request.params['name']
@@ -31,3 +47,14 @@ class LineitemController(BaseController):
 
         line_item = LineItem.get(id)
         line_item.order(unit_price, po_id)
+
+    @h.json_response
+    @h.commit_or_rollback
+    def invoice(self, id, **kwargs):
+        specification = request.params['specification']
+        quantity = request.params['quantity']
+        unit_price = request.params['unit_price']
+        invoice_no = request.params['invoice_no']
+
+        line_item = LineItem.get(id)
+        line_item.invoice(specification, quantity, unit_price, invoice_no)

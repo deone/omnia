@@ -7,9 +7,14 @@ Add created_by column to requisition table and cascade to controller and templat
 Maybe we might need to add user.purchase_orders and user.requisitions relations just like we have user.approvedrequisitions, for system reports based on users, to track user actions.
 Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered.
 We might need to create a relation po->invoice in future.
-Fix URL hack for invoice creation from purchase order view template
+Add zerofill to requisition, purchaseorder and vendor ids and invoice number.
+Eliminate url checks in ajaxget.js.
+I hold vendor object in PO and Invoice objects 'cos its needed almost on every page in these modules. And the vendor_object itself always comes with line_items, so I see us having a recursion issue if we try to access a vendor object with many line items.
+Remove lineitems from po_object, write a separate controller action to populate purchase order with items.
+Remove Delete links from PO and Invoice view pages.
+Add "View Invoices" functionality later. For now its commented out in menu.html.
 
-* Ideally, purchase Order drop-down should only display vendors who have line items. Tried this out, encountered issues.
+* Ideally, purchase Order drop-down should only display vendors who have line items. I tried this out and it worked, the only issue is documented in models.
 
 Steps from here
 ===============
@@ -27,3 +32,8 @@ PO Delete
 =========
     * For now, you cannot delete PO, will look into that later.
     * User can delete PO line item after it has been added (i.e. line item has been ordered). This action should revert all actions in LineItem.order() in the same sequence.
+
+Add Item to Invoice
+===================
+Update item's invoice_id
+Increment invoice's total amount

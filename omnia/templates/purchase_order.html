@@ -7,8 +7,10 @@
     <script>
         $(function(){
             $("#purchase-order").show();
+
             var obj = new AjaxGet();
             obj.get("/purchase_order/${c.po_id}/get_by_id");
+            obj.get("/purchase_order/${c.po_id}/is_invoice_received");
         });
     </script>
 </%def>
@@ -23,7 +25,7 @@
 
 <%def name="task()"></%def>
 
-<%def name="view()">
+<%def name="view()"><!--{{{-->
     <div id="purchase-order">
         <h4>Purchase Order</h4>
         <div id="po">
@@ -42,7 +44,6 @@
                     <th>Quantity</th>
                     <th>Unit Price</th>
                     <th>Total Price</th>
-                    <th></th>
                 </thead>
                 <tbody id="po-items">
                 </tbody>
@@ -59,6 +60,12 @@
             </ul>
         </div>
     </div>
+</%def><!--}}}-->
+
+<%def name="extra_actions()">
+    <div>
+        <input id="invoice-button" type="button" value="Create Invoice" onclick="showInvoicePage('${c.po_id}');"/>
+    </div>
 </%def>
 
 <%def name="container()">
@@ -67,6 +74,7 @@
             ${self.task()}   
             ${self.view()}
         </div>
+        ${self.extra_actions()}
     </div>
 </%def>
 

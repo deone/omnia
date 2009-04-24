@@ -282,7 +282,7 @@ class PurchaseOrder(Base):#{{{
     def todict(self):
         return  {
                     "id": self.id,
-                    "vendor": Vendor.get(self.vendor_id).todict(),
+                    "vendor": Vendor.get_as_dict(self.vendor_id),
                     "total_amount": self.total_amount,
                     "status": PurchaseOrder.STATUS_MAP[int(self.status)],
                     "created_by": User.get(self.created_by).firstname + " " + User.get(self.created_by).lastname,
@@ -340,22 +340,22 @@ class Invoice(Base):#{{{
         return invoice.todict()
 
     @staticmethod
-    def get(id=None):
+    def get(no=None):
         try:
-            if id:
-                return meta.session.query(Invoice).filter_by(id=id).one()
+            if no:
+                return meta.session.query(Invoice).filter_by(invoice_number=no).one()
             else:
                 return [i for i in meta.session.query(Invoice)]
         except Exception, e:
             print_exc()
 
     @staticmethod
-    def get_as_dict(id=None):
+    def get_as_dict(no=None):
         try:
-            if id:
-                return meta.session.query(Requisition).filter_by(id=id).one().todict()
+            if no:
+                return meta.session.query(Invoice).filter_by(invoice_number=no).one().todict()
             else:
-                return [r.todict() for r in meta.session.query(Requisition)]
+                return [i.todict() for i in meta.session.query(Invoice)]
         except Exception, e:
             print_exc()
 
@@ -364,7 +364,7 @@ class Invoice(Base):#{{{
                     "id": self.id,
                     "invoice_no": self.invoice_number,
                     "po_id": self.purchase_order_id,
-                    "vendor_id": self.vendor_id,
+                    "vendor": Vendor.get_as_dict(self.vendor_id),
                     "total_amount": self.total_amount,
                     "created_by": self.created_by
                 }
@@ -421,7 +421,7 @@ class Vendor(Base):#{{{
     # need to write these two functions, get_name_dict() and to_name_dict()?
     @staticmethod
     def get_names():
-        return [v.to_name_dict() for v in meta.session.query(Vendor)]
+        return [name_dict(v) for v in meta.session.query(Vendor)]
 
     @staticmethod
     def get_vendors_with_line_items():
@@ -437,13 +437,7 @@ class Vendor(Base):#{{{
             #Bug: When remove() is done through a loop or list comprehension, it leaves one value in list even if all values meet requirement for removal. We might have to come back to this later.
             [line_items.remove(l) for l in line_items if l.status == 1]
 
-        return [v.to_name_dict() for v in meta.session.query(Vendor) if v.lineitems != []]
-
-    def to_name_dict(self):
-        return  {
-            "id": self.id,
-            "name": self.name
-        }
+        return [name_dict(v) for v in meta.session.query(Vendor) if v.lineitems != []]
 
     def todict(self):
         return  {
@@ -470,7 +464,7 @@ class LineItem(Base):#{{{
     requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
     vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'))
     purchaseorderid = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'))
-    invoiceid = Column(Integer, ForeignKey('invoice.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    invoiceno = Column(Integer, ForeignKey('invoice.invoice_number', ondelete='RESTRICT', onupdate='CASCADE'))
 
     requisition = relation(Requisition, backref=backref('lineitems', order_by=id))
     vendor = relation(Vendor, backref=backref('lineitems', order_by=id))
@@ -521,15 +515,33 @@ class LineItem(Base):#{{{
     def remove_from_PO(self):
         pass
 
-    def order(self, unitprice, purchaseorderid):
-        self.unitprice = unitprice
-        self.purchaseorderid = purchaseorderid
-        self.totalprice = int(unitprice) * int(self.quantity)
+    def order(self, unit_price, purchase_order_id):
+        self.unitprice = unit_price
+        self.purchaseorderid = purchase_order_id
+        self.totalprice = int(unit_price) * int(self.quantity)
         self.status = 1
 
-        po = PurchaseOrder.get(purchaseorderid)
+        po = PurchaseOrder.get(purchase_order_id)
         po.total_amount = po.total_amount + self.totalprice
+
+    def invoice(self, specification, quantity, unit_price, invoice_no):
+        self.specification = specification
+        self.quantity = quantity
+        self.unitprice = unit_price
+        self.total_price = int(quantity) * int(unit_price)
+        self.invoiceno = invoice_no
+
+        inv = Invoice.get(invoice_no)
+        inv.total_amount = inv.total_amount + self.total_price
     
+    @staticmethod
+    def get_by_vendor_id(vendor_id):
+        return [name_dict(li) for li in meta.session.query(LineItem).filter_by(vendorid=vendor_id).filter_by(invoiceno=None).all()]
+
+    @staticmethod
+    def get_by_invoice_no(invoice_no):
+        return [li.todict() for li in meta.session.query(LineItem).filter_by(invoiceno=invoice_no).all()]
+
     #}}}
 
 class Item(Base):#{{{
@@ -569,17 +581,23 @@ class Item(Base):#{{{
 
 # Refactor these helpers and add them to Misc#{{{
 # Helpers should not return the whole object to avoid recursion limit error
-
-def vendor_dict(id):
-    return meta.session.query(Vendor).filter_by(id=id).one().todict()
-
 def lst_to_dictlst(lst):
+    """Convert a list to a dictionary with both key and value as list element"""
     new_lst = []
 
     for t in lst:
-        type = {}
-        type['id'] = t
-        type['name'] = t
-        new_lst.append(type)
+        dct = {}
+        dct['id'] = t
+        dct['name'] = t
+        new_lst.append(dct)
 
-    return new_lst#}}}
+    return new_lst
+
+def name_dict(object):
+    """Return a dictionary of object's id and name"""
+    return  {
+        "id": object.id,
+        "name": object.name
+    }
+
+    #}}}

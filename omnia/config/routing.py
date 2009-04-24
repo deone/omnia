@@ -35,6 +35,9 @@ def make_map():
     map.connect('lineitem_action', '/lineitem/:action', controller='lineitem')
     map.connect('lineitem_others', '/lineitem/:id/:action', controller='lineitem')
 
+    map.connect('invoice_action', '/invoice/:action', controller='invoice')
+    map.connect('invoice_other', '/invoice/:id/:action', controller='invoice')
+
     map.connect('purchase_order', '/purchase_order', controller='purchase_order', action='index')
     map.connect('purchase_order_action', '/purchase_order/:action', controller='purchase_order')
     map.connect('purchase_order_other', '/purchase_order/:id/:action', controller='purchase_order')

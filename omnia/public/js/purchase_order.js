@@ -1,10 +1,10 @@
 var vendor = "";
 
 // AjaxPost
-function createPO(id) {//{{{
+function createPO() {//{{{
 
     var vendorId = $("#vendor").val();
-    var userId = id;
+    var userId = $("#user-id").val();
     var data = "vendor=" + vendorId + 
                 "&user=" + userId;
 
@@ -61,6 +61,7 @@ function orderItem(POId)    {//{{{
 
     });
 }//}}}
+
 // Ajax Post functions end here
 
 
@@ -136,6 +137,28 @@ function showItemDetail() {//{{{
         );
 }//}}}
 
+function editPOItems(list, container)  {//{{{
+
+    var rows = "";
+
+    for (i=0; i<list.length; i++)   {
+        
+        rows += "<tr>" + 
+                    "<td>" + list[i]['id'] + "</td>" + 
+                    "<td>" + list[i]['name'] + "</td>" + 
+                    "<td>" + list[i]['specification'] + "</td>" + 
+                    "<td>" + list[i]['quantity'] + "</td>" + 
+                    "<td>" + list[i]['unitprice'] + "</td>" + 
+                    "<td>" + list[i]['totalprice'] + "</td>" + 
+                    "<td><a href=''>Delete</a></td>" + 
+                "</tr>";
+
+    }
+
+    $(container).html(rows);
+
+}//}}}
+
 function showPOItems(list, container)  {//{{{
 
     var rows = "";
@@ -149,7 +172,6 @@ function showPOItems(list, container)  {//{{{
                     "<td>" + list[i]['quantity'] + "</td>" + 
                     "<td>" + list[i]['unitprice'] + "</td>" + 
                     "<td>" + list[i]['totalprice'] + "</td>" + 
-                    "<td><a href='/purchase_order/'>Delete</td>" + 
                 "</tr>";
 
     }
@@ -170,7 +192,7 @@ function displayPOs(POList, container)    {//{{{
                     "<td>" + POList[i]['line_items'].length + "</td>" + 
                     "<td>" + POList[i]['total_amount'] + "</td>" + 
                     "<td>" + POList[i]['date_created'] + "</td>" + 
-                    "<td>" + POList[i]['created_by']['firstname'] + " " + POList[i]['created_by']['lastname'] + "</td>" + 
+                    "<td>" + POList[i]['created_by'] + "</td>" + 
                     "<td>" + POList[i]['status'] + "</td>" + 
                     "<td><a href='/purchase_order/" + POList[i]['id'] + "/view'>View</a></td>" + 
                 "</tr>";
@@ -180,3 +202,9 @@ function displayPOs(POList, container)    {//{{{
     $(container).html(rows);
 
 }//}}}
+
+function showInvoicePage(poId)  {
+
+    document.location = "/invoice/create?po_id=" + poId;
+
+}

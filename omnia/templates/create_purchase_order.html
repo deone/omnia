@@ -1,8 +1,6 @@
-<%inherit file="dashboard.html"/>
-
 <%def name="title()">Create Purchase Order</%def>
 
-<%def name="custom_js()">
+<%def name="custom_js()"><!--{{{-->
     <script src="/js/purchase_order.js"></script>
     <script>
         $(function()    {
@@ -11,17 +9,17 @@
             obj.get("/vendor/get_vendors_with_line_items");
         });
     </script>
-</%def>
+</%def><!--}}}-->
 
-<%def name="menu()">
+<%def name="menu()"><!--{{{-->
     <%include file="menu.html"/>
-</%def>
+</%def><!--}}}-->
 
-<%def name="actionlinks()">
+<%def name="actionlinks()"><!--{{{-->
     <li><a href="">Add Item</a>
-</%def>
+</%def><!--}}}-->
 
-<%def name="task()">
+<%def name="task()"><!--{{{-->
     <div id="create-PO">
         <h4>Create Purchase Order</h4>
         <form name="createPO-form" id="createPO-form" class="info-form">
@@ -32,17 +30,18 @@
                         <label for="info">Create Purchase Order for:</label>
                         <select id="vendor" name="vendor"></select>
                     </li>
+                    <input type="hidden" id="user-id" name="user-id" value="${session['user'].id}"/>
                 </ol>
             </fieldset>
 
             <fieldset class="submit">
-                <input type="button" class="submit" value="Create" onclick="createPO('${session['user'].id}');"/>
+                <input type="button" class="submit" value="Create" onclick="createPO();"/>
             </fieldset>
         </form>
     </div>
-</%def>
+</%def><!--}}}-->
 
-<%def name="view()">
+<%def name="view()"><!--{{{-->
     <div id="purchase-order">
         <h4>Purchase Order</h4>
         <div id="po">
@@ -65,15 +64,18 @@
             </ul>
         </div>
     </div>
-</%def>
+</%def><!--}}}-->
 
-<%def name="container()">
+<%def name="extra_actions()"></%def>
+
+<%def name="container()"><!--{{{-->
     <div class="grid_12 omega main">
         <div class="widget">
             ${self.task()}   
             ${self.view()}
         </div>
+        ${self.extra_actions()}
     </div>
-</%def>
+</%def><!--}}}-->
 
 <%inherit file="purchase_order.html"/>

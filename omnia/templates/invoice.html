@@ -1,0 +1,71 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Invoice</%def>
+
+<%def name="custom_js()"><!--{{{-->
+    <script src="/js/invoice.js"></script>
+    <script>
+        $(function(){
+            $("#invoice").show();
+
+            var obj = new AjaxGet();
+            obj.get("/invoice/${c.inv_no}/get_by_no");
+        });
+    </script>
+</%def><!--}}}-->
+
+<%def name="menu()"><!--{{{-->
+    <%include file="menu.html"/>
+</%def><!--}}}-->
+
+<%def name="actionlinks()"><!--{{{-->
+    <li><a href="/invoice/${c.inv_no}/edit">Edit</a></li>
+</%def><!--}}}-->
+
+<%def name="task()"></%def>
+
+<%def name="view()">
+    <div id="invoice">
+        <h4>Invoice</h4>
+        <div id="vendor">
+            <ul>
+                <li id="name"></li>
+                <li id="address"></li>
+                <li id="phone"></li>
+            </ul>
+        </div>
+
+        <div id="invoice-detail">
+            <ul>
+                <li>Invoice No. <span></span></li>
+                ${self.actionlinks()}
+            </ul>
+        </div>
+
+        <div id="line-items">
+            <table>
+                <thead>
+                    <th>Item No.</th>
+                    <th>Item Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                <thead>
+                <tbody id="inv-items">
+                </tbody>
+            </table>
+            <ul>
+                <li>Amount <span id="amount"></span></li>
+            </ul>
+        </div>
+    </div>
+</%def>
+
+<%def name="activity()"><!--{{{-->
+    <div class="grid_12 omega">
+        <div class="widget">
+            ${self.task()}   
+            ${self.view()}
+        </div>
+    </div>
+</%def><!--}}}-->

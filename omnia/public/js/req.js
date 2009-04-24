@@ -160,8 +160,8 @@ function displayApprovedReqs(reqList, container)  {//{{{
 
         rows += "<tr>" + 
                     "<td>" + reqList[i]['requisition_id'] + "</td>" + 
-                    "<td>" + reqList[i]['requisition']['description'] + "</td>" + 
-                    "<td>" + reqList[i]['user']['firstname'] + " " + reqList[i]['user']['lastname'] + "</td>" + 
+                    "<td>" + reqList[i]['requisition'] + "</td>" + 
+                    "<td>" + reqList[i]['user'] + "</td>" + 
                 "</tr>";
 
     }
@@ -184,7 +184,7 @@ function createItemRows(container, list)   {//{{{
                     "<td>" + list[i]['id'] + "</td>" + 
                     "<td>" + list[i]['name'] + "</td>" + 
                     "<td>" + list[i]['itemtype'] + "</td>" + 
-                    "<td>" + list[i]['vendorid'] + "</td>" + 
+                    "<td>" + list[i]['vendor'] + "</td>" + 
                     "<td>" + list[i]['specification'] + "</td>" + 
                     "<td>" + list[i]['quantity'] + "</td>" + 
                     "<td>" + list[i]['unitprice'] + "</td>" + 

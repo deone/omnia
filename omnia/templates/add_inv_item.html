@@ -1,0 +1,47 @@
+<%def name="title()">Add Item to Invoice</%def>
+
+<%def name="custom_js()">
+    <script src="/js/invoice.js"></script>
+    <script>
+        var obj = new AjaxGet();
+        obj.get("/invoice/${c.invoice_no}/get_by_no")
+    </script>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>Add Item To <span id="vendor-name"></span>&rsquo;s Invoice</h4>
+
+            <form name="add-inv-item-form" id="add-inv-item-form" class="info-form">
+                <div class="feedback"></div>
+                <fieldset>
+                    <ol>
+                        <li>
+                            <label for="item">Item</label>
+                            <select id="item-name" name="item-name"></select>
+                        </li>
+                        <li>
+                            <label for="specification">Specification</label>
+                            <textarea id="specification" name="specification" cols=30 rows=3></textarea>
+                        </li>
+                        <li>
+                            <label for="quantity">Quantity</label>
+                            <input id="quantity" name="quantity"/>
+                        <li>
+                            <label for="unit-price">Unit Price</label>
+                            <input id="unit-price" name="unit-price"/>
+                        </li>
+                        <input type="hidden" id="invoice-no" name="invoice-no" value="${c.invoice_no}"/>
+                    </ol>
+                </fieldset>
+
+                <fieldset class="submit">
+                    <input type="button" class="submit" value="Add Item" onclick="addItemToInvoice()"/>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</%def>
+
+<%inherit file="add_line_item.html"/>

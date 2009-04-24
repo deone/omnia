@@ -1,0 +1,80 @@
+<%def name="title()">Create Invoice</%def>
+
+<%def name="custom_js()"><!--{{{-->
+    <script src="/js/invoice.js"></script>
+    <script>
+        $(function()    {
+            var obj = new AjaxGet();
+            obj.get("/purchase_order/${c.po_id}/get_by_id");
+        });
+    </script>
+</%def><!--}}}-->
+
+<%def name="menu()"><!--{{{-->
+    <%include file="menu.html"/>
+</%def><!--}}}-->
+
+<%def name="actionlinks()">
+    <a href="">Add Item</a>
+</%def>
+
+<%def name="task()"><!--{{{-->
+    <div id="create-invoice">
+        <h4><span id="vendor-name"></span>'s Invoice for Purchase Order <span id="po-id"></span></h4>
+        <form name="create-invoice-form" id="create-invoice-form" class="info-form">
+            <div class="feedback">&nbsp;</div>
+            <fieldset>
+                <ol>
+                    <li>
+                        <label for="info">Invoice No:</label>
+                        <input id="invoice-no" name="invoice-no"/>
+                    </li>
+                    <input type="hidden" id="purchase-order-id" name="purchase-order-id"/>
+                    <input type="hidden" id="vendor-id" name="vendor-id"/>
+                    <input type="hidden" id="user-id" name="user-id" value="${session['user'].id}"/>
+                </ol>
+            </fieldset>
+
+            <fieldset class="submit">
+                <input type="button" class="submit" value="Create" onclick="createInvoice();"/>
+            </fieldset>
+        </form>
+    </div>
+</%def><!--}}}-->
+
+<%def name="view()"><!--{{{-->
+    <div id="invoice">
+        <h4>Invoice</h4>
+        <div id="vendor">
+            <ul>
+                <li id="name"></li>
+                <li id="address"></li>
+                <li id="phone"></li>
+            </ul>
+        </div>
+
+        <div id="invoice-detail">
+            <ul>
+                <li>Invoice No. <span></span></li>
+                ${self.actionlinks()}
+            </ul>
+        </div>
+
+        <div id="line-items">
+            <ul>
+                <li>Amount <span id="amount"></span></li>
+            </ul>
+        </div>
+    </div>
+</%def><!--}}}-->
+
+<%def name="activity()"><!--{{{-->
+    <div class="grid_12 omega main">
+        <div class="widget">
+            ${self.task()}
+            ${self.view()}
+        </div>
+    </div>
+</%def><!--}}}-->
+
+<%inherit file="invoice.html"/>
