@@ -15,13 +15,11 @@ def rollback():
 def create_response(code, type=None, value=None):
     if type == None and value == None:
         response = {
-                        "version": 1.0,
                         "code": code,
                         "data": None
                    }
     else:
         response = { 
-                        "version": 1.0,
                         "code": code,
                         "data": {
                             "type": type,
