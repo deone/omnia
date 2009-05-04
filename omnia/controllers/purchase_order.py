@@ -37,6 +37,12 @@ class PurchaseOrderController(BaseController):
         return ("po_object", PurchaseOrder.create(vendor_id, user_id))
 
     @h.json_response
+    @h.commit_or_rollback
+    def close(self, id, **kwargs):
+        po = PurchaseOrder.get(id)
+        po.close()
+
+    @h.json_response
     def get_by_id(self, id, **kwargs):
         return ("po_object", PurchaseOrder.get_as_dict(id=id))
 

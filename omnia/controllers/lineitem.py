@@ -57,4 +57,26 @@ class LineitemController(BaseController):
         invoice_no = request.params['invoice_no']
 
         line_item = LineItem.get(id)
-        line_item.invoice(specification, quantity, unit_price, invoice_no)
+
+        if specification.strip().upper() != line_item.specification.strip().upper():
+            return ("error", "Specification does not match PO item specification")
+
+        if int(quantity.strip()) != int(line_item.quantity):
+            return ("error", "Quantity does not match PO item quantity")
+
+        if int(unit_price.strip()) != int(line_item.unitprice):
+            return ("error", "Unit price does not match PO item unit price")
+
+        ret_val = line_item.invoice(specification, quantity, unit_price, invoice_no)
+        return ("ok", ret_val)
+
+    @h.json_response
+    @h.commit_or_rollback
+    def deliver(self, id, **kwargs):
+        status = request.params['status']
+        location = request.params['location']
+        deliverer = request.params['deliverer']
+
+        line_item = LineItem.get(id)
+
+        line_item.deliver(status, location, deliverer)
