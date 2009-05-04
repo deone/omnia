@@ -44,7 +44,12 @@ class PurchaseOrderController(BaseController):
 
     @h.json_response
     def get_by_id(self, id, **kwargs):
-        return ("po_object", PurchaseOrder.get_as_dict(id=id))
+        po_dict = PurchaseOrder.get_as_dict(id=id) 
+
+        if po_dict:
+            return ("po_object", po_dict)
+        else:
+            return ("error", "No such Purchase Order")
 
     @h.json_response
     def get(self, **kwargs):

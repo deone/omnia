@@ -74,9 +74,11 @@ class LineitemController(BaseController):
     @h.commit_or_rollback
     def deliver(self, id, **kwargs):
         status = request.params['status']
-        location = request.params['location']
-        deliverer = request.params['deliverer']
 
         line_item = LineItem.get(id)
+        ret_val = line_item.deliver(status)
 
-        line_item.deliver(status, location, deliverer)
+        if ret_val == None:
+            return ("ok", "Items Received")
+        else:
+            return ("error", "Error Receiving Items")

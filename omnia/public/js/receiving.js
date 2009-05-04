@@ -1,11 +1,4 @@
-function fetchPO() {//{{{
-
-    var poId = $("#PO-no").val();
-
-    var obj = new AjaxGet();
-    obj.get("/purchase_order/" + poId + "/get_by_id");
-
-}//}}}
+var POObject = "";
 
 function showDelivery(data) {//{{{
     $(".grid_12").removeClass("main");
@@ -35,16 +28,16 @@ function deliverItems() {
     var POId = $("#po-id").val();
 
     for (i=0; i<POObject.line_items.length; i++)    {
-        deliverItem(POObject.line_items[i]['id'], 2, storageLocation, deliverer);
-        closePO(POId);
+        deliverItem(POObject.line_items[i]['id'], 2);
+        //closePO(POId);
     }
 }
 
 // AjaxPost
-function deliverItem(itemId, _status, sLocation, deliverer)    {
+function deliverItem(itemId, _status)    {
 
     var url = "/lineitem/" + itemId + "/deliver";
-    var data = "status=" + _status + "&location=" + sLocation + "&deliverer=" + deliverer;
+    var data = "status=" + _status;
 
     $.ajax({
 
@@ -55,14 +48,62 @@ function deliverItem(itemId, _status, sLocation, deliverer)    {
 
         success: function(response) {
             if (response.code != 0) {
-                alert("Error");
+                $("#storage-location .feedback")
+                    .addClass("err")
+                    .html("Error. " + response.data.body);
             } else  {
-                alert("Success");
+                if (response.data.type == "error")    {
+                    $("#storage-location .feedback")
+                        .addClass("err")
+                        .html("Error. " + response.data.body);
+                } else  {
+                    $("#storage-location .feedback")
+                        .addClass("ok")
+                        .html(response.data.body);
+                }
             }
         }
 
     });
 }
+
+function fetchPO() {//{{{
+    var poId = $("#PO-no").val();
+
+    var url = "/purchase_order/" + poId + "/get_by_id";
+    var data = "";
+
+    $.ajax({
+
+        url: url,
+        type: "POST",
+        data: data,
+        dataType: "json",
+
+        success: function(response) {
+            if (response.code != 0) {
+                $("#receive-form .feedback")
+                    .addClass("err")
+                    .html("Error. " + response.data.body);
+            } else  {
+                if (response.data.type == "error")  {
+                    $("#receive-form .feedback")
+                        .addClass("err")
+                        .html("Error. " + response.data.body);
+                } else  {
+                    POObject = response.data.body;
+
+                    var obj = new AjaxGet();
+                    obj.get("/invoice/" + response.data.body['id'] + "/get_by_poid");
+
+                    showDelivery(response.data.body);
+                }
+            }
+        }
+        
+    });
+
+}//}}}
 
 function closePO(POId)  {
     var url = "/purchase_order/" + POId + "/close";

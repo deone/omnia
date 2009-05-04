@@ -556,6 +556,9 @@ class LineItem(Base):#{{{
         self.total_price = int(quantity) * int(unit_price)
         self.invoiceno = invoice_no
 
+    def deliver(self, status):
+        self.status = status
+
     @staticmethod
     def get_by_vendor_id(vendor_id):
         return [name_dict(li) for li in meta.session.query(LineItem).filter_by(vendorid=vendor_id).filter_by(invoiceno=None).all()]

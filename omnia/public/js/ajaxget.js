@@ -1,5 +1,3 @@
-var POObject = "";
-
 function AjaxGet(url)   {
 
     this.get = function (url)  {
@@ -48,23 +46,6 @@ function AjaxGet(url)   {
                         displayOptions(data, "#vendor", "");
 
                     } else if (dataType == "po_object") {
-
-                        if (url[url.length - 1] == "receiving") {
-
-                            POObject = data;
-
-                            var obj = new AjaxGet();
-                            obj.get("/invoice/" + data['id'] + "/get_by_poid");
-
-                            if (data != null)   {
-                                $("#receive-form .feedback").empty();
-                                showDelivery(data);
-                            } else  {
-                                $("#receive-form .feedback")
-                                    .addClass("err")
-                                    .html("Purchase Order does not exist");
-                            }
-                        }
 
                         if (url[url.length - 1] == "add_line_item")    {
                             $("#vendor-name").html(data['vendor']['name']);
