@@ -11,10 +11,6 @@
     </script>
 </%def><!--}}}-->
 
-<%def name="menu()"><!--{{{-->
-    <%include file="menu.html"/>
-</%def><!--}}}-->
-
 <%def name="actionlinks()"><!--{{{-->
     <li><a href="">Add Item</a>
 </%def><!--}}}-->
@@ -27,7 +23,7 @@
             <fieldset>
                 <ol>
                     <li>
-                        <label for="info">Create Purchase Order for:</label>
+                        <label for="create-PO">Create Purchase Order for:</label>
                         <select id="vendor" name="vendor"></select>
                     </li>
                     <input type="hidden" id="user-id" name="user-id" value="${session['user'].id}"/>

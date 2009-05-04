@@ -10,10 +10,6 @@
     </script>
 </%def><!--}}}-->
 
-<%def name="menu()"><!--{{{-->
-    <%include file="menu.html"/>
-</%def><!--}}}-->
-
 <%def name="actionlinks()">
     <a href="">Add Item</a>
 </%def>
@@ -26,8 +22,12 @@
             <fieldset>
                 <ol>
                     <li>
-                        <label for="info">Invoice No:</label>
+                        <label for="invoice-no">Invoice No:</label>
                         <input id="invoice-no" name="invoice-no"/>
+                    </li>
+                    <li>
+                        <label for="amount">Invoice Amount:</label>
+                        <input id="amount" name="amount"/>
                     </li>
                     <input type="hidden" id="purchase-order-id" name="purchase-order-id"/>
                     <input type="hidden" id="vendor-id" name="vendor-id"/>
@@ -37,6 +37,7 @@
 
             <fieldset class="submit">
                 <input type="button" class="submit" value="Create" onclick="createInvoice();"/>
+                <input type="reset" value="Clear"/>
             </fieldset>
         </form>
     </div>
