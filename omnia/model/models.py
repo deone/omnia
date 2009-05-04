@@ -260,6 +260,9 @@ class PurchaseOrder(Base):#{{{
     status = Column(Integer, default='0', nullable=False)
     created_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
+    delivered_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    date_delivered = Column(DateTime)
+    storage_location = Column(String(100))
     date_closed = Column(DateTime)
 
     def __init__(self, vendor_id, user_id):
@@ -288,8 +291,12 @@ class PurchaseOrder(Base):#{{{
                     "created_by": User.get(self.created_by).firstname + " " + User.get(self.created_by).lastname,
                     "line_items": [li.todict() for li in self.lineitems],
                     "date_created": str(self.date_created),
-                    "date_closed": str(self.date_closed)
+                    "date_closed": str(self.date_closed),
                 }
+
+    def close(self):
+        self.status = 1
+        self.date_closed = datetime.datetime.now()
 
     @staticmethod
     def get(id=None):
@@ -311,6 +318,13 @@ class PurchaseOrder(Base):#{{{
         except Exception, e:
             print_exc()
 
+    @staticmethod
+    def get_amount(id):
+        try:
+            return meta.session.query(PurchaseOrder).filter_by(id=id).one().total_amount
+        except Exception, e:
+            print_exc()
+
     #}}}
 
 class Invoice(Base):#{{{
@@ -321,20 +335,21 @@ class Invoice(Base):#{{{
     invoice_number = Column(Integer, unique=True, nullable=False)
     purchase_order_id = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     vendor_id = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
-    total_amount = Column(Integer, default='0', nullable=False)
+    total_amount = Column(Integer)
     created_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
 
-    def __init__(self, invoice_number, purchase_order_id, vendor_id, created_by):
+    def __init__(self, invoice_number, purchase_order_id, vendor_id, created_by, total_amount):
         self.invoice_number = invoice_number
         self.purchase_order_id = purchase_order_id
         self.vendor_id = vendor_id
+        self.total_amount = total_amount
         self.created_by = created_by
         self.date_created = datetime.datetime.now()
 
     @staticmethod
-    def create(invoice_number, purchase_order_id, vendor_id, created_by):
-        invoice = Invoice(invoice_number, purchase_order_id, vendor_id, created_by)
+    def create(invoice_number, purchase_order_id, vendor_id, created_by, total_amount):
+        invoice = Invoice(invoice_number, purchase_order_id, vendor_id, created_by, total_amount)
         meta.session.add(invoice)
         meta.session.flush()
         return invoice.todict()
@@ -346,6 +361,13 @@ class Invoice(Base):#{{{
                 return meta.session.query(Invoice).filter_by(invoice_number=no).one()
             else:
                 return [i for i in meta.session.query(Invoice)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_by_poid(poid):
+        try:
+            return meta.session.query(Invoice).filter_by(purchase_order_id=poid).one().todict()
         except Exception, e:
             print_exc()
 
@@ -366,7 +388,8 @@ class Invoice(Base):#{{{
                     "po_id": self.purchase_order_id,
                     "vendor": Vendor.get_as_dict(self.vendor_id),
                     "total_amount": self.total_amount,
-                    "created_by": self.created_by
+                    "created_by": self.created_by,
+                    "date_created": str(self.date_created)
                 }
 #}}}
 
@@ -461,11 +484,13 @@ class LineItem(Base):#{{{
     unitprice = Column(Integer, nullable=False)
     totalprice = Column(Integer, nullable=False)
     status = Column(Integer, default='0', nullable=False)
+
     requisitionid = Column(Integer, ForeignKey('requisition.id', ondelete='RESTRICT', onupdate='CASCADE'))
     vendorid = Column(Integer, ForeignKey('vendor.id', ondelete='RESTRICT', onupdate='CASCADE'))
     purchaseorderid = Column(Integer, ForeignKey('purchaseorder.id', ondelete='RESTRICT', onupdate='CASCADE'))
     invoiceno = Column(Integer, ForeignKey('invoice.invoice_number', ondelete='RESTRICT', onupdate='CASCADE'))
 
+    # Relations
     requisition = relation(Requisition, backref=backref('lineitems', order_by=id))
     vendor = relation(Vendor, backref=backref('lineitems', order_by=id))
     purchaseorder = relation(PurchaseOrder, backref=backref('lineitems', order_by=id))
@@ -509,7 +534,7 @@ class LineItem(Base):#{{{
             "vendor": Vendor.get(self.vendorid).name,
             "requisitionid": self.requisitionid,
             "purchaseorderid": self.purchaseorderid,
-            "status": LineItem.STATUS_MAP[int(self.status)]
+            "status": LineItem.STATUS_MAP[int(self.status)],
         }
 
     def remove_from_PO(self):
@@ -531,9 +556,6 @@ class LineItem(Base):#{{{
         self.total_price = int(quantity) * int(unit_price)
         self.invoiceno = invoice_no
 
-        inv = Invoice.get(invoice_no)
-        inv.total_amount = inv.total_amount + self.total_price
-    
     @staticmethod
     def get_by_vendor_id(vendor_id):
         return [name_dict(li) for li in meta.session.query(LineItem).filter_by(vendorid=vendor_id).filter_by(invoiceno=None).all()]

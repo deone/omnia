@@ -1,0 +1,103 @@
+<%def name="title()">Receive Items</%def>
+
+<%def name="custom_js()"><!--{{{-->
+    <script src="/js/receiving.js"></script>
+</%def><!--}}}-->
+
+<%def name="actionlinks()"></%def>
+
+<%def name="task()"><!--{{{-->
+    <div id="create-delivery">
+        <h4>Receive Items</h4>
+        <form name="receive-form" id="receive-form" class="info-form">
+            <div class="feedback">&nbsp;</div>
+            <fieldset>
+                <ol>
+                    <li>
+                        <label for="PO-no">Enter Purchase Order No.</label>
+                        <input id="PO-no" name="PO-no"/>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="submit">
+                <input type="button" class="submit" value="Search" onclick="fetchPO()"/>
+            </fieldset>
+        </form>
+    </div>
+</%def><!--}}}-->
+
+<%def name="view()">
+    <div id="receiving">
+        <h4>Receive Items</h4>
+        <div id="invoice-detail">
+            <ul>
+                <li>Invoice Number <span id="number"></span></li>
+                <li>Invoice Date <span id="date"></span></li>
+            </ul>
+        </div>
+
+        <div id="PO-detail">
+            <div id="po">
+                <ul>
+                    <li>Purchase Order No. <span id="id"></span></li>
+                    <li>Purchase Order Date <span id="date"></span></li>
+                    ${self.actionlinks()}
+                </ul>
+            </div>
+            <div id="line-items">
+                <table>
+                    <thead>
+                        <th>Item No.</th>
+                        <th>Name</th>
+                        <th>Specification</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total Price</th>
+                    </thead>
+                    <tbody id="po-items">
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Total Price <span id="amount"></span></li>
+                </ul>
+            </div>
+            <div id="vendor">
+                <ul>
+                    <li>Name of Vendor <span id="name"></span></li>
+                    <li>Address <span id="address"></span></li>
+                    <li>Phone Number <span id="phone"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <form name="storage-location" id="storage-location" class="info-form">
+            <div class="feedback">&nbsp;</div>
+            <fieldset>
+                <ol>
+                    <li>
+                        <label for="location">Storage Location</label>
+                        <input id="location" name="location"/>
+                    </li>
+                </ol>
+                <input type="hidden" id="user-id" name="user-id" value="${session['user'].id}"/>
+                <input type="hidden" id="po-id" name="po-id"/>
+            </fieldset>
+
+            <fieldset class="submit">
+                <input type="button" class="submit" value="Deliver Items" onclick="deliverItems()"/>
+            </fieldset>
+        </form>
+    </div>
+</%def>
+
+<%def name="activity()">
+    <div class="grid_12 omega main">
+        <div class="widget">
+            ${self.task()}    
+            ${self.view()}
+        </div>
+    </div>
+</%def>
+
+<%inherit file="purchase_order.html"/>

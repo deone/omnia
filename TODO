@@ -13,8 +13,11 @@ I hold vendor object in PO and Invoice objects 'cos its needed almost on every p
 Remove lineitems from po_object, write a separate controller action to populate purchase order with items.
 Remove Delete links from PO and Invoice view pages.
 Add "View Invoices" functionality later. For now its commented out in menu.html.
+System should catch errors when invoice total amount does not match PO total amount.
 
 * Ideally, purchase Order drop-down should only display vendors who have line items. I tried this out and it worked, the only issue is documented in models.
+Check "PO does not exist" error in receiving.html
+FFix bug in "View Purchase Orders".
 
 Steps from here
 ===============
