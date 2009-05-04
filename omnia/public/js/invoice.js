@@ -2,11 +2,13 @@
 function createInvoice()    {//{{{
 
     var invoiceNo = $("#invoice-no").val();
+    var amount = $("#amount").val();
     var poId = $("#purchase-order-id").val();
     var vendorId = $("#vendor-id").val();
     var userId = $("#user-id").val();
 
     var data =  "invoice_no=" + invoiceNo + 
+                "&amount=" + amount + 
                 "&po_id=" + poId + 
                 "&vendor_id=" + vendorId + 
                 "&user_id=" + userId;
@@ -23,27 +25,22 @@ function createInvoice()    {//{{{
             if (response.code != 0) {
                 $("#create-invoice-form .feedback")
                     .addClass("err")
-                    .html("Error Creating Invoice");
-
+                    .html("Error. " + response.data.body);
             } else  {
-                $("#invoice-detail a").attr("href", "/invoice/" + response.data.body['invoice_no'] + "/add_item");
-                showInvoice(response.data.body);
-            }
+                if (response.data.type == "error") {
+                    $("#create-invoice-form .feedback")
+                        .addClass("err")
+                        .html("Error. " + response.data.body);
 
+                } else  {
+                    $("#invoice-detail a").attr("href", "/invoice/" + response.data.body['invoice_no'] + "/add_item");
+                    showInvoice(response.data.body);
+                }
+            }
         }
 
     });
 
-}//}}}
-
-function showInvoice(data)  {//{{{
-    $("#create-invoice").hide();
-
-    $("#invoice-detail span").html(data['invoice_no']);
-    $("#line-items #amount").html(data['total_amount']);
-
-    $(".grid_12").removeClass("main");
-    $("#invoice").show();
 }//}}}
 
 function addItemToInvoice() {//{{{
@@ -71,9 +68,15 @@ function addItemToInvoice() {//{{{
             if (response.code != 0) {
                 $("#add-inv-item-form .feedback")
                     .addClass("err")
-                    .html("Error Adding Item To Invoice");
+                    .html("Error. " + response.data.body);
             } else  {
-                document.location = "/invoice/" + invoiceNo + "/edit";
+                if (response.data.type == "error")   {
+                    $("#add-inv-item-form .feedback")
+                        .addClass("err")
+                        .html("Error. " + response.data.body);
+                } else  {
+                    document.location = "/invoice/" + invoiceNo + "/edit";
+                }
             }
 
         }
@@ -83,7 +86,18 @@ function addItemToInvoice() {//{{{
 }//}}}
 
 
-function editInvoiceItems(list, container)  {
+
+function showInvoice(data)  {//{{{
+    $("#create-invoice").hide();
+
+    $("#invoice-detail span").html(data['invoice_no']);
+    $("#line-items #amount").html(data['total_amount']);
+
+    $(".grid_12").removeClass("main");
+    $("#invoice").show();
+}//}}}
+
+function editInvoiceItems(list, container)  {//{{{
 
     var rows = "";
 
@@ -102,9 +116,9 @@ function editInvoiceItems(list, container)  {
 
     $(container).html(rows);
 
-}
+}//}}}
 
-function showInvoiceItems(list, container)  {
+function showInvoiceItems(list, container)  {//{{{
 
     var rows = "";
 
@@ -122,4 +136,4 @@ function showInvoiceItems(list, container)  {
 
     $(container).html(rows);
 
-}
+}//}}}

@@ -64,7 +64,6 @@ function orderItem(POId)    {//{{{
 
 // Ajax Post functions end here
 
-
 function populatePO(data)   {//{{{
     $("#po #id").html(data['id']);
     $("#po #date").html(data['date_created']);
@@ -91,12 +90,6 @@ function showPO(po)   {//{{{
     // Show Purchase Order
     $(".grid_12").removeClass("main");
     $("#purchase-order").show();
-}//}}}
-
-function displayVendorDetails(data) {//{{{
-    $("#name").html(data['name']);
-    $("#address").html(data['address']);
-    $("#phone").html(data['phone']);
 }//}}}
 
 function populateItemField(data)    {//{{{
@@ -151,27 +144,6 @@ function editPOItems(list, container)  {//{{{
                     "<td>" + list[i]['unitprice'] + "</td>" + 
                     "<td>" + list[i]['totalprice'] + "</td>" + 
                     "<td><a href=''>Delete</a></td>" + 
-                "</tr>";
-
-    }
-
-    $(container).html(rows);
-
-}//}}}
-
-function showPOItems(list, container)  {//{{{
-
-    var rows = "";
-
-    for (i=0; i<list.length; i++)   {
-        
-        rows += "<tr>" + 
-                    "<td>" + list[i]['id'] + "</td>" + 
-                    "<td>" + list[i]['name'] + "</td>" + 
-                    "<td>" + list[i]['specification'] + "</td>" + 
-                    "<td>" + list[i]['quantity'] + "</td>" + 
-                    "<td>" + list[i]['unitprice'] + "</td>" + 
-                    "<td>" + list[i]['totalprice'] + "</td>" + 
                 "</tr>";
 
     }

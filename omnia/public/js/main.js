@@ -29,3 +29,30 @@ function displayOptions(data, element, match)   {//{{{
 function $$(id) {
     return document.getElementById(id);
 }
+
+function showPOItems(list, container)  {//{{{
+
+    var rows = "";
+
+    for (i=0; i<list.length; i++)   {
+        
+        rows += "<tr>" + 
+                    "<td>" + list[i]['id'] + "</td>" + 
+                    "<td>" + list[i]['name'] + "</td>" + 
+                    "<td>" + list[i]['specification'] + "</td>" + 
+                    "<td>" + list[i]['quantity'] + "</td>" + 
+                    "<td>" + list[i]['unitprice'] + "</td>" + 
+                    "<td>" + list[i]['totalprice'] + "</td>" + 
+                "</tr>";
+
+    }
+
+    $(container).html(rows);
+
+}//}}}
+
+function displayVendorDetails(data) {//{{{
+    $("#name").html(data['name']);
+    $("#address").html(data['address']);
+    $("#phone").html(data['phone']);
+}//}}}

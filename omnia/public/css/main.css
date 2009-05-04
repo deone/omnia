@@ -8,6 +8,7 @@
 @import url("req.css");
 @import url("purchase_order.css");
 @import url("invoice.css");
+@import url("receiving.css");
 
 body    {
     color: #333;    
@@ -24,7 +25,7 @@ table    {
 }
 
 tbody   {
-padding: 0;
+    padding: 0;
 }
 
 table th, table td  {
@@ -129,7 +130,7 @@ h4  {
 }
 
 #logo   {
-    width: 150px;
+    /*width: 150px;*/
     float: left;
 }
 

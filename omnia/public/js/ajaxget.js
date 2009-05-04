@@ -1,3 +1,5 @@
+var POObject = "";
+
 function AjaxGet(url)   {
 
     this.get = function (url)  {
@@ -47,6 +49,23 @@ function AjaxGet(url)   {
 
                     } else if (dataType == "po_object") {
 
+                        if (url[url.length - 1] == "receiving") {
+
+                            POObject = data;
+
+                            var obj = new AjaxGet();
+                            obj.get("/invoice/" + data['id'] + "/get_by_poid");
+
+                            if (data != null)   {
+                                $("#receive-form .feedback").empty();
+                                showDelivery(data);
+                            } else  {
+                                $("#receive-form .feedback")
+                                    .addClass("err")
+                                    .html("Purchase Order does not exist");
+                            }
+                        }
+
                         if (url[url.length - 1] == "add_line_item")    {
                             $("#vendor-name").html(data['vendor']['name']);
                             fillItemForm(data['vendor']);
@@ -62,7 +81,7 @@ function AjaxGet(url)   {
                             showPOItems(data['line_items'], "#po-items");
                         }
 
-                        if (url[url.length - 1].split("=")[0] = "create=po_id") {
+                        if (url[url.length - 1].split("=")[0] == "create?po_id") {
                             $("#vendor-name").html(data['vendor']['name']);
                             $("#po-id").html(data['id']);
                             $("#purchase-order-id").attr("value", data["id"]);
@@ -77,22 +96,31 @@ function AjaxGet(url)   {
                         displayPOs(data, "#pos-container");
 
                     } else if (dataType == "invoice_object")    {
-                        
+                        if (url[url.length - 1] == "receiving")  {
+                            $("#invoice-detail #number").html(data['invoice_no']);
+                            $("#invoice-detail #date").html(data['date_created']);
+                        }
+
                         if (url[url.length - 1] == "add_item")  {
                             $("#vendor-name").html(data['vendor']['name']);
 
                             var obj = new AjaxGet();
                             obj.get("/lineitem/" + data['vendor']['id'] + "/get_by_vendor_id");
 
-                        } else  {
-                            $("#name").html(data['vendor']['name']);
-                            $("#address").html(data['vendor']['address']);
-                            $("#phone").html(data['vendor']['phone']);
-                            $("#invoice-detail span").html(data['invoice_no']);
-                            $("#amount").html(data['total_amount']);
+                        }
 
-                            var obj = new AjaxGet();
-                            obj.get("/lineitem/" + data['invoice_no'] + "/get_by_invoice_no");
+                        if (url[url.length - 1] != "add_item")  {
+
+                            if (url[url.length - 1] != "receiving")  {
+                                $("#name").html(data['vendor']['name']);
+                                $("#address").html(data['vendor']['address']);
+                                $("#phone").html(data['vendor']['phone']);
+                                $("#invoice-detail span").html(data['invoice_no']);
+                                $("#amount").html(data['total_amount']);
+
+                                var obj = new AjaxGet();
+                                obj.get("/lineitem/" + data['invoice_no'] + "/get_by_invoice_no");
+                            }
 
                         }
 
