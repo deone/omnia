@@ -24,6 +24,10 @@ class PurchaseOrderController(BaseController):
         c.po_id = id
         return render('/edit_purchase_order.html')
 
+    def doc_print(self, id):
+        c.po_id = id
+        return render('/print_purchase_order.html')
+
     def add_line_item(self, id):
         c.po_id = id
         return render('/add_po_line_item.html')

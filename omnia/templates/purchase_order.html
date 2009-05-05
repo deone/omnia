@@ -23,11 +23,15 @@
     <li><a href="/purchase_order/${c.po_id}/edit">Edit</a></li>
 </%def>
 
+<%def name="printlnk()">
+    <a target="blank" href="/purchase_order/${c.po_id}/doc_print">print</a>
+</%def>
+
 <%def name="task()"></%def>
 
 <%def name="view()"><!--{{{-->
     <div id="purchase-order">
-        <h4>Purchase Order</h4>
+        <h4>Purchase Order${self.printlnk()}</h4>
         <div id="po">
             <ul>
                 <li>Purchase Order No. <span id="id"></span></li>

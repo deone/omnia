@@ -109,11 +109,11 @@ function showReqDetails(req)   {//{{{
                         "Requestor <b>" + req['full_name'] + "</b><br/>" + 
                         "Organization <b>" + req['organization'] + "</b><br/>" + 
                         "Requestor&rsquo;s Phone Number <b>" + req['phone_number'] + "</b><br/>" + 
-                        "Description <b>" + req['description'] + "</b><br/>" + 
-                        "<a href='/requisition/" + req['id'] + "/add_line_item'>Add Item</a>" + 
+                        "Description <b>" + req['description'] + "</b>" + 
                     "</p>";
 
     $("#req-detail").html(reqDetail);
+    $("#add-item").html("<a href='/requisition/" + req['id'] + "/add_line_item'>Add Item</a>");
 
 }//}}}
 

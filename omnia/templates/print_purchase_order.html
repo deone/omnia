@@ -1,0 +1,21 @@
+<%def name="actionlinks()"></%def>
+
+<%def name="title()">Print Purchase Order</%def>
+
+<%def name="printlnk()"></%def>
+
+<%def name="menu()"></%def>
+
+<%def name="extra_actions()"></%def>
+
+<%def name="container()"><!--{{{-->
+    <div class="grid_12 omega">
+        <div class="widget">
+            ${self.task()}   
+            ${self.view()}
+        </div>
+        ${self.extra_actions()}
+    </div>
+</%def><!--}}}-->
+
+<%inherit file="purchase_order.html"/>

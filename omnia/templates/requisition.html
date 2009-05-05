@@ -20,34 +20,49 @@
     <%include file="menu.html"/>
 </%def><!--}}}-->
 
+<%def name="printlnk()">
+    <a target="blank" href="/requisition/${c.req_id}/doc_print">print</a>
+</%def>
+
+<%def name="actionlink()">
+    <p id="add-item"></p>
+</%def>
+
+<%def name="view()">
+    <h4>Requisition Details${self.printlnk()}</h4>
+    <div class="inner">
+        <div id="req-detail"></div>
+        ${self.actionlink()}
+        <h6>Items</h6>
+        <table>
+            <thead>
+                <th>ID.</th>
+                <th>Name</th>
+                <th>Item Type</th>
+                <th>Vendor</th>
+                <th>Specification</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+            </thead>
+            <tbody id="req-items">
+            </tbody>
+        </table>
+    </div>
+</%def>
+
+<%def name="extra()">
+    <div id="other" class="inner">
+        <input type="button" class="button" value="Approve" onclick="approveReq('${c.req_id}', '${session['user'].id}');"/>
+        <div class="clear-float"></div>
+    </div>
+</%def>
+
 <%def name="activity()"><!--{{{-->
-    <div class="grid_12 omega main">
-
+    <div class="grid_12 omega">
         <div class="widget">
-            <h4>Requisition Details</h4>
-            <div class="inner">
-                <div id="req-detail"></div>
-                <h6>Items</h6>
-                <table>
-                    <thead>
-                        <th>ID.</th>
-                        <th>Name</th>
-                        <th>Item Type</th>
-                        <th>Vendor</th>
-                        <th>Specification</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total Price</th>
-                    </thead>
-                    <tbody id="req-items">
-                    </tbody>
-                </table>
-            </div>
-            <div id="other" class="inner">
-                <input type="button" class="button" value="Approve" onclick="approveReq('${c.req_id}', '${session['user'].id}');"/>
-                <div class="clear-float"></div>
-            </div>
+            ${self.view()}        
+            ${self.extra()}
         </div>
-
     </div>
 </%def><!--}}}-->

@@ -57,7 +57,7 @@ function AjaxGet(url)   {
                             editPOItems(data['line_items'], "#po-items");
                         }
 
-                        if (url[url.length - 1] == "view")  {
+                        if (url[url.length - 1] == "view" || url[url.length - 1] == "doc_print")  {
                             populatePO(data);
                             showPOItems(data['line_items'], "#po-items");
                         }

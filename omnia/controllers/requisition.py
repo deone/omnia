@@ -24,6 +24,10 @@ class RequisitionController(BaseController):
         c.req_id = id
         return render("/requisition.html")
 
+    def doc_print(self, id):
+        c.req_id = id
+        return render("/print_requisition.html")
+
     def approve(self):
         return render("/approve.html")
 

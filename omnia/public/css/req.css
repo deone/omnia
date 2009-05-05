@@ -21,8 +21,5 @@
 
 .inner .button    {
     float: right;
-}
-
-.inner .button  {
     display: none;
 }
