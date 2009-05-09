@@ -20,7 +20,7 @@
 </%def>
 
 <%def name="actionlinks()">
-    <li><a href="/purchase_order/${c.po_id}/edit">Edit</a></li>
+    <li><a id="edit-PO" href="/purchase_order/${c.po_id}/edit">Edit</a></li>
 </%def>
 
 <%def name="printlnk()">
@@ -35,7 +35,7 @@
         <div id="po">
             <ul>
                 <li>Purchase Order No. <span id="id"></span></li>
-                <li>Date <span id="date"></span></li>
+                <li>Date Created <span id="date"></span></li>
                 ${self.actionlinks()}
             </ul>
         </div>

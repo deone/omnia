@@ -24,17 +24,19 @@ function showDelivery(data) {//{{{
 
 function deliverItems() {
     var storageLocation = $("#location").val();
-    var deliverer = $("#user-id").val();
     var POId = $("#po-id").val();
+    var poClosedBy = $("#user-id").val();
 
     for (i=0; i<POObject.line_items.length; i++)    {
-        deliverItem(POObject.line_items[i]['id'], 2);
-        //closePO(POId);
+        var item = POObject.line_items[i]['id'];
+        deliverItem(item, 2);
+        //closeReq(item);
     }
+    closePO(storageLocation, poClosedBy, POId);
 }
 
 // AjaxPost
-function deliverItem(itemId, _status)    {
+function deliverItem(itemId, _status)    {//{{{
 
     var url = "/lineitem/" + itemId + "/deliver";
     var data = "status=" + _status;
@@ -56,16 +58,12 @@ function deliverItem(itemId, _status)    {
                     $("#storage-location .feedback")
                         .addClass("err")
                         .html("Error. " + response.data.body);
-                } else  {
-                    $("#storage-location .feedback")
-                        .addClass("ok")
-                        .html(response.data.body);
                 }
             }
         }
 
     });
-}
+}//}}}
 
 function fetchPO() {//{{{
     var poId = $("#PO-no").val();
@@ -105,9 +103,10 @@ function fetchPO() {//{{{
 
 }//}}}
 
-function closePO(POId)  {
+function closePO(storageLocation, poClosedBy, POId)  {
     var url = "/purchase_order/" + POId + "/close";
-    var data = "";
+    var data =  "location=" + storageLocation + 
+                "&closed_by=" + poClosedBy;
 
     $.ajax({
 
@@ -120,7 +119,9 @@ function closePO(POId)  {
             if (response.code != 0) {
                 alert("Error");
             } else  {
-                alert("Success");
+                $("#storage-location .feedback")
+                    .addClass("ok")
+                    .html("Items Received. Purchase Order Closed.");
             }
         }
 

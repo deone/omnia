@@ -43,8 +43,11 @@ class PurchaseOrderController(BaseController):
     @h.json_response
     @h.commit_or_rollback
     def close(self, id, **kwargs):
+        location = request.params['location']
+        closed_by = request.params['closed_by']
+
         po = PurchaseOrder.get(id)
-        po.close()
+        po.close(location, closed_by)
 
     @h.json_response
     def get_by_id(self, id, **kwargs):

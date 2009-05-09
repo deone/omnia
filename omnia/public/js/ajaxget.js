@@ -59,6 +59,12 @@ function AjaxGet(url)   {
 
                         if (url[url.length - 1] == "view" || url[url.length - 1] == "doc_print")  {
                             populatePO(data);
+                            if (data['status'] == "Closed") {
+                                $("#po ul").append("<li>Status&nbsp;<b>" + data['status'] + "</b></li>" +
+                                "<li>Closed By&nbsp;<b>" + data['closed_by'] + "</b></li>" + 
+                                "<li>Date Closed&nbsp;<b>" + data['date_closed'] + "</b></li>"
+                                );
+                            }
                             showPOItems(data['line_items'], "#po-items");
                         }
 
@@ -113,6 +119,10 @@ function AjaxGet(url)   {
 
                     } else if (dataType == "ok")    {
 
+                            $("#edit-PO").hide();
+                            $("#add-line-item").hide();
+                            $("#view-PO").hide();
+                            $("#line-items a").hide();
 
                     } else if (dataType == "req_list")    {
                         displayReqs(data, "#reqs-container");

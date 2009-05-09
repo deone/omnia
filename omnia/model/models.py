@@ -260,10 +260,9 @@ class PurchaseOrder(Base):#{{{
     status = Column(Integer, default='0', nullable=False)
     created_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
-    delivered_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'))
-    date_delivered = Column(DateTime)
     storage_location = Column(String(100))
     date_closed = Column(DateTime)
+    closed_by = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'))
 
     def __init__(self, vendor_id, user_id):
         self.vendor_id = vendor_id
@@ -292,10 +291,13 @@ class PurchaseOrder(Base):#{{{
                     "line_items": [li.todict() for li in self.lineitems],
                     "date_created": str(self.date_created),
                     "date_closed": str(self.date_closed),
+                    "closed_by": User.get(self.created_by).firstname + " " + User.get(self.created_by).lastname
                 }
 
-    def close(self):
+    def close(self, storage_location, closed_by):
         self.status = 1
+        self.storage_location = storage_location
+        self.closed_by = closed_by
         self.date_closed = datetime.datetime.now()
 
     @staticmethod
