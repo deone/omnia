@@ -143,6 +143,10 @@ class Requisition(Base):#{{{
         self.phone_number = phone_number
         self.date_created = datetime.datetime.now()
 
+    def close(self):
+        self.status = 3
+        self.date_closed = datetime.datetime.now()
+
     @staticmethod
     def create(date_required, description, organization, fullname, phone_number):
         req = Requisition(date_required, description, organization, fullname, phone_number)
@@ -538,6 +542,14 @@ class LineItem(Base):#{{{
             "purchaseorderid": self.purchaseorderid,
             "status": LineItem.STATUS_MAP[int(self.status)],
         }
+
+    @staticmethod
+    def get_items_status(req_id):
+        try:
+            items = meta.session.query(LineItem).filter_by(requisitionid=req_id).all()
+            return [item.status for item in items]
+        except Exception, e:
+            print_exc()
 
     def remove_from_PO(self):
         pass

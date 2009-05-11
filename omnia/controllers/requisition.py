@@ -68,3 +68,22 @@ class RequisitionController(BaseController):
 
         user_id = request.params['user_id']
         req.approve(id, user_id)
+
+    @h.json_response
+    @h.commit_or_rollback
+    def close(self, **kwargs):
+        req_id = request.params['req_id']
+
+        items_status = LineItem.get_items_status(req_id)
+
+        for item_status in items_status:
+            if item_status != 2:
+                return False
+
+        req = Requisition.get(req_id)
+        ret_val = req.close()
+
+        if ret_val != None:
+            return ("error", ret_val)
+        else:
+            return ("ok", ret_val)

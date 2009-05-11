@@ -29,8 +29,9 @@ function deliverItems() {
 
     for (i=0; i<POObject.line_items.length; i++)    {
         var item = POObject.line_items[i]['id'];
+        var reqId = POObject.line_items[i]['requisitionid'];
         deliverItem(item, 2);
-        //closeReq(item);
+        closeReq(reqId);
     }
     closePO(storageLocation, poClosedBy, POId);
 }
@@ -125,5 +126,27 @@ function closePO(storageLocation, poClosedBy, POId)  {
             }
         }
 
+    });
+}
+
+function closeReq(reqId)    {
+    var url = "/requisition/close";
+    var data = "req_id=" + reqId;
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: data,
+        dataType: "json",
+
+        success: function(response) {
+            if (response.code != 0) {
+                alert("Error: " + response.data.body);
+            } else  {
+                if (response.data.type != "ok") {
+                    alert("Error: " + response.data.body);
+                }
+            }
+        }
     });
 }

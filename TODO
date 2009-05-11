@@ -37,7 +37,18 @@ PO Delete
     * For now, you cannot delete PO, will look into that later.
     * User can delete PO line item after it has been added (i.e. line item has been ordered). This action should revert all actions in LineItem.order() in the same sequence.
 
-Add Item to Invoice
-===================
-Update item's invoice_id
-Increment invoice's total amount
+Close Requisition
+=================
+Get status of all items with req_id
+If all status are 2:"Delivered", set req's status to 3:"Closed"
+Else, do nothing.
+
+Fine-tuning Invoice
+==================
+Invoice should relate with PO and store its items in another table.
+Knock off invoice_no field in lineitem table.
+We may add "Invoice Received" status to PO.
+
+Receiving
+=========
+If we attempt to receive and un-invoiced PO, an exception should be thrown.
