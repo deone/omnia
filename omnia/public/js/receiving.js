@@ -22,7 +22,7 @@ function showDelivery(data) {//{{{
     }
 }//}}}
 
-function deliverItems() {
+function deliverItems() {//{{{
     var storageLocation = $("#location").val();
     var POId = $("#po-id").val();
     var poClosedBy = $("#user-id").val();
@@ -34,7 +34,7 @@ function deliverItems() {
         closeReq(reqId);
     }
     closePO(storageLocation, poClosedBy, POId);
-}
+}//}}}
 
 // AjaxPost
 function deliverItem(itemId, _status)    {//{{{
@@ -70,6 +70,7 @@ function fetchPO() {//{{{
     var poId = $("#PO-no").val();
 
     var url = "/purchase_order/" + poId + "/get_by_id";
+    //var url = "/purchase_order/" + poId + "/get_invoiced";
     var data = "";
 
     $.ajax({
@@ -104,7 +105,7 @@ function fetchPO() {//{{{
 
 }//}}}
 
-function closePO(storageLocation, poClosedBy, POId)  {
+function closePO(storageLocation, poClosedBy, POId)  {//{{{
     var url = "/purchase_order/" + POId + "/close";
     var data =  "location=" + storageLocation + 
                 "&closed_by=" + poClosedBy;
@@ -127,9 +128,9 @@ function closePO(storageLocation, poClosedBy, POId)  {
         }
 
     });
-}
+}//}}}
 
-function closeReq(reqId)    {
+function closeReq(reqId)    {//{{{
     var url = "/requisition/close";
     var data = "req_id=" + reqId;
 
@@ -149,4 +150,4 @@ function closeReq(reqId)    {
             }
         }
     });
-}
+}//}}}

@@ -1,5 +1,5 @@
-grant all on omnia.* to 'omnia'@'localhost' identified by 'omnia';
-grant all on omnia_test.* to 'omnia'@'localhost' identified by 'omnia';
+grant all on procure.* to 'procure'@'localhost' identified by 'procure';
+grant all on procure_test.* to 'procure'@'localhost' identified by 'procure';
 
-create database if not exists omnia;
-create database if not exists omnia_test;
+create database if not exists procure;
+create database if not exists procure_test;
