@@ -35,3 +35,47 @@ Fine-tuning Invoice
 Invoice should relate with PO and store its items in another table.
 Knock off invoice_no field in lineitem table.
 We may add "Invoice Received" status to PO.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Email sending when the following actions are completed:
+* Requisition is made - email to Requestor
+* When invoice is received - send email to Warehouse Manager
+
+Authorization
+* Buyer, Procurement Manager, Warehouse Manager, Administrator
+
+Warehouse Item listing
+Storage Location Constraint
+List of Tools
+App Control/File Hierarchy
