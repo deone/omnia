@@ -27,7 +27,7 @@
     </div>
 </%def><!--}}}-->
 
-<%def name="view()"><!--{{{-->
+<%def name="view()">
     <div id="receiving">
         <h4>Receive Items</h4>
         <div id="invoice-detail">
@@ -89,15 +89,15 @@
             </fieldset>
         </form>
     </div>
-</%def><!--}}}-->
+</%def>
 
-<%def name="activity()"><!--{{{-->
+<%def name="activity()">
     <div class="grid_12 omega main">
         <div class="widget">
             ${self.task()}    
             ${self.view()}
         </div>
     </div>
-</%def><!--}}}-->
+</%def>
 
 <%inherit file="purchase_order.html"/>

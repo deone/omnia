@@ -57,7 +57,6 @@ class PurchaseOrderController(BaseController):
             return ("po_object", po_dict)
         else:
             return ("error", "No such Purchase Order")
-
     """
     @h.json_response
     def get_invoiced(self, id, **kwargs):
