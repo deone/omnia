@@ -2,6 +2,7 @@ import os
 import ConfigParser
 
 class Config(object):
+    """Configuration Object"""
     def __init__(self, path="/etc/erecruit.conf"):
         self.path = path
         self.config = ConfigParser.ConfigParser()
