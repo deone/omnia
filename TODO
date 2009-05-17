@@ -72,10 +72,12 @@ Email sending when the following actions are completed:
 * Requisition is made - email to Requestor
 * When invoice is received - send email to Warehouse Manager
 
+Set messages on the fly for each email functionality
+
 Authorization
 * Buyer, Procurement Manager, Warehouse Manager, Administrator
 
 Warehouse Item listing
 Storage Location Constraint
 List of Tools
-App Control/File Hierarchy
+Application File Hierarchy
