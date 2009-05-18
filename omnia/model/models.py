@@ -372,7 +372,7 @@ class Invoice(Base):#{{{
 
     @staticmethod
     def get_po_ids():
-        return [i.purchase_order_id for i in meta.session.query(Invoice)]
+        return [id_dict(i.purchase_order_id) for i in meta.session.query(Invoice)]
 
     @staticmethod
     def get_by_poid(poid):
@@ -578,8 +578,8 @@ class LineItem(Base):#{{{
         self.status = status
 
     @staticmethod
-    def get_by_vendor_id(vendor_id):
-        return [name_dict(li) for li in meta.session.query(LineItem).filter_by(vendorid=vendor_id).filter_by(invoiceno=None).all()]
+    def get_for_invoice(vendor_id, po_id):
+        return [name_dict(li) for li in meta.session.query(LineItem).filter_by(invoiceno=None).filter_by(vendorid=vendor_id).filter_by(purchaseorderid=po_id).all()]
 
     @staticmethod
     def get_by_invoice_no(invoice_no):
@@ -641,6 +641,12 @@ def name_dict(object):
     return  {
         "id": object.id,
         "name": object.name
+    }
+
+def id_dict(id):
+    return  {
+        "id": id,
+        "name": id
     }
 
     #}}}

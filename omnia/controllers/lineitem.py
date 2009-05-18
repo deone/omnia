@@ -10,14 +10,16 @@ log = logging.getLogger(__name__)
 class LineitemController(BaseController):
 
     @h.json_response
-    def get_by_vendor_id(self, id, **kwargs):
+    def get_for_invoice(self, id, **kwargs):
         """This id is vendor_id, there should be a better way to do this.
            This does not read fine: /lineitem/vendor_id/get_by_vendor_id,
            Should be something like: /lineitem/get_by_vendor_id/vendor_id
 
            Same with get_by_invoice_no
         """
-        items = LineItem.get_by_vendor_id(id)
+        po_id = request.params['po_id']
+
+        items = LineItem.get_for_invoice(id, po_id)
         return ("itemname_list", items)
 
     @h.json_response

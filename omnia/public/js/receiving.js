@@ -70,7 +70,6 @@ function fetchPO() {//{{{
     var poId = $("#PO-no").val();
 
     var url = "/purchase_order/" + poId + "/get_by_id";
-    //var url = "/purchase_order/" + poId + "/get_invoiced";
     var data = "";
 
     $.ajax({

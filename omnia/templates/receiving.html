@@ -2,6 +2,12 @@
 
 <%def name="custom_js()"><!--{{{-->
     <script src="/js/receiving.js"></script>
+    <script>
+        $(function()    {
+            var obj = new AjaxGet();
+            obj.get("/purchase_order/get_invoiced");
+        });
+    </script>
 </%def><!--}}}-->
 
 <%def name="actionlinks()"></%def>
@@ -14,8 +20,10 @@
             <fieldset>
                 <ol>
                     <li>
-                        <label for="PO-no">Enter Purchase Order No.</label>
-                        <input id="PO-no" name="PO-no"/>
+                        <label for="PO-no">Purchase Order No.</label>
+                        <select id="PO-no" name="PO-no">
+                            <option value="">--Select--</option>
+                        </select>
                     </li>
                 </ol>
             </fieldset>

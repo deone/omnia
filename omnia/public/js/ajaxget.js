@@ -45,6 +45,9 @@ function AjaxGet(url)   {
                     } else if (dataType == "vendorname_list")   {
                         displayOptions(data, "#vendor", "");
 
+                    } else if (dataType == "poid_list") {
+                        displayOptions(data, "#PO-no", "");
+
                     } else if (dataType == "po_object") {
 
                         if (url[url.length - 1] == "add_line_item")    {
@@ -92,7 +95,7 @@ function AjaxGet(url)   {
                             $("#vendor-name").html(data['vendor']['name']);
 
                             var obj = new AjaxGet();
-                            obj.get("/lineitem/" + data['vendor']['id'] + "/get_by_vendor_id");
+                            obj.get("/lineitem/" + data['vendor']['id'] + "/get_for_invoice?po_id=" + data['po_id']);
 
                         }
 

@@ -1,22 +1,27 @@
+LATER
+=====
 Refactor javascript to use more advanced language features. e.g. inheritance, object and class augmentation 
 and object-oriented style.
 Write AjaxPost object, refactor all other functions to use object model like AjaxGet()
 Folderize files in the template folder, if possible do same for controllers
-Add created_by column to requisition table and cascade to controller and templates.
 Maybe we might need to add user.purchase_orders and user.requisitions relations just like we have user.approvedrequisitions, for system reports based on users, to track user actions.
 Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered.
 We might need to create a relation po->invoice in future.
 Add zerofill to requisition, purchaseorder and vendor ids and invoice number.
 Eliminate url checks in ajaxget.js.
 I hold vendor object in PO and Invoice objects 'cos its needed almost on every page in these modules. And the vendor_object itself always comes with line_items, so I see us having a recursion issue if we try to access a vendor object with many line items.
-Remove lineitems from po_object, write a separate controller action to populate purchase order with items.
-Remove Delete links from PO and Invoice view pages.
 Add "View Invoices" functionality later. For now its commented out in menu.html.
-System should catch errors when invoice total amount does not match PO total amount.
-Knock off the "Delete" link properly on purchase order page if invoice is received.
+Pagination
+Search facility for any record:Requisition, Invoice, Purchase Order
+
 * Ideally, purchase Order drop-down should only display vendors who have line items. I tried this out and it worked, the only issue is documented in models.
-If we attempt to receive and un-invoiced PO, an exception should be thrown.
+
+NOW
+===
 Remove "Add Item" link from approved requisition detail and closed requisition.
+Must Invoice number column be unique?
+Storage location field in receiving must be a drop-down
+
 
 Many-to-Many relationship
 =========================
@@ -72,7 +77,7 @@ Email sending when the following actions are completed:
 * Requisition is made - email to Requestor
 * When invoice is received - send email to Warehouse Manager
 
-Set messages on the fly for each email functionality
+Set subject & message body on the fly for each email functionality
 
 Authorization
 * Buyer, Procurement Manager, Warehouse Manager, Administrator

@@ -58,14 +58,9 @@ class PurchaseOrderController(BaseController):
         else:
             return ("error", "No such Purchase Order")
 
-    """
     @h.json_response
-    def get_invoiced(self, id, **kwargs):
-        if id not in Invoice.get_po_ids():
-            return ("error", "Purchase Order has not been Invoiced.")
-        else:
-            return 
-    """
+    def get_invoiced(self, **kwargs):
+        return ("poid_list", Invoice.get_po_ids())
 
     @h.json_response
     def get(self, **kwargs):
