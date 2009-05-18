@@ -14,12 +14,12 @@ function showDelivery(data) {//{{{
 
     displayVendorDetails(data['vendor']);
 
-    if (data['status'] != "Closed") {
+    /*if (data['status'] != "Closed") {
         $("#po-id").attr("value", data['id']);
         $("#storage-location").show();
     } else  {
         $("#receiving").append("<div class='ok'><b>This Purchase Order Is Closed.</b></div>");
-    }
+    }*/
 }//}}}
 
 function deliverItems() {//{{{

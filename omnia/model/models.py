@@ -372,7 +372,11 @@ class Invoice(Base):#{{{
 
     @staticmethod
     def get_po_ids():
-        return [id_dict(i.purchase_order_id) for i in meta.session.query(Invoice)]
+        return [
+            id_dict(i.purchase_order_id) for i in meta.session.query(Invoice) if i.purchase_order_id in [
+                p.id for p in meta.session.query(PurchaseOrder).filter_by(status=0)
+            ]
+        ]
 
     @staticmethod
     def get_by_poid(poid):
