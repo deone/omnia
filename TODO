@@ -20,7 +20,8 @@ NOW
 ===
 Remove "Add Item" link from approved requisition detail and closed requisition.
 Must Invoice number column be unique?
-Storage location field in receiving must be a drop-down
+Implement drop down in storage location field.
+Eliminate username and use email to sign in to the application.
 
 
 Many-to-Many relationship
@@ -42,47 +43,11 @@ Knock off invoice_no field in lineitem table.
 We may add "Invoice Received" status to PO.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Email sending when the following actions are completed:
-* Requisition is made - email to Requestor
-* When invoice is received - send email to Warehouse Manager
-
-Set subject & message body on the fly for each email functionality
+Storage Location Constraint
 
 Authorization
 * Buyer, Procurement Manager, Warehouse Manager, Administrator
 
 Warehouse Item listing
-Storage Location Constraint
 List of Tools
 Application File Hierarchy
