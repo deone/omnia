@@ -130,16 +130,18 @@ class Requisition(Base):#{{{
     description = Column(Text, nullable=False)
     organization = Column(String(100), nullable=False)
     full_name = Column(String(100), nullable=False)
+    email = Column(String(100), nullable=False)
     phone_number = Column(String(20), nullable=False)
     date_created = Column(DateTime, default=datetime.datetime.now())
     date_closed = Column(DateTime)
     status = Column(Integer, default='0', nullable=False)
 
-    def __init__(self, date_required, description, organization, full_name, phone_number):
+    def __init__(self, date_required, description, organization, full_name, email, phone_number):
         self.date_required = date_required
         self.description = description
         self.organization = organization
         self.full_name = full_name
+        self.email = email
         self.phone_number = phone_number
         self.date_created = datetime.datetime.now()
 
@@ -148,8 +150,8 @@ class Requisition(Base):#{{{
         self.date_closed = datetime.datetime.now()
 
     @staticmethod
-    def create(date_required, description, organization, fullname, phone_number):
-        req = Requisition(date_required, description, organization, fullname, phone_number)
+    def create(date_required, description, organization, fullname, email, phone_number):
+        req = Requisition(date_required, description, organization, fullname, email, phone_number)
         meta.session.add(req)
         meta.session.flush()
         return req
@@ -625,6 +627,27 @@ class Item(Base):#{{{
         return lst_to_dictlst([i.name for i in meta.session.query(Item).filter_by(type=type)])
     
     #}}}
+
+class Warehouse(Base):#{{{
+    __tablename__ = 'warehouse'
+    __table_args__ = {'mysql_engine': 'innodb'}
+
+    id = Column(Integer, primary_key=True)
+    location = Column(String(100), nullable=False)
+    address = Column(String(200), nullable=False)
+    manager = Column(Integer, ForeignKey('user.id', ondelete='RESTRICT', onupdate='CASCADE'))
+    manager_email = Column(String(100), nullable=False)
+
+    @staticmethod
+    def get(id=None, username=None):
+        try:
+            if id:
+                return meta.session.query(Warehouse).filter_by(id=id).one()
+            else:
+                return [w for w in meta.session.query(Warehouse)]
+        except Exception, e:
+            print_exc()
+#}}}
 
 # Refactor these helpers and add them to Misc#{{{
 # Helpers should not return the whole object to avoid recursion limit error

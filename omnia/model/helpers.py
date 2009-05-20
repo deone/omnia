@@ -1,6 +1,9 @@
 from omnia.model.models import *
 import omnia.model.meta as meta
+from omnia.config.config import Config
+
 from traceback import print_exc
+import smtplib
 import simplejson
 import sys
 import datetime
@@ -88,3 +91,24 @@ def authenticate(username, password):
         if hashed_password == user.password:
             return user
         return False
+
+def send_mail(server, port, username, password, sender, recipient, subject, message):
+    try:
+        # Connect and login to SMTP server
+        server = smtplib.SMTP(server, port)
+        
+        config = Config()
+        if config.get("mailserver", "auth") != "0":
+            server.login(username, password)
+
+        # Build email 
+        sender = sender.strip()
+        header = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+        email = header + message.strip()
+
+        # Send email
+        server.sendmail(sender, recipient, email)
+        server.quit()
+        return True
+    except smtplib.SMTPException, e:
+        print_exc()
