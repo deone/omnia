@@ -43,11 +43,11 @@ Knock off invoice_no field in lineitem table.
 We may add "Invoice Received" status to PO.
 
 
-Storage Location Constraint
-
 Authorization
 * Buyer, Procurement Manager, Warehouse Manager, Administrator
-
 Warehouse Item listing
+
+Docs
+====
 List of Tools
 Application File Hierarchy

@@ -38,6 +38,8 @@ def make_map():
     map.connect('invoice_action', '/invoice/:action', controller='invoice')
     map.connect('invoice_other', '/invoice/:id/:action', controller='invoice')
 
+    map.connect('warehouse_action', '/warehouse/:action', controller='warehouse')
+
     map.connect('purchase_order', '/purchase_order', controller='purchase_order', action='index')
     map.connect('purchase_order_action', '/purchase_order/:action', controller='purchase_order')
     map.connect('purchase_order_other', '/purchase_order/:id/:action', controller='purchase_order')

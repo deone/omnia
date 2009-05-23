@@ -3,7 +3,7 @@ import ConfigParser
 
 class Config(object):
     """Configuration Object"""
-    def __init__(self, path="/etc/erecruit.conf"):
+    def __init__(self, path="/etc/procure.conf"):
         self.path = path
         self.config = ConfigParser.ConfigParser()
         self.config.read(self.path)
