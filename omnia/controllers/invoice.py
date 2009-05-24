@@ -3,6 +3,7 @@ import logging
 from omnia.lib.base import *
 
 import omnia.model.helpers as h
+from omnia.config.config import Config
 from omnia.model.models import *
 
 log = logging.getLogger(__name__)
@@ -51,4 +52,23 @@ class InvoiceController(BaseController):
             return ("error", "Invoice amount does not match PO amount.");
 
         invoice = Invoice.create(invoice_no, po_id, vendor_id, user_id, amount)
+
+        warehouse = Warehouse.get(1)
+        
+        # Send email
+        config = Config()
+        server = config.get("mailserver", "server")
+        port =  config.get("mailserver", "port")
+        username = config.get("mailserver", "username") 
+        password = config.get("mailserver", "password")
+        
+        sender = config.get("email", "sender")
+        recipient = warehouse.manager_email
+
+        subject = config.get("email", "subject2")
+        message = "Hi " + User.get(warehouse.manager).firstname + " " + User.get(warehouse.manager).lastname + ",\r\n\r\n"
+        message += "Invoice %s has been received for purchase order %s. %sRegards %s" % (invoice_no, po_id, "\r\n\r\n", "\r\n\r\n")
+
+        h.send_mail(server, port, username, password, sender, recipient, subject, message)
+
         return ("invoice_object", invoice)
