@@ -22,6 +22,7 @@ Remove "Add Item" link from approved requisition detail and closed requisition.
 Must Invoice number column be unique?
 Implement drop down in storage location field.
 Eliminate username and use email to sign in to the application.
+Remove "Preview" link from Purchase Order.
 
 
 Many-to-Many relationship

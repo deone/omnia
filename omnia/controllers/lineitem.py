@@ -78,9 +78,6 @@ class LineitemController(BaseController):
         status = request.params['status']
 
         line_item = LineItem.get(id)
-        ret_val = line_item.deliver(status)
+        line_item.deliver(status)
 
-        if ret_val == None:
-            return ("ok", "Items Received")
-        else:
-            return ("error", "Error Receiving Items")
+        return ("ok", "Items Received")
