@@ -93,7 +93,7 @@
             </fieldset>
 
             <fieldset class="submit">
-                <input type="button" class="submit" value="Deliver Items" onclick="deliverItems()"/>
+                <input type="button" class="submit" value="Deliver Items" onclick="checkWarehouse()"/>
             </fieldset>
         </form>
     </div>
@@ -102,7 +102,7 @@
 <%def name="activity()"><!--{{{-->
     <div class="grid_12 omega main">
         <div class="widget">
-            ${self.task()}    
+           ${self.task()}    
             ${self.view()}
         </div>
     </div>

@@ -5,12 +5,14 @@ function createReq()    {//{{{
     var reqDesc = $("#req-description").val();
     var organization = $("#organization").val();
     var fullName = $("#firstname").val() + " " + $("#surname").val();
+    var email = $("#email").val();
     var phoneNumber = $("#phone-number").val();
 
     var data = "datereq=" + dateRequired +
                 "&reqdesc=" + reqDesc + 
                 "&organization=" + organization +
                 "&fullname=" + fullName + 
+                "&email=" + email + 
                 "&phone=" + phoneNumber;
 
     var url = "/requisition/new";

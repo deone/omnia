@@ -11,36 +11,30 @@ function showDelivery(data) {//{{{
     showPOItems(data['line_items'], "#po-items");
 
     $("#line-items #amount").html(data['total_amount']);
-
     displayVendorDetails(data['vendor']);
-
-    /*if (data['status'] != "Closed") {
-        $("#po-id").attr("value", data['id']);
-        $("#storage-location").show();
-    } else  {
-        $("#receiving").append("<div class='ok'><b>This Purchase Order Is Closed.</b></div>");
-    }*/
+    $("#po-id").attr("value", data['id']);
 }//}}}
 
-function deliverItems() {//{{{
-    var storageLocation = $("#location").val();
+function deliverItems(warehouse) {//{{{
     var POId = $("#po-id").val();
     var poClosedBy = $("#user-id").val();
 
     for (i=0; i<POObject.line_items.length; i++)    {
         var item = POObject.line_items[i]['id'];
         var reqId = POObject.line_items[i]['requisitionid'];
+
         deliverItem(item, 2);
         closeReq(reqId);
     }
-    closePO(storageLocation, poClosedBy, POId);
+    closePO(warehouse, poClosedBy, POId);
 }//}}}
 
 // AjaxPost
-function deliverItem(itemId, _status)    {//{{{
 
-    var url = "/lineitem/" + itemId + "/deliver";
-    var data = "status=" + _status;
+function checkWarehouse()   {//{{{
+    var url = "/warehouse/check";
+    var warehouse = $("#location").val();
+    var data = "location=" + warehouse;
 
     $.ajax({
 
@@ -51,11 +45,11 @@ function deliverItem(itemId, _status)    {//{{{
 
         success: function(response) {
             if (response.code != 0) {
-                $("#storage-location .feedback")
-                    .addClass("err")
-                    .html("Error. " + response.data.body);
+                alert(response.data.body);
             } else  {
-                if (response.data.type == "error")    {
+                if (response.data.type != "error")  {
+                    deliverItems(warehouse);
+                } else  {
                     $("#storage-location .feedback")
                         .addClass("err")
                         .html("Error. " + response.data.body);
@@ -120,9 +114,36 @@ function closePO(storageLocation, poClosedBy, POId)  {//{{{
             if (response.code != 0) {
                 alert("Error");
             } else  {
-                $("#storage-location .feedback")
-                    .addClass("ok")
-                    .html("Items Received. Purchase Order Closed.");
+                if (response.data.type != "error")  {
+                    $("#storage-location .feedback")
+                        .addClass("ok")
+                        .html("Items Received. Purchase Order Closed.");   
+                } else  {
+                    $("#storage-location .feedback")
+                        .addClass("err")
+                        .html("Error: " + response.data.body);
+                }
+            }
+        }
+
+    });
+}//}}}
+
+function deliverItem(itemId, _status, reqId)    {//{{{
+
+    var url = "/lineitem/" + itemId + "/deliver";
+    var data = "status=" + _status;
+
+    $.ajax({
+
+        url: url,
+        type: "POST",
+        data: data,
+        dataType: "json",
+
+        success: function(response) {
+            if (response.code != 0) {
+                alert(response.data.body);
             }
         }
 
@@ -142,10 +163,6 @@ function closeReq(reqId)    {//{{{
         success: function(response) {
             if (response.code != 0) {
                 alert("Error: " + response.data.body);
-            } else  {
-                if (response.data.type != "ok") {
-                    alert("Error: " + response.data.body);
-                }
             }
         }
     });
