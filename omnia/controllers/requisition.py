@@ -4,7 +4,6 @@ import datetime
 from omnia.lib.base import *
 
 import omnia.model.helpers as h
-from omnia.config.config import Config
 from omnia.model.models import *
 
 log = logging.getLogger(__name__)
@@ -57,25 +56,9 @@ class RequisitionController(BaseController):
         description = request.params['reqdesc']
         organization = request.params['organization']
         fullname = request.params['fullname']
-        email = request.params['email']
         phone_number = request.params['phone']
 
-        req = Requisition.create(date_required, description, organization, fullname, email, phone_number)
-
-        config = Config()
-        server = config.get("mailserver", "server")
-        port =  config.get("mailserver", "port")
-        username = config.get("mailserver", "username") 
-        password = config.get("mailserver", "password")
-        
-        sender = config.get("email", "sender")
-        recipient = email
-
-        subject = "Requisition Made"
-        message = "Hi " + fullname + "," + "\r\n" + "Your requisition has been made." + "\r\n\r\n"
-
-        h.send_mail(server, port, username, password, sender, recipient, subject, message)
-
+        req = Requisition.create(date_required, description, organization, fullname, phone_number)
         return ("object", req.todict())
 
     @h.json_response
@@ -93,12 +76,14 @@ class RequisitionController(BaseController):
 
         items_status = LineItem.get_items_status(req_id)
 
-        # Check if items have been delivered
         for item_status in items_status:
             if item_status != 2:
                 return False
 
         req = Requisition.get(req_id)
-        req.close()
+        ret_val = req.close()
 
-        return ("ok", "Requisition Closed")
+        if ret_val != None:
+            return ("error", ret_val)
+        else:
+            return ("ok", ret_val)
