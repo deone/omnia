@@ -5,7 +5,7 @@ and object-oriented style.
 Write AjaxPost object, refactor all other functions to use object model like AjaxGet()
 Folderize files in the template folder, if possible do same for controllers
 Maybe we might need to add user.purchase_orders and user.requisitions relations just like we have user.approvedrequisitions, for system reports based on users, to track user actions.
-Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered.
+Remove "Add Item" link from /purchase_order/po_id/edit when all items have been ordered. Same for invoice
 We might need to create a relation po->invoice in future.
 Add zerofill to requisition, purchaseorder and vendor ids and invoice number.
 Eliminate url checks in ajaxget.js.

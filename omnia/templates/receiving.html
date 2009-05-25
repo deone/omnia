@@ -4,6 +4,8 @@
     <script src="/js/receiving.js"></script>
     <script>
         $(function()    {
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
             var obj = new AjaxGet();
             obj.get("/purchase_order/get_invoiced");
         });

@@ -2,10 +2,12 @@
 
 <%def name="title()">Dashboard</%def>
 
-<%def name="custom_js()"></%def>
-
-<%def name="menu()">
-    <%include file="menu.html"/>
+<%def name="custom_js()">
+    <script>
+        $(function()    {
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+        });
+    </script>
 </%def>
 
 <%def name="activity()">
@@ -20,7 +22,13 @@
 </%def>
 
 <%def name="page_content()">
-    ${self.menu()}
+    <div class="grid_4 alpha">
+        <div class="widget">
+            <ul>
+                
+            </ul>
+        </div>
+    </div>
     ${self.activity()}
     <div id="footer" class="grid_16 alpha omega">
         <p>&copy;2009. OmniaWorks. All rights reserved.</p>

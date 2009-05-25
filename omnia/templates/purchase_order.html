@@ -6,6 +6,8 @@
     <script src="/js/purchase_order.js"></script>
     <script>
         $(function(){
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
             $("#purchase-order").show();
 
             var obj = new AjaxGet();
@@ -13,10 +15,6 @@
             obj.get("/purchase_order/${c.po_id}/is_invoice_received");
         });
     </script>
-</%def>
-
-<%def name="menu()">
-    <%include file="menu.html"/>
 </%def>
 
 <%def name="actionlinks()">

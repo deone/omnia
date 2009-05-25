@@ -4,6 +4,8 @@
     <script src="/js/purchase_order.js"></script>
     <script>
         $(function()    {
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
             var obj = new AjaxGet();
             // Display only vendor objects which contain line items
             obj.get("/vendor/get_vendors_with_line_items");

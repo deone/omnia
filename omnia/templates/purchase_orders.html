@@ -6,14 +6,12 @@
     <script src="/js/purchase_order.js"></script>
     <script>
         $(function()    {
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
             var obj = new AjaxGet();
             obj.get("/purchase_order/get");
         });
     </script>
-</%def>
-
-<%def name="menu()">
-    <%include file="menu.html"/>
 </%def>
 
 <%def name="activity()">

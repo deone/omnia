@@ -6,6 +6,8 @@
     <script src="/js/invoice.js"></script>
     <script>
         $(function(){
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
             $("#invoice").show();
 
             var obj = new AjaxGet();

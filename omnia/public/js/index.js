@@ -50,6 +50,7 @@ function login(data, url)   {
 
         success: function(response) {
             type = response.data.type;
+            data = response.data.body;
 
             if (type == "error")    {
                 $(".feedback")

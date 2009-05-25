@@ -56,3 +56,36 @@ function displayVendorDetails(data) {//{{{
     $("#address").html(data['address']);
     $("#phone").html(data['phone']);
 }//}}}
+
+var role = {
+    "Administrator": "<li><a href='/dashboard'>Dashboard</a></li><br/>" + 
+            "<li><span>Requisition</span></li>" + 
+            "<li><a href='/requisition/create'>Create Requisition</a></li>" + 
+            "<li><a href='/requisition'>View Requisitions</a></li>" + 
+            "<li><a href='/requisition/approve'>Approve Requisitions</a></li><br/>" + 
+            "<li><span>Purchase Order<span></li>" + 
+            "<li><a href='/purchase_order/create'>Create Purchase Order</a></li>" + 
+            "<li><a href='/purchase_order'>View Purchase Orders</a></li><br/>" + 
+            "<li><span>Delivery</span></li>" + 
+            "<li><a href='/receiving'>Receive Items</a></li><br/>" + 
+            "<li><a href='/logout'>Logout</a></li>",
+
+    "Buyer": "<li><a href='/dashboard'>Dashboard</a></li><br/>" + 
+            "<li><span>Requisition</span></li>" + 
+            "<li><a href='/requisition/create'>Create Requisition</a></li>" + 
+            "<li><a href='/requisition'>View Requisitions</a></li></br/>" + 
+            "<li><span>Purchase Order<span></li>" + 
+            "<li><a href='/purchase_order/create'>Create Purchase Order</a></li>" + 
+            "<li><a href='/purchase_order'>View Purchase Orders</a></li><br/>" +
+            "<li><a href='/logout'>Logout</a></li>",
+
+    "Procurement Manager": "<li><a href='/dashboard'>Dashboard</a></li><br/>" +
+            "<li><span>Requisition</span></li>" + 
+            "<li><a href='/requisition/approve'>Approve Requisitions</a></li><br/>" + 
+            "<li><a href='/logout'>Logout</a></li>",
+
+    "Warehouse Manager": "<li><a href='/dashboard'>Dashboard</a></li><br/>" +
+            "<li><span>Delivery</span></li>" + 
+            "<li><a href='/receiving'>Receive Items</a></li><br/>" + 
+            "<li><a href='/logout'>Logout</a></li>"
+}

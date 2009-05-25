@@ -3,8 +3,12 @@
 <%def name="custom_js()">
     <script src="/js/invoice.js"></script>
     <script>
-        var obj = new AjaxGet();
-        obj.get("/invoice/${c.invoice_no}/get_by_no")
+        $(function()    {
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
+            var obj = new AjaxGet();
+            obj.get("/invoice/${c.invoice_no}/get_by_no");
+        });
     </script>
 </%def>
 
