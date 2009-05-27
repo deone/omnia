@@ -13,6 +13,8 @@ I hold vendor object in PO and Invoice objects 'cos its needed almost on every p
 Add "View Invoices" functionality later. For now its commented out in menu.html.
 Pagination
 Search facility for any record:Requisition, Invoice, Purchase Order
+Eliminate username and use email to sign in to the application.
+Plenty other refactoring associated with configuration parameters.
 
 * Ideally, purchase Order drop-down should only display vendors who have line items. I tried this out and it worked, the only issue is documented in models.
 
@@ -21,8 +23,18 @@ NOW
 Remove "Add Item" link from approved requisition detail and closed requisition.
 Must Invoice number column be unique?
 Implement drop down in storage location field.
-Eliminate username and use email to sign in to the application.
 Remove "Preview" link from Purchase Order.
+Checkout how to use jquery each() function to shorten the displayItems() in warehouse.js
+Config file should contain itemtypes. This would eliminate using the itemtype value of lineitem to determine how things are done in the warehouse. Move other stuff into config as required.
+Refactor displayItems in warehouse.js.
+Refactor get_for_invoice() and get_by_invoice_no() in lineitem.py
+Now we have lineitems in this format: ['MS Word', 'Software', 2]
+    We can have {'item': ['MS Word', 'Software', 2], 'specification': 'CQ60', 'vendor': 'HP'} OR
+                {'name': 'MS Word', itemtype: 'software', quantity: 2, 'specification': ['CQ60'], 'vendor': 'HP'}
+    The latter is better, its more programmatic! We would be able to show name and quantity as a link 
+    and spec and vendor (hidden) in the same list item. When we click the link, the div is toggled.
+
+To get the quantity, we can have a count method in which we would pass a name and select based on that name, we would return the length of the list.
 
 
 Many-to-Many relationship

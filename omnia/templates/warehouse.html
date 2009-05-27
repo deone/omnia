@@ -1,0 +1,25 @@
+<%inherit file="dashboard.html"/>
+
+<%def name="title()">Warehouse</%def>
+
+<%def name="custom_js()"><!--{{{-->
+    <script src="/js/warehouse.js"></script>
+    <script>
+        $(function()    {
+            $(".grid_4 .widget ul").html(role["${session['user'].roles}"]);
+
+            var obj = new AjaxGet();
+            obj.get("/lineitem/get_types");
+            obj.get("/lineitem/get");
+        });
+    </script>
+</%def><!--}}}-->
+
+<%def name="activity()"><!--{{{-->
+    <div class="grid_12 omega main">
+        <div class="widget">
+            <h4>Warehouse</h4>
+            <div class="inner"></div>
+        </div>
+    </div>
+</%def><!--}}}-->

@@ -534,7 +534,50 @@ class LineItem(Base):#{{{
             if id:
                 return meta.session.query(LineItem).filter_by(id=id).one()
             else:
-                return [li for li in meta.session.query(LineItem)]
+                return [li.todict() for li in meta.session.query(LineItem)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_names():
+        try:
+            return [li.name for li in meta.session.query(LineItem)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_types():
+        try:
+            return [li.itemtype for li in meta.session.query(LineItem)]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def get_spec(name):
+        try:
+            return [
+                dict([('specification', li.specification), ('vendor', Vendor.get(li.vendorid).name)]) 
+                for li in meta.session.query(LineItem).filter_by(name=name)
+            ]
+        except Exception, e:
+            print_exc()
+
+    @staticmethod
+    def count(name):
+        return len([li.name for li in meta.session.query(LineItem).filter_by(name=name)])
+
+    @staticmethod
+    def get_item_dict():
+        try:
+            return [
+                dict([
+                        ('name', li.name),
+                        ('itemtype', li.itemtype),
+                        ('specification', li.specification), 
+                        ('vendor', Vendor.get(li.vendorid).name)
+                    ]) 
+                for li in meta.session.query(LineItem)
+            ]
         except Exception, e:
             print_exc()
 

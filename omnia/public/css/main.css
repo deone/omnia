@@ -9,6 +9,7 @@
 @import url("purchase_order.css");
 @import url("invoice.css");
 @import url("receiving.css");
+@import url("warehouse.css");
 
 body    {
     color: #333;

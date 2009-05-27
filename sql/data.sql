@@ -18,4 +18,4 @@ insert into item (name, type) values ("Microsoft Windows Server 2003", "Computer
 insert into item (name, type) values ("Forklift", "Engineering Tool");
 insert into item (name, type) values ("Oil Drill", "Engineering Tool");
 
-insert into warehouse(location, address, manager, manager_email) values ("Ikeja", "Oba Akinjobi Way, G.R.A", 4, "deone@example.com");
+insert into warehouse (location, address, manager, manager_email) values ("Ikeja", "Oba Akinjobi Way, G.R.A", 4, "deone@example.com");

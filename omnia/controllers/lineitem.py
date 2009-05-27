@@ -7,8 +7,65 @@ from omnia.model.models import *
 
 log = logging.getLogger(__name__)
 
+def build_spec_list(items):
+    items_specs = {}
+
+    for i in names_set(items):
+        spec_lst = []
+        for j in items:
+            if i == j['name']:
+                spec_lst.append(j['specification'])
+
+        items_specs[i] = spec_lst
+
+    return items_specs
+
+def names_set(items):
+    names = []
+
+    for i in items:
+        names.append(i['name'])
+
+    return list(set(names))
+
+def items_set(items):
+    lst = []
+
+    for i in items:
+        if i not in lst:
+            lst.append(i)
+
+    return lst
+    
+
 class LineitemController(BaseController):
 
+    @h.json_response
+    def get(self, **kwargs):
+        items = LineItem.get_item_dict()
+
+        specs = build_spec_list(items)
+
+        for i in items:
+            i['specification'] = specs[i['name']]
+            i['quantity'] = len(specs[i['name']])
+
+        return ("list", items_set(items))
+
+    @h.json_response
+    def get_types(self, **kwargs):
+        item_types = set(LineItem.get_types())
+        item_type_list = list(item_types)
+
+        return ("item_type_list", item_type_list)
+
+    @h.json_response
+    def get_spec(self, **kwargs):
+        name = request.params['name']
+
+        items = LineItem.get_spec(name)
+        return ("item_spec_list", items)
+    
     @h.json_response
     def get_for_invoice(self, id, **kwargs):
         """This id is vendor_id, there should be a better way to do this.
@@ -16,6 +73,8 @@ class LineitemController(BaseController):
            Should be something like: /lineitem/get_by_vendor_id/vendor_id
 
            Same with get_by_invoice_no
+
+           Solution: Use querystring param instead of url param.
         """
         po_id = request.params['po_id']
 

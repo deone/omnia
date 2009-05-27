@@ -57,7 +57,7 @@ function displayVendorDetails(data) {//{{{
     $("#phone").html(data['phone']);
 }//}}}
 
-var role = {
+var role = {//{{{
     "Administrator": "<li><a href='/dashboard'>Dashboard</a></li><br/>" + 
             "<li><span>Requisition</span></li>" + 
             "<li><a href='/requisition/create'>Create Requisition</a></li>" + 
@@ -66,8 +66,9 @@ var role = {
             "<li><span>Purchase Order<span></li>" + 
             "<li><a href='/purchase_order/create'>Create Purchase Order</a></li>" + 
             "<li><a href='/purchase_order'>View Purchase Orders</a></li><br/>" + 
-            "<li><span>Delivery</span></li>" + 
-            "<li><a href='/receiving'>Receive Items</a></li><br/>" + 
+            "<li><span>Warehouse</span></li>" + 
+            "<li><a href='/receiving'>Receive Items</a></li>" + 
+            "<li><a href='/warehouse'>View Warehouse</a></li><br/>" + 
             "<li><a href='/logout'>Logout</a></li>",
 
     "Buyer": "<li><a href='/dashboard'>Dashboard</a></li><br/>" + 
@@ -85,7 +86,8 @@ var role = {
             "<li><a href='/logout'>Logout</a></li>",
 
     "Warehouse Manager": "<li><a href='/dashboard'>Dashboard</a></li><br/>" +
-            "<li><span>Delivery</span></li>" + 
-            "<li><a href='/receiving'>Receive Items</a></li><br/>" + 
-            "<li><a href='/logout'>Logout</a></li>"
-}
+            "<li><span>Warehouse</span></li>" + 
+            "<li><a href='/receiving'>Receive Items</a></li>" + 
+            "<li><a href='/warehouse'>View Warehouse</a></li><br/>" + 
+            "<li><a href='/logout'>Logout</a></li>",
+}//}}}

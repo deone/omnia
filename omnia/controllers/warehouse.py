@@ -10,10 +10,7 @@ log = logging.getLogger(__name__)
 class WarehouseController(BaseController):
 
     def index(self):
-        # Return a rendered template
-        #   return render('/some/template.mako')
-        # or, Return a response
-        return 'Hello World'
+        return render ("/warehouse.html")
 
     @h.json_response
     def check(self, **kwargs):
