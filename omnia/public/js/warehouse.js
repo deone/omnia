@@ -2,9 +2,9 @@ function showItemBoxes(list)    {//{{{
 
     for (i=0; i<list.length; i++)   {
         $(".inner").append(
-                "<div id='" + i + "' class='grid_4 omega itembox'>" + 
+                "<div id='cat" + i + "' class='grid_4 omega itembox'>" + 
                     "<h6>" + list[i] + "</h6>" + 
-                    "<ul></ul>" + 
+                    "<ul class='item-list'></ul>" + 
                 "</div>"
                 );
     }
@@ -16,59 +16,54 @@ function showItemBoxes(list)    {//{{{
 function displayItems(list)  {//{{{
     for (i=0; i<list.length; i++)   {
 
-        if (list[i][1] == "Computer Hardware")  {
+        if (list[i]['itemtype'] == "Computer Hardware")  {
 
-            if (list[i][2] != 1)    {
-                $("#0 ul").append(
-                        "<li>" + 
-                        "<a href='/lineitem/get_spec?name=" + list[i][0] + "'>" + 
-                        list[i][0] + " (" + list[i][2] + ")</a>" + 
-                        "<div id='spec" + i + "' class='spec'>dfhdfh</div>" + 
-                        "</li>"
-                        );
-            } else  {
-                $("#0 ul").append(
-                        "<a href='/lineitem/get_spec?name='>" + 
-                        "<li>" + list[i][0] + "</li>" + 
-                        "</a>"
-                        );
-            }
+            $("#cat0 .item-list").append(
+                    "<li>" + 
+                        "<a href='#'>" + list[i]['name'] + " (" + list[i]['quantity'] + ")</a>" + 
+                    "</li>" + 
+                    "<li>" + 
+                        "<ul class='item-spec'>" + 
+                            "<li><b>Specs</b>:" + list[i]['specification'] + "</li>" + 
+                            "<li><b>Vendor</b>:" + list[i]['vendor'] + "</li>" + 
+                        "</ul>" + 
+                    "</li>"
+                    );
+
         }
 
-        if (list[i][1] == "Engineering Tool")  {
-            if (list[i][2] != 1)    {
-                $("#1 ul").append(
-                        "<a href='/lineitem/get_spec?name=" + list[i][0] + "'>" + 
-                        "<li>" + list[i][0] + " (" + list[i][2] + ")</li>" + 
-                        "</a>"
-                        );
-            } else  {
-                $("#1 ul").append(
-                        "<a href='/lineitem/get_spec?name=" + list[i][0] + "'>" + 
-                        "<li>" + list[i][0] + "</li>" + 
-                        "</a>"
-                        );
-            }
+
+        if (list[i]['itemtype'] == "Engineering Tool")  {
+
+            $("#cat1 .item-list").append(
+                    "<li>" + 
+                        "<a href='#'>" + list[i]['name'] + " (" + list[i]['quantity'] + ")</a>" + 
+                    "</li>" + 
+                    "<li>" + 
+                        "<ul class='item-spec'>" + 
+                            "<li><b>Specs</b>:" + list[i]['specification'] + "</li>" + 
+                            "<li><b>Vendor</b>:" + list[i]['vendor'] + "</li>" + 
+                        "</ul>" + 
+                    "</li>"
+                    ); 
+
         }
 
-        if (list[i][1] == "Computer Software")  {
-            if (list[i][2] != 1)    {
-                $("#2 ul").append(
-                        "<a href='/lineitem/get_spec?name=" + list[i][0] + "'>" + 
-                        "<li>" + list[i][0] + " (" + list[i][2] + ")</li>" + 
-                        "</a>"
-                        );
-            } else  {
-                $("#2 ul").append(
-                        "<a href='/lineitem/get_spec?name=" + list[i][0] + "'>" + 
-                        "<li>" + list[i][0] + "</li>" + 
-                        "</a>"
-                        );
-            }
+        if (list[i]['itemtype'] == "Computer Software")  {
+
+            $("#cat2 .item-list").append(
+                    "<li>" + 
+                        "<a href='#'>" + list[i]['name'] + " (" + list[i]['quantity'] + ")</a>" + 
+                    "</li>" + 
+                    "<li>" + 
+                        "<ul class='item-spec'>" + 
+                            "<li><b>Specs</b>:" + list[i]['specification'] + "</li>" + 
+                            "<li><b>Vendor</b>:" + list[i]['vendor'] + "</li>" + 
+                        "</ul>" + 
+                    "</li>"
+                    );
+
         }
 
     }
 }//}}}
-
-function showSpec(list) {
-}

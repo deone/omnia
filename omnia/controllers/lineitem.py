@@ -50,22 +50,15 @@ class LineitemController(BaseController):
             i['specification'] = specs[i['name']]
             i['quantity'] = len(specs[i['name']])
 
-        return ("list", items_set(items))
+        return ("item_list", items_set(items))
 
     @h.json_response
     def get_types(self, **kwargs):
-        item_types = set(LineItem.get_types())
-        item_type_list = list(item_types)
+        types = LineItem.get_types()
+        type_set = list(set(types))
 
-        return ("item_type_list", item_type_list)
+        return ("item_type_list", type_set)
 
-    @h.json_response
-    def get_spec(self, **kwargs):
-        name = request.params['name']
-
-        items = LineItem.get_spec(name)
-        return ("item_spec_list", items)
-    
     @h.json_response
     def get_for_invoice(self, id, **kwargs):
         """This id is vendor_id, there should be a better way to do this.

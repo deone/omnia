@@ -49,9 +49,6 @@ function AjaxGet(url)   {
                     } else if (dataType == "item_type_list")    {
                         showItemBoxes(data);
 
-                    } else if (dataType == "item_spec_list")    {
-                        showSpec(data);
-
                     } else if (dataType == "vendorname_list")   {
                         displayOptions(data, "#vendor", "");
 
