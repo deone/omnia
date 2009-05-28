@@ -13,55 +13,50 @@ function showItemBoxes(list)    {//{{{
 
 }//}}}
 
+function showItemDetails(elem, name, qty, spec, vendor) {//{{{
+    if (qty > 1)    {
+        $(elem).append(
+                "<li>" + 
+                    "<a href='#'>" + name + " (" + qty + ")</a>" + 
+                "</li>"
+                );
+    } else  {
+        $(elem).append(
+                "<li>" + 
+                    "<a href='#'>" + name  + "</a>" + 
+                "</li>"
+                );
+    }
+
+    $(elem).append(
+                "<li>" + 
+                    "<ul class='item-spec'>" + 
+                        "<li><b>Specs</b>:" + spec + "</li>" + 
+                        "<li><b>Vendor</b>:" + vendor + "</li>" + 
+                    "</ul>" + 
+                "</li>"
+                );
+}//}}}
+
 function displayItems(list)  {//{{{
     for (i=0; i<list.length; i++)   {
 
         if (list[i]['itemtype'] == "Computer Hardware")  {
 
-            $("#cat0 .item-list").append(
-                    "<li>" + 
-                        "<a href='#'>" + list[i]['name'] + " (" + list[i]['quantity'] + ")</a>" + 
-                    "</li>" + 
-                    "<li>" + 
-                        "<ul class='item-spec'>" + 
-                            "<li><b>Specs</b>:" + list[i]['specification'] + "</li>" + 
-                            "<li><b>Vendor</b>:" + list[i]['vendor'] + "</li>" + 
-                        "</ul>" + 
-                    "</li>"
-                    );
+            showItemDetails("#cat0 .item-list", list[i]['name'], list[i]['quantity'], list[i]['specification'], list[i]['vendor']);
 
         }
 
 
         if (list[i]['itemtype'] == "Engineering Tool")  {
 
-            $("#cat1 .item-list").append(
-                    "<li>" + 
-                        "<a href='#'>" + list[i]['name'] + " (" + list[i]['quantity'] + ")</a>" + 
-                    "</li>" + 
-                    "<li>" + 
-                        "<ul class='item-spec'>" + 
-                            "<li><b>Specs</b>:" + list[i]['specification'] + "</li>" + 
-                            "<li><b>Vendor</b>:" + list[i]['vendor'] + "</li>" + 
-                        "</ul>" + 
-                    "</li>"
-                    ); 
+            showItemDetails("#cat1 .item-list", list[i]['name'], list[i]['quantity'], list[i]['specification'], list[i]['vendor']);
 
         }
 
         if (list[i]['itemtype'] == "Computer Software")  {
 
-            $("#cat2 .item-list").append(
-                    "<li>" + 
-                        "<a href='#'>" + list[i]['name'] + " (" + list[i]['quantity'] + ")</a>" + 
-                    "</li>" + 
-                    "<li>" + 
-                        "<ul class='item-spec'>" + 
-                            "<li><b>Specs</b>:" + list[i]['specification'] + "</li>" + 
-                            "<li><b>Vendor</b>:" + list[i]['vendor'] + "</li>" + 
-                        "</ul>" + 
-                    "</li>"
-                    );
+            showItemDetails("#cat2 .item-list", list[i]['name'], list[i]['quantity'], list[i]['specification'], list[i]['vendor']);
 
         }
 

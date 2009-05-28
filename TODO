@@ -26,16 +26,7 @@ Implement drop down in storage location field.
 Remove "Preview" link from Purchase Order.
 Checkout how to use jquery each() function to shorten the displayItems() in warehouse.js
 Config file should contain itemtypes. This would eliminate using the itemtype value of lineitem to determine how things are done in the warehouse. Move other stuff into config as required.
-Refactor displayItems in warehouse.js.
-Refactor get_for_invoice() and get_by_invoice_no() in lineitem.py
-Now we have lineitems in this format: ['MS Word', 'Software', 2]
-    We can have {'item': ['MS Word', 'Software', 2], 'specification': 'CQ60', 'vendor': 'HP'} OR
-                {'name': 'MS Word', itemtype: 'software', quantity: 2, 'specification': ['CQ60'], 'vendor': 'HP'}
-    The latter is better, its more programmatic! We would be able to show name and quantity as a link 
-    and spec and vendor (hidden) in the same list item. When we click the link, the div is toggled.
-
-To get the quantity, we can have a count method in which we would pass a name and select based on that name, we would return the length of the list.
-
+Refactor get_for_invoice() and get_by_invoice_no() in lineitem.py to use querystring param passing.
 
 Many-to-Many relationship
 =========================
@@ -54,11 +45,6 @@ Fine-tuning Invoice
 Invoice should relate with PO and store its items in another table.
 Knock off invoice_no field in lineitem table.
 We may add "Invoice Received" status to PO.
-
-
-Authorization
-* Buyer, Procurement Manager, Warehouse Manager, Administrator
-Warehouse Item listing
 
 Docs
 ====
